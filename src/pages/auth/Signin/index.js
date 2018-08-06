@@ -31,6 +31,10 @@ class Signin extends Component {
     };
   }
 
+  componentDidMount() {
+    this.Auth.loginAPI();
+  }
+
   componentWillMount() {
     if (this.Auth.loggedIn()) this.props.history.replace('/');
   }
@@ -74,7 +78,7 @@ class Signin extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
-              <form onSubmit={this.handleFormSubmit}>
+              <form melhod="POST" onSubmit={this.handleFormSubmit}>
                 <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                   <input
                     className="mdl-textfield__input"

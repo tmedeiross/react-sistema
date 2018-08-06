@@ -52,7 +52,8 @@ body {
   color: #fff;
 }
 .mdl-layout__header-row {
-  height: 90px;
+  height: 60px;
+  min-height: 60px !important;
 }
 
 .nav-icon {

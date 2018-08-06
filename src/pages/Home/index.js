@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Navbar from '../../layout/Navbar/Navbar';
 import AuthService from '../../components/AuthService';
 import withAuth from '../../components/withAuth';
-
 import '../../styles/global';
 
 const Auth = new AuthService();
@@ -16,13 +15,31 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // usuario: sessionStorage.getItem('usuario'),
+      user: '',
+      profile: '',
     };
   }
+
+  componentDidMount() {}
 
   handleLogout() {
     Auth.logout();
     this.props.history.replace('/signin');
+  }
+
+  componentWillMount() {
+    if (Auth.loggedIn()) {
+      try {
+        const profile = Auth.getProfile();
+        this.setState({
+          user: profile,
+          profile: profile.sub,
+        });
+      } catch (err) {
+        Auth.logout();
+        this.props.history.replace('/login');
+      }
+    }
   }
 
   render() {
@@ -34,7 +51,16 @@ class Home extends Component {
           <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header" />
           <main className="mdl-layout__content">
             <div className="page-content">
-              <button type="button" className="form-submit" onClick={this.handleLogout.bind(this)}>
+              <h4>
+                Logado como&nbsp;
+                {this.state.profile}
+              </h4>
+              <button
+                type="button"
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                color="primary"
+                onClick={this.handleLogout.bind(this)}
+              >
                 Logout
               </button>
             </div>

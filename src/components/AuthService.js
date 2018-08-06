@@ -8,24 +8,57 @@ export default class AuthService {
     this.getProfile = this.getProfile.bind(this);
   }
 
+  loginAPI() {
+    return this.fetch(`${this.domain}/login`, {
+      method: 'POST',
+      body: JSON.stringify({
+        username: 'acert',
+        password: 'acert',
+      }),
+    }).then((res) => {
+      this.setTokenAPI(res.token);
+      return Promise.resolve(res);
+    });
+  }
+
+  setTokenAPI(idTokenAPI) {
+    localStorage.setItem('id_token_API', idTokenAPI);
+  }
+
+  getTokenAPI() {
+    return localStorage.getItem('id_token_API');
+  }
+
   login(username, password) {
-    // Get a token
     return this.fetch(`${this.domain}/login`, {
       method: 'POST',
       body: JSON.stringify({
         username,
         password,
       }),
-    }).then((res) => {
-      this.setToken(res.token);
-      return Promise.resolve(res);
-    });
+    }).then(res => Promise.resolve(res));
+  }
+
+  createUser(name, username, password) {
+    const tokenAPI = this.getTokenAPI();
+    return this.fetch(`${this.domain}/user`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${tokenAPI}`,
+      },
+      body: JSON.stringify({
+        name,
+        username,
+        password,
+      }),
+    }).then(res => res.json());
   }
 
   loggedIn() {
-    // Checks if there is a saved token and it's still valid
     const token = this.getToken();
-    return !!token && !this.isTokenExpired(token); // handwaiving here
+    return !!token && !this.isTokenExpired(token);
   }
 
   isTokenExpired(token) {
@@ -41,17 +74,14 @@ export default class AuthService {
   }
 
   setToken(idToken) {
-    // Saves user token to localStorage
     localStorage.setItem('id_token', idToken);
   }
 
   getToken() {
-    // Retrieves the user token from localStorage
     return localStorage.getItem('id_token');
   }
 
   logout() {
-    // Clear user token and profile data from localStorage
     localStorage.removeItem('id_token');
   }
 
@@ -60,7 +90,6 @@ export default class AuthService {
   }
 
   fetch(url, options) {
-    // performs api calls sending the required authentication headers
     const headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -79,7 +108,6 @@ export default class AuthService {
   }
 
   _checkStatus(response) {
-    // raises an error in case response status is not a success
     if (response.status >= 200 && response.status < 300) {
       return response;
     }
