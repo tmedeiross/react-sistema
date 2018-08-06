@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import Navbar from '../../layout/Navbar/Navbar';
 import AuthService from '../../components/AuthService';
 import withAuth from '../../components/withAuth';
@@ -23,7 +22,7 @@ class Home extends Component {
 
   handleLogout() {
     Auth.logout();
-    this.props.history.replace('/login');
+    this.props.history.replace('/signin');
   }
 
   render() {

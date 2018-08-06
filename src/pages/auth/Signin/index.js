@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import AuthService from '../../../components/AuthService';
 import Navbar from '../../../layout/Navbar/Navbar';
 import '../../../styles/global';
 
@@ -14,6 +15,9 @@ const Card = styled.header`
 class Signin extends Component {
   constructor() {
     super();
+    this.handleChange = this.handleChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.Auth = new AuthService();
     this.state = {
       title: 'ENTRAR',
       btnLogin: 'LOGAR',
@@ -25,24 +29,38 @@ class Signin extends Component {
       email: '',
       password: '',
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = (event) => {
+  componentWillMount() {
+    if (this.Auth.loggedIn()) this.props.history.replace('/');
+  }
+
+  handleFormSubmit(e) {
+    e.preventDefault();
+
+    this.Auth.login(this.state.username, this.state.password)
+      .then((res) => {
+        this.props.history.replace('/');
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }
+
+  handleChange(e) {
     this.setState({
-      [event.target.name]: event.target.value,
+      [e.target.name]: e.target.value,
     });
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-  };
-
-  validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
   }
+  // handleChange = (event) => {
+  //   this.setState({
+  //     [event.target.name]: event.target.value,
+  //   });
+  // };
+
+  // validateForm() {
+  //   return this.state.email.length > 0 && this.state.password.length > 0;
+  // }
 
   render() {
     return (
@@ -56,15 +74,15 @@ class Signin extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
-              <form action="#" onSubmit={this.handleSubmit}>
+              <form onSubmit={this.handleFormSubmit}>
                 <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                   <input
                     className="mdl-textfield__input"
-                    type="email"
+                    type="text"
                     id="cadEmail"
-                    name="email"
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                    value={this.state.email}
+                    name="username"
+                    // pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    // value={this.state.email}
                     onChange={this.handleChange}
                   />
                   <label className="mdl-textfield__label" htmlFor="cadEmail">
@@ -78,12 +96,12 @@ class Signin extends Component {
                 <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                   <input
                     className="mdl-textfield__input"
-                    type="password"
                     name="password"
+                    type="password"
                     id="cadPassword"
                     // minLength="10"
                     // pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                    value={this.state.senha}
+                    // value={this.state.senha}
                     onChange={this.handleChange}
                   />
                   <label className="mdl-textfield__label" htmlFor="cadPassword">
@@ -93,27 +111,25 @@ class Signin extends Component {
                     {this.state.errPassword}
                   </span>
                 </div>
-              </form>
-            </div>
-            <div className="mdl-card__actions mdl-typography--text-right">
-              <Link
-                type="submit"
-                className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
-                color="primary"
-                to="/signup"
-              >
-                {this.state.bntCadastrar}
-              </Link>
+                <div className="mdl-card__actions mdl-typography--text-right">
+                  <Link
+                    type="submit"
+                    className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                    color="primary"
+                    to="/signup"
+                  >
+                    {this.state.bntCadastrar}
+                  </Link>
 
-              <Link
-                type="button"
-                className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
-                color="primary"
-                to="/home"
-                disabled={!this.validateForm()}
-              >
-                {this.state.btnLogin}
-              </Link>
+                  <button
+                    className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
+                    color="primary"
+                    type="submit"
+                  >
+                    {this.state.btnLogin}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </Card>

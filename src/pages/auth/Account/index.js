@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import '../../../styles/global';
-import Modal from '../../Modal';
 import Navbar from '../../../layout/Navbar/Navbar';
 
 const Card = styled.header`

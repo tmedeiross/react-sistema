@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-// import { PrivateRoute } from './auth';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Signin from './pages/auth/Signin';
 import Signup from './pages/auth/Signup';
 import Pwforget from './pages/auth/Pwforget';
@@ -9,8 +8,8 @@ import Home from './pages/Home';
 import Login from './pages/auth/Login';
 
 const Routes = () => (
-  <Router>
-    <div>
+  <BrowserRouter>
+    <Switch>
       <Route exact path="/login" component={Login} />
       <Route exact path="/signin" component={Signin} />
       <Route exact path="/signin" component={Account} />
@@ -18,8 +17,8 @@ const Routes = () => (
       <Route exact path="/pwforget" component={Pwforget} />
       <Route exact path="/account" component={Account} />
       <Route exact path="/" component={Home} />
-    </div>
-  </Router>
+    </Switch>
+  </BrowserRouter>
 );
 
 export default Routes;
