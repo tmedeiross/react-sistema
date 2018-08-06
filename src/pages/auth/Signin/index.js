@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import '../styles/global';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import Navbar from './Navbar';
+import Navbar from '../../../layout/Navbar/Navbar';
+import '../../../styles/global';
 
 const Card = styled.header`
   display: flex;
@@ -11,7 +11,7 @@ const Card = styled.header`
   width: 100%;
   padding-top: 150px;
 `;
-class Cadastro extends Component {
+class Signin extends Component {
   constructor() {
     super();
     this.state = {
@@ -22,16 +22,29 @@ class Cadastro extends Component {
       lbPassword: 'Senha',
       errEmail: 'Email incorreto',
       errPassword: 'Quantidade de caracteres insuficiente (minímo 10)',
-
-      // isEnabled: false,
+      email: '',
+      password: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
-    // const isEnabled = email.length > 0 && password.length > 0;
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+    // console.log(sessionStorage.getItem('usuario'));
+    console.log(sessionStorage.getItem('isAuthenticated'));
   }
 
-  handleChange(event) {
-    this.setState({ value: event.target.value });
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  validateForm() {
+    return this.state.email.length > 0 && this.state.password.length > 0;
   }
 
   render() {
@@ -46,7 +59,7 @@ class Cadastro extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
-              <form action="#">
+              <form action="#" onSubmit={this.handleSubmit}>
                 <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                   <input
                     className="mdl-textfield__input"
@@ -71,7 +84,8 @@ class Cadastro extends Component {
                     type="password"
                     name="password"
                     id="cadPassword"
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                    // minLength="10"
+                    // pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                     value={this.state.senha}
                     onChange={this.handleChange}
                   />
@@ -86,21 +100,20 @@ class Cadastro extends Component {
             </div>
             <div className="mdl-card__actions mdl-typography--text-right">
               <Link
-                type="button"
-                // disabled={!isEnabled}
+                type="submit"
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
                 color="primary"
-                to="/cadastro"
+                to="/signup"
               >
                 {this.state.bntCadastrar}
               </Link>
 
               <Link
-                href="/login"
                 type="button"
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
                 color="primary"
-                to="/"
+                to="/home"
+                disabled={!this.validateForm()}
               >
                 {this.state.btnLogin}
               </Link>
@@ -112,4 +125,4 @@ class Cadastro extends Component {
   }
 }
 
-export default Cadastro;
+export default Signin;

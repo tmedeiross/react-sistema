@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import '../styles/global';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
-import Navbar from './Navbar';
+import Navbar from '../../../layout/Navbar/Navbar';
 
 const Card = styled.header`
   display: flex;
@@ -12,7 +10,7 @@ const Card = styled.header`
   width: 100%;
   padding-top: 150px;
 `;
-class Login extends Component {
+class Cadastro extends Component {
   constructor() {
     super();
     this.state = {
@@ -59,7 +57,6 @@ class Login extends Component {
                     id="cadNome"
                     name="name"
                     pattern="^[a-zA-Z0-9]+$"
-                    name="name"
                     minLength="10"
                     value={this.state.name}
                     onChange={this.handleChange}
@@ -139,11 +136,10 @@ class Login extends Component {
               </Link>
 
               <Link
-                href="/login"
                 type="button"
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
                 color="primary"
-                to="/"
+                to="/home"
               >
                 {this.state.bntCadastrar}
               </Link>
@@ -155,4 +151,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Cadastro;

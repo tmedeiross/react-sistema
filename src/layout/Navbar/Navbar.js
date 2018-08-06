@@ -1,5 +1,7 @@
 import React from 'react';
-import Logo from '../assets/img/logo-white.png';
+// import { Link } from 'react-router-dom';
+// import * as routes from '../../../constants/routes';
+import Logo from '../../assets/img/logo-white.png';
 
 const Navbar = () => (
   <div className="mdl-layout mdl-layout--fixed-header">
@@ -9,6 +11,11 @@ const Navbar = () => (
           <img className="nav-icon" src={Logo} alt="logo" />
         </span>
         <div className="mdl-layout-spacer" />
+        <nav className="mdl-navigation mdl-layout--large-screen-only">
+          {/* <Link className="mdl-navigation__link" to={/}>
+            Dashboard
+          </Link> */}
+        </nav>
       </div>
     </header>
   </div>
