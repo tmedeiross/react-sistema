@@ -2,7 +2,12 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Navbar from '../../layout/Navbar/Navbar';
+import AuthService from '../../components/AuthService';
+import withAuth from '../../components/withAuth';
+
 import '../../styles/global';
+
+const Auth = new AuthService();
 
 const Container = styled.header`
   padding-top: 100px;
@@ -14,11 +19,11 @@ class Home extends Component {
     this.state = {
       // usuario: sessionStorage.getItem('usuario'),
     };
-    this.sair = this.sair.bind(this);
   }
 
-  sair(event) {
-    window.sessionStorage.removeItem('isAuthenticated');
+  handleLogout() {
+    Auth.logout();
+    this.props.history.replace('/login');
   }
 
   render() {
@@ -30,18 +35,9 @@ class Home extends Component {
           <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header" />
           <main className="mdl-layout__content">
             <div className="page-content">
-              <p>
-Você está logado.
-              </p>
-              <Link
-                type="button"
-                className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
-                color="primary"
-                to="/signin"
-                onClick={this.sair}
-              >
-                Deslogar
-              </Link>
+              <button type="button" className="form-submit" onClick={this.handleLogout.bind(this)}>
+                Logout
+              </button>
             </div>
           </main>
         </Container>
@@ -49,5 +45,4 @@ Você está logado.
     );
   }
 }
-
-export default Home;
+export default withAuth(Home);

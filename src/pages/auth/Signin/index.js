@@ -28,9 +28,6 @@ class Signin extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
-    // console.log(sessionStorage.getItem('usuario'));
-    console.log(sessionStorage.getItem('isAuthenticated'));
   }
 
   handleChange = (event) => {
