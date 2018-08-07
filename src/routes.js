@@ -5,6 +5,7 @@ import Signup from './pages/auth/Signup';
 import Pwforget from './pages/auth/Pwforget';
 import Account from './pages/auth/Account';
 import Home from './pages/Home';
+import NewClient from './pages/auth/NewClient';
 
 const Routes = () => (
   <BrowserRouter>
@@ -15,6 +16,7 @@ const Routes = () => (
       <Route exact path="/pwforget" component={Pwforget} />
       <Route exact path="/account" component={Account} />
       <Route exact path="/" component={Home} />
+      <Route exact path="/register" component={NewClient} />
     </Switch>
   </BrowserRouter>
 );

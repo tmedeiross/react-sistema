@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import Navbar from '../../layout/Navbar/Navbar';
 import AuthService from '../../components/AuthService';
 import withAuth from '../../components/withAuth';
@@ -37,7 +38,7 @@ class Home extends Component {
         });
       } catch (err) {
         Auth.logout();
-        this.props.history.replace('/login');
+        this.props.history.replace('/signin');
       }
     }
   }
@@ -63,6 +64,14 @@ class Home extends Component {
               >
                 Logout
               </button>
+              <Link
+                type="button"
+                className="ml1 mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                color="primary"
+                to="/register"
+              >
+                Logout
+              </Link>
             </div>
           </main>
         </Container>

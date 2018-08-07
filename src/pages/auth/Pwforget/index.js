@@ -130,7 +130,7 @@ class Cadastro extends Component {
                 // disabled={!isEnabled}
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
                 color="primary"
-                to="/login"
+                to="/signin"
               >
                 {this.state.btnLogin}
               </Link>
