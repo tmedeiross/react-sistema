@@ -66,11 +66,11 @@ class Home extends Component {
               </button>
               <Link
                 type="button"
-                className="ml1 mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                className="ml1 mdl-button mdl-js-button mdl-button--raised mdl-button--primary mdl-js-ripple-effect"
                 color="primary"
                 to="/register"
               >
-                Logout
+                Add new client
               </Link>
             </div>
           </main>

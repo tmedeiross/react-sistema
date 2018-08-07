@@ -31,10 +31,6 @@ class Signin extends Component {
     };
   }
 
-  componentDidMount() {
-    this.Auth.loginAPI();
-  }
-
   componentWillMount() {
     if (this.Auth.loggedIn()) this.props.history.replace('/');
   }
@@ -42,7 +38,7 @@ class Signin extends Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    this.Auth.user(this.state.username, this.state.password)
+    this.Auth.login(this.state.username, this.state.password)
       .then((res) => {
         this.props.history.replace('/');
       })

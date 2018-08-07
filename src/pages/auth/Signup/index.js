@@ -53,10 +53,6 @@ class Cadastro extends Component {
     });
   };
 
-  componentDidMount() {
-    this.Auth.loginAPI();
-  }
-
   handleFormSubmit(e) {
     e.preventDefault();
     this.Auth.createUser(this.state.name, this.state.username, this.state.password)
@@ -180,13 +176,13 @@ class Cadastro extends Component {
                   >
                     {this.state.btnLogin}
                   </Link>
-                  <button
+                  {/* <button
                     className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
                     color="primary"
                     type="submit"
                   >
                     {this.state.bntCadastrar}
-                  </button>
+                  </button> */}
                   <button
                     type="button"
                     className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
@@ -216,7 +212,7 @@ class Cadastro extends Component {
             type="button"
             className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary mdl-js-ripple-effect"
             color="primary"
-            to="/home"
+            to="/"
           >
             Fechar
           </Link>
