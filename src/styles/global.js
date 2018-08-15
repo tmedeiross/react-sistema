@@ -33,6 +33,7 @@ body {
     text-rendering: optimizeLegibility !important;
     -webkit-font-smoothing: antialiased !important;
     background:url('http://www.grupoacert.com.br/App_Themes/Acert/images/section-contact-bg.jpg') no-repeat center fixed;
+    background-size: cover;
   }
 .mdl-typography--text-center {
   align-items: center;

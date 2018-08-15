@@ -101,7 +101,7 @@ Informação da loja
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Company name
+                          Nome da empresa
                         </label>
                       </div>
                     </div>
@@ -115,7 +115,7 @@ Informação da loja
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Trading name
+                          Nome da Marca
                         </label>
                       </div>
                     </div>
@@ -132,7 +132,7 @@ Informação da loja
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Phone Number
+                          Telefone
                         </label>
                       </div>
                     </div>
@@ -155,7 +155,7 @@ Informação da loja
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--12-col">
                       <h4>
-Billing address
+Endereço de cobrança
                       </h4>
                     </div>
                   </div>
@@ -171,7 +171,7 @@ Billing address
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          ZIP code
+                          CEP
                         </label>
                       </div>
                     </div>
@@ -185,7 +185,7 @@ Billing address
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Number
+                          Número
                         </label>
                       </div>
                     </div>
@@ -199,7 +199,7 @@ Billing address
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Trading name
+                          Marca
                         </label>
                       </div>
                     </div>
@@ -215,7 +215,7 @@ Billing address
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Address
+                          Endereço
                         </label>
                       </div>
                     </div>
@@ -232,7 +232,7 @@ Billing address
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Address Complementar
+                          Complemento
                         </label>
                       </div>
                     </div>
@@ -246,7 +246,7 @@ Billing address
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Neighborhood
+                          Bairro
                         </label>
                       </div>
                     </div>
@@ -263,18 +263,93 @@ Billing address
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          City
+                          Cidade
                         </label>
                       </div>
                     </div>
                     <div className="mdl-cell mdl-cell--6-col">
                       <div className="mdl-selectfield mdl-js-selectfield w100">
                         <select id="myselect" name="myselect" className="mdl-selectfield__select">
-                          <option value="option0_value">
-Address
+                          <option value="Acre">
+AC
                           </option>
-                          <option value="option1_value">
-Address
+                          <option value="Alagoas">
+AL
+                          </option>
+                          <option value="Amapá">
+AP
+                          </option>
+                          <option value="Amazonas">
+AM
+                          </option>
+                          <option value="Bahia">
+BA
+                          </option>
+                          <option value="Ceará">
+CE
+                          </option>
+                          <option value="Distrito Federal">
+DF
+                          </option>
+                          <option value="Espírito Santo">
+ES
+                          </option>
+                          <option value="Goiás">
+GO
+                          </option>
+                          <option value="Maranhão">
+MA
+                          </option>
+                          <option value="Mato Grosso">
+MT
+                          </option>
+                          <option value="Mato Grosso do Sul">
+MS
+                          </option>
+                          <option value="Minas Gerais">
+MG
+                          </option>
+                          <option value="Pará">
+PA
+                          </option>
+                          <option value="Paraíba">
+PB
+                          </option>
+                          <option value="Paraná">
+PR
+                          </option>
+                          <option value="Pernambuco">
+PE
+                          </option>
+                          <option value="Piauí">
+PI
+                          </option>
+                          <option value="Rio de Janeiro">
+RJ
+                          </option>
+                          <option value="Rio Grande do Norte">
+RN
+                          </option>
+                          <option value="Rio Grande do Sul">
+RS
+                          </option>
+                          <option value="Rondônia">
+RO
+                          </option>
+                          <option value="Roraima">
+RR
+                          </option>
+                          <option value="Santa Catarina">
+SC
+                          </option>
+                          <option value="São Paulo">
+SP
+                          </option>
+                          <option value="Sergipe">
+SE
+                          </option>
+                          <option value="Tocantins">
+TO
                           </option>
                         </select>
                       </div>
