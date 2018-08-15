@@ -5,7 +5,7 @@ import Signup from './pages/auth/Signup';
 import Pwforget from './pages/auth/Pwforget';
 import Account from './pages/auth/Account';
 import Home from './pages/Home';
-import Cadastro from './pages/auth/Cadastro';
+import Cadastro from './pages/Cadastro';
 
 const Routes = () => (
   <BrowserRouter>

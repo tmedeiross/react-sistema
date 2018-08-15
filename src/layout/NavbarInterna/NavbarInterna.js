@@ -18,29 +18,21 @@ class NavbarInterna extends Component {
       <nav className="navbar app">
         <header className="mdl-layout__header">
           <div className="mdl-layout__header-row">
-            <span className="mdl-layout-title">
-              <img className="nav-icon" src={Logo} alt="logo" />
-            </span>
+            <span className="mdl-layout-title" />
             <div className="page-content">
               <nav className="mdl-navigation mdl-layout--large-screen-only">
                 <Link className="mdl-navigation__link" to="/">
-                  Logado como&nbsp; Nome
+                  <img className="nav-icon" src={Logo} alt="logo" />
                 </Link>
               </nav>
             </div>
             <div className="mdl-layout-spacer" />
             <nav className="mdl-navigation mdl-layout--large-screen-only">
-              <Link className="mdl-navigation__link" to="/">
-                Dashboard
-              </Link>
               <Link className="mdl-navigation__link" to="/register">
                 Add new client
               </Link>
               <Link className="mdl-navigation__link" to="/">
-                Item
-              </Link>
-              <Link className="mdl-navigation__link" to="/">
-                Item
+                Logado como&nbsp; Nome
               </Link>
               <Link className="mdl-navigation__link" to="/" onClick={this.handleLogout.bind(this)}>
                 Logout

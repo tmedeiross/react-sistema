@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import Navbar from '../../../layout/Navbar/Navbar';
-import AuthService from '../../../components/AuthService';
-import withAuth from '../../../components/withAuth';
-import '../../../styles/global';
+import NavbarInterna from '../../layout/NavbarInterna/NavbarInterna';
+import AuthService from '../../components/AuthService';
+import withAuth from '../../components/withAuth';
+import '../../styles/global';
 import './cadastro.css';
 
 const Auth = new AuthService();
@@ -53,8 +53,7 @@ class Cadastro extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar />
-
+        <NavbarInterna />
         <Container>
           <Card>
             <div className="mdl-card mdl-shadow--2dp">
