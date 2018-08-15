@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import Navbar from '../../layout/Navbar/Navbar';
+import NavbarInterna from '../../layout/NavbarInterna/NavbarInterna';
 import AuthService from '../../components/AuthService';
 import withAuth from '../../components/withAuth';
 import '../../styles/global';
@@ -46,7 +46,7 @@ class Home extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar />
+        <NavbarInterna />
 
         <Container>
           <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header" />

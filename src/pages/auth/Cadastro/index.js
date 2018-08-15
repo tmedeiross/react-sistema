@@ -159,9 +159,8 @@ Endereço de cobrança
                       </h4>
                     </div>
                   </div>
-
                   <div className="mdl-grid">
-                    <div className="mdl-cell mdl-cell--3-col">
+                    <div className="mdl-cell mdl-cell--12-col">
                       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                         <input
                           className="mdl-textfield__input"
@@ -171,10 +170,12 @@ Endereço de cobrança
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          CEP
+                          Endereço
                         </label>
                       </div>
                     </div>
+                  </div>
+                  <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--3-col">
                       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                         <input
@@ -199,13 +200,11 @@ Endereço de cobrança
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Marca
+                          Complemento
                         </label>
                       </div>
                     </div>
-                  </div>
-                  <div className="mdl-grid">
-                    <div className="mdl-cell mdl-cell--12-col">
+                    <div className="mdl-cell mdl-cell--3-col">
                       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                         <input
                           className="mdl-textfield__input"
@@ -215,28 +214,14 @@ Endereço de cobrança
                           onChange={this.handleChange}
                         />
                         <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Endereço
+                          CEP
                         </label>
                       </div>
                     </div>
                   </div>
 
                   <div className="mdl-grid">
-                    <div className="mdl-cell mdl-cell--6-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Complemento
-                        </label>
-                      </div>
-                    </div>
-                    <div className="mdl-cell mdl-cell--6-col">
+                    <div className="mdl-cell mdl-cell--4-col">
                       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                         <input
                           className="mdl-textfield__input"
@@ -250,10 +235,8 @@ Endereço de cobrança
                         </label>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="mdl-grid">
-                    <div className="mdl-cell mdl-cell--6-col">
+                    <div className="mdl-cell mdl-cell--4-col">
                       <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
                         <input
                           className="mdl-textfield__input"
@@ -267,7 +250,7 @@ Endereço de cobrança
                         </label>
                       </div>
                     </div>
-                    <div className="mdl-cell mdl-cell--6-col">
+                    <div className="mdl-cell mdl-cell--4-col">
                       <div className="mdl-selectfield mdl-js-selectfield w100">
                         <select id="myselect" name="myselect" className="mdl-selectfield__select">
                           <option value="Acre">
