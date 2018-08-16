@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import NavbarInterna from '../../layout/NavbarInterna/NavbarInterna';
 import AuthService from '../../components/AuthService';
 import withAuth from '../../components/withAuth';
@@ -8,10 +6,6 @@ import '../../styles/global';
 import './styles.css';
 
 const Auth = new AuthService();
-
-const Container = styled.header`
-  padding-top: 100px;
-`;
 
 class Home extends Component {
   constructor(props) {
@@ -54,163 +48,71 @@ class Home extends Component {
             <div className="list">
               <header>
                 Pedido
-                <i className="material-icons filter_list">
-filter_list
-                </i>
+                <i className="material-icons filter_list">filter_list</i>
               </header>
               <ul>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
               </ul>
             </div>
@@ -218,27 +120,15 @@ Store: Amazing NY
             <div className="list">
               <header>
                 Estoque
-                <i className="material-icons filter_list">
-filter_list
-                </i>
+                <i className="material-icons filter_list">filter_list</i>
               </header>
               <ul>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
               </ul>
             </div>
@@ -246,27 +136,15 @@ Store: Amazing NY
             <div className="list">
               <header>
                 Laboratório de montagem
-                <i className="material-icons filter_list">
-filter_list
-                </i>
+                <i className="material-icons filter_list">filter_list</i>
               </header>
               <ul>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
               </ul>
             </div>
@@ -274,27 +152,15 @@ Store: Amazing NY
             <div className="list">
               <header>
                 Loja
-                <i className="material-icons filter_list">
-filter_list
-                </i>
+                <i className="material-icons filter_list">filter_list</i>
               </header>
               <ul>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
               </ul>
             </div>
@@ -302,27 +168,15 @@ Store: Amazing NY
             <div className="list">
               <header>
                 Entregue
-                <i className="material-icons filter_list">
-filter_list
-                </i>
+                <i className="material-icons filter_list">filter_list</i>
               </header>
               <ul>
                 <li>
-                  <i className="material-icons more_vert">
-more_vert
-                  </i>
-                  <p className="number">
-203.002
-                  </p>
-                  <p className="name">
-Nome Nome
-                  </p>
-                  <p className="date">
-jul,09
-                  </p>
-                  <div className="footer">
-Store: Amazing NY
-                  </div>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
                 </li>
               </ul>
             </div>

@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import NavbarInterna from '../../layout/NavbarInterna/NavbarInterna';
 import AuthService from '../../components/AuthService';
 import withAuth from '../../components/withAuth';
