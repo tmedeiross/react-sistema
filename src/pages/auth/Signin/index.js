@@ -55,8 +55,9 @@ class Signin extends Component {
         this.props.history.push('/');
       } catch (err) {
         this.setState({
-          error: err.response.data.message,
+          error: 'Usuário e/ou senha inválidos verifique suas credenciais',
         });
+        console.log(err.response.data.message);
       }
     }
   };
