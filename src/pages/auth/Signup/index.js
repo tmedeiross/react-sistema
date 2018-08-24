@@ -56,8 +56,6 @@ class Signup extends Component {
     } else {
       try {
         const response = await api.post('/user', this.state.formData);
-        login(this.state.formData.email);
-        user(this.state.formData.email);
         this.props.history.push('/signin');
       } catch (err) {
         this.setState({
