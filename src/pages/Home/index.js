@@ -1,11 +1,18 @@
 import React, { Component, Fragment } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import TextField from '@material-ui/core/TextField';
 import NavbarInterna from '../../layout/NavbarInterna/NavbarInterna';
-import AuthService from '../../components/AuthService';
-import withAuth from '../../components/withAuth';
+
+// import PropTypes from 'prop-types';
+import * as AddUser from '../../store/actions/account';
+
+import { login, user, logout } from '../../services/auth';
+import api from '../../services/api';
+
 import '../../styles/global';
 import './styles.css';
-
-const Auth = new AuthService();
 
 class Home extends Component {
   constructor(props) {
@@ -16,27 +23,10 @@ class Home extends Component {
     };
   }
 
-  componentDidMount() {}
-
-  handleLogout() {
-    Auth.logout();
-    this.props.history.replace('/signin');
-  }
-
-  componentWillMount() {
-    if (Auth.loggedIn()) {
-      try {
-        const profile = Auth.getProfile();
-        this.setState({
-          user: profile,
-          profile: profile.sub,
-        });
-      } catch (err) {
-        Auth.logout();
-        this.props.history.replace('/signin');
-      }
-    }
-  }
+  handleLogout = (e) => {
+    logout();
+    this.props.history.push('/signin');
+  };
 
   render() {
     return (
@@ -186,4 +176,4 @@ class Home extends Component {
     );
   }
 }
-export default withAuth(Home);
+export default withRouter(Home);

@@ -56,7 +56,10 @@ body {
   height: 60px;
   min-height: 60px !important;
 }
-
+.error {
+  color: #f44336;
+  padding: 10px 0;
+}
 .nav-icon {
   width:90px;
 }
@@ -71,6 +74,10 @@ body {
   margin: auto;
   width: 80%;
   display: block;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset;
 }
 .materialContainer {
    width: 100%;
@@ -136,6 +143,7 @@ body {
   .mdl-dialog__content {
     padding: 20px 24px 24px 24px;
     color: rgba(0,0,0, 0.54); }
+
 @media screen and (max-width: 1024px) {
   .mdl-layout__header-row {
       padding: 0 15px;

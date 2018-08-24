@@ -1,6 +1,12 @@
 .mdl-cell {
   margin: 0 8px;
 }
+.mdl-card.cadastro {
+  width: 1300px;
+  max-width: 90%;
+  margin-top: -100px;
+}
+
 /* .mdl-textfield {
   padding: 10px 0;
 }

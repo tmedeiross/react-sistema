@@ -15,9 +15,7 @@ class Modal extends React.Component {
             onClick={this.props.onClose}
             className="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored"
           >
-            <i className="material-icons">
-close
-            </i>
+            <i className="material-icons">close</i>
           </button>
         </div>
         <div className="mdl-dialog__content">

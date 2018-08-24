@@ -1,9 +1,9 @@
 {
-  "name": "cliente-grupoacert",
+  "name": "order-tracking-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^1.4.2",
+    "@material-ui/core": "^1.5.1",
     "@material-ui/icons": "^2.0.0",
     "axios": "^0.18.0",
     "fast-json-stable-stringify": "^2.0.0",
@@ -19,6 +19,8 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
+    "reactotron-react-js": "^2.1.1",
+    "reactotron-redux": "^2.1.0",
     "redux": "^4.0.0",
     "styled-components": "^3.3.3"
   },

@@ -1,12 +1,21 @@
 import React, { Component, Fragment } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import styled from 'styled-components';
+
+// import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import * as AddUser from '../../store/actions/account';
+
+import { login, user } from '../../services/auth';
+import api from '../../services/api';
+
 import NavbarInterna from '../../layout/NavbarInterna/NavbarInterna';
-import AuthService from '../../components/AuthService';
-import withAuth from '../../components/withAuth';
+
 import '../../styles/global';
 import './cadastro.css';
-
-const Auth = new AuthService();
 
 const Container = styled.header`
   padding-top: 100px;
@@ -19,34 +28,33 @@ const Card = styled.header`
   padding-top: 50px;
 `;
 class Cadastro extends Component {
-  constructor(props) {
-    super(props);
+  constructor(account, addUserDetails) {
+    super(account, addUserDetails);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.state = {
-      user: '',
-      profile: '',
+      formData: {},
     };
   }
 
-  componentDidMount() {}
-
-  handleLogout() {
-    Auth.logout();
-    this.props.history.replace('/signin');
-  }
-
-  componentWillMount() {
-    if (Auth.loggedIn()) {
-      try {
-        const profile = Auth.getProfile();
-        this.setState({
-          user: profile,
-          profile: profile.sub,
-        });
-      } catch (err) {
-        Auth.logout();
-        this.props.history.replace('/signin');
-      }
+  handleFormSubmit = async (e) => {
+    e.preventDefault();
+    console.log(this.state.formData);
+    try {
+      const response = await api.post('/store', this.state.formData);
+      this.props.history.push('/lojas');
+    } catch (err) {
+      console.log(err.response);
+      this.setState({
+        error: err.response.data.message,
+      });
     }
+  };
+
+  handleChange(e) {
+    this.setState({
+      formData: { ...this.state.formData, [e.target.name]: e.target.value },
+    });
   }
 
   render() {
@@ -55,7 +63,7 @@ class Cadastro extends Component {
         <NavbarInterna />
         <Container>
           <Card>
-            <div className="mdl-card mdl-shadow--2dp">
+            <div className="mdl-card mdl-shadow--2dp cadastro">
               <div className="mdl-card__title bg-primary">
                 <h2 className="mdl-card__title-text mdl-typography--text-center w100">
                   Cadastro de loja
@@ -63,283 +71,195 @@ class Cadastro extends Component {
               </div>
               <div className="mdl-card__supporting-text w100">
                 <form action="#" onSubmit={this.handleFormSubmit}>
+                  {this.state.error && <p className="error">{this.state.error}</p>}
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--12-col">
-                      <h4>
-Informação da loja
-                      </h4>
+                      <h4>Informação da loja</h4>
                     </div>
                   </div>
 
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--6-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          CNPJ
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="cnpj"
+                        name="cnpj"
+                        label="CNPJ"
+                        margin="normal"
+                        type="number"
+                        onChange={this.handleChange}
+                      />
                     </div>
                   </div>
 
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--6-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Nome da empresa
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="fantasyName"
+                        name="fantasyName"
+                        label="Nome da Empresa"
+                        margin="normal"
+                        onChange={this.handleChange}
+                      />
                     </div>
                     <div className="mdl-cell mdl-cell--6-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Nome da Marca
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="socialName"
+                        name="socialName"
+                        label="Razão Social"
+                        margin="normal"
+                        onChange={this.handleChange}
+                      />
                     </div>
                   </div>
 
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--6-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Telefone
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        label="Telefone"
+                        margin="normal"
+                        type="number"
+                        onChange={this.handleChange}
+                      />
                     </div>
                     <div className="mdl-cell mdl-cell--6-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Email
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="email"
+                        name="email"
+                        label="Email"
+                        margin="normal"
+                        onChange={this.handleChange}
+                      />
                     </div>
                   </div>
 
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--12-col">
-                      <h4>
-Endereço de cobrança
-                      </h4>
+                      <h4>Endereço de cobrança</h4>
                     </div>
                   </div>
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--12-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Endereço
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="address"
+                        name="address"
+                        label="Endereço"
+                        margin="normal"
+                        onChange={this.handleChange}
+                      />
                     </div>
                   </div>
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--3-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Número
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="number"
+                        name="number"
+                        label="Numero"
+                        margin="normal"
+                        type="number"
+                        onChange={this.handleChange}
+                      />
                     </div>
                     <div className="mdl-cell mdl-cell--6-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Complemento
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="complement"
+                        name="complement"
+                        label="Complemento"
+                        margin="normal"
+                        onChange={this.handleChange}
+                      />
                     </div>
                     <div className="mdl-cell mdl-cell--3-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          CEP
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="zipCode"
+                        name="zipCode"
+                        label="CEP"
+                        margin="normal"
+                        onChange={this.handleChange}
+                      />
                     </div>
                   </div>
 
                   <div className="mdl-grid">
                     <div className="mdl-cell mdl-cell--4-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Bairro
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="neighborhood"
+                        name="neighborhood"
+                        label="Bairro"
+                        margin="normal"
+                        onChange={this.handleChange}
+                      />
                     </div>
 
                     <div className="mdl-cell mdl-cell--4-col">
-                      <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                        <input
-                          className="mdl-textfield__input"
-                          type="text"
-                          id="cadNome"
-                          name="name"
-                          onChange={this.handleChange}
-                        />
-                        <label className="mdl-textfield__label" htmlFor="cadNome">
-                          Cidade
-                        </label>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="city"
+                        name="city"
+                        label="Cidade"
+                        margin="normal"
+                        onChange={this.handleChange}
+                      />
                     </div>
                     <div className="mdl-cell mdl-cell--4-col">
-                      <div className="mdl-selectfield mdl-js-selectfield w100">
-                        <select id="myselect" name="myselect" className="mdl-selectfield__select">
-                          <option value="Acre">
-AC
-                          </option>
-                          <option value="Alagoas">
-AL
-                          </option>
-                          <option value="Amapá">
-AP
-                          </option>
-                          <option value="Amazonas">
-AM
-                          </option>
-                          <option value="Bahia">
-BA
-                          </option>
-                          <option value="Ceará">
-CE
-                          </option>
-                          <option value="Distrito Federal">
-DF
-                          </option>
-                          <option value="Espírito Santo">
-ES
-                          </option>
-                          <option value="Goiás">
-GO
-                          </option>
-                          <option value="Maranhão">
-MA
-                          </option>
-                          <option value="Mato Grosso">
-MT
-                          </option>
-                          <option value="Mato Grosso do Sul">
-MS
-                          </option>
-                          <option value="Minas Gerais">
-MG
-                          </option>
-                          <option value="Pará">
-PA
-                          </option>
-                          <option value="Paraíba">
-PB
-                          </option>
-                          <option value="Paraná">
-PR
-                          </option>
-                          <option value="Pernambuco">
-PE
-                          </option>
-                          <option value="Piauí">
-PI
-                          </option>
-                          <option value="Rio de Janeiro">
-RJ
-                          </option>
-                          <option value="Rio Grande do Norte">
-RN
-                          </option>
-                          <option value="Rio Grande do Sul">
-RS
-                          </option>
-                          <option value="Rondônia">
-RO
-                          </option>
-                          <option value="Roraima">
-RR
-                          </option>
-                          <option value="Santa Catarina">
-SC
-                          </option>
-                          <option value="São Paulo">
-SP
-                          </option>
-                          <option value="Sergipe">
-SE
-                          </option>
-                          <option value="Tocantins">
-TO
-                          </option>
-                        </select>
-                      </div>
+                      <TextField
+                        className="w100"
+                        id="select-currency-native"
+                        select
+                        name="state"
+                        label="UF"
+                        onChange={this.handleChange}
+                        SelectProps={{
+                          native: true,
+                        }}
+                        helperText="Por favor, selecione seu estado"
+                        margin="normal"
+                      >
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="Mato GrossoMT" />
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                      </TextField>
                     </div>
                   </div>
 
                   <div className="mdl-card__actions mdl-typography--text-right">
                     <button
-                      type="button"
+                      type="submit"
                       className="mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
                       color="primary"
                     >
@@ -355,4 +275,4 @@ TO
     );
   }
 }
-export default withAuth(Cadastro);
+export default withRouter(Cadastro);

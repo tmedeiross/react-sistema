@@ -1,16 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import * as routes from '../../../constants/routes';
+import { login, user, logout } from '../../services/auth';
 import Logo from '../../assets/img/logo-white.png';
 
-import AuthService from '../../components/AuthService';
-import withAuth from '../../components/withAuth';
-
-const Auth = new AuthService();
 class NavbarInterna extends Component {
   handleLogout() {
-    Auth.logout();
-    this.props.history.replace('/signin');
+    logout();
+    this.props.history.push('/signin');
   }
 
   render() {
@@ -28,11 +24,12 @@ class NavbarInterna extends Component {
             </div>
             <div className="mdl-layout-spacer" />
             <nav className="mdl-navigation mdl-layout--large-screen-only">
-              <Link className="mdl-navigation__link" to="/register">
-                Add new client
+              <Link className="mdl-navigation__link" to="/lojas">
+                Lista de lojas
               </Link>
               <Link className="mdl-navigation__link" to="/">
-                Logado como&nbsp; Nome
+                Logado como&nbsp;
+                {localStorage.getItem('id_user')}
               </Link>
               <Link className="mdl-navigation__link" to="/" onClick={this.handleLogout.bind(this)}>
                 Logout

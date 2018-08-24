@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import styled from 'styled-components';
-import AuthService from '../../../components/AuthService';
+
+// import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import * as AddUser from '../../../store/actions/account';
+
+import { login, user } from '../../../services/auth';
+import api from '../../../services/api';
 import Navbar from '../../../layout/Navbar/Navbar';
+
 import '../../../styles/global';
 
 const Card = styled.header`
@@ -12,12 +22,12 @@ const Card = styled.header`
   width: 100%;
   padding-top: 150px;
 `;
+
 class Signin extends Component {
-  constructor() {
-    super();
+  constructor(account, addUserDetails) {
+    super(account, addUserDetails);
     this.handleChange = this.handleChange.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.Auth = new AuthService();
+    this.handleSignIn = this.handleSignIn.bind(this);
     this.state = {
       title: 'ENTRAR',
       btnLogin: 'LOGAR',
@@ -26,41 +36,36 @@ class Signin extends Component {
       lbPassword: 'Senha',
       errEmail: 'Email incorreto',
       errPassword: 'Quantidade de caracteres insuficiente (minímo 10)',
-      email: '',
-      password: '',
+      formData: {},
     };
   }
 
-  componentWillMount() {
-    if (this.Auth.loggedIn()) this.props.history.replace('/');
-  }
-
-  handleFormSubmit(e) {
+  handleSignIn = async (e) => {
     e.preventDefault();
-
-    this.Auth.login(this.state.username, this.state.password)
-      .then((res) => {
-        this.props.history.replace('/');
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  }
+    if (!this.state.formData.username) {
+      this.setState({ error: 'Por favor, preencha o email para continuar.' });
+    } else if (!this.state.formData.password) {
+      this.setState({ error: 'Por favor, preencha a senha para continuar.' });
+    } else {
+      try {
+        const response = await api.post('/login', this.state.formData);
+        login(response.data.token);
+        user(this.state.formData.username);
+        console.log(response);
+        this.props.history.push('/');
+      } catch (err) {
+        this.setState({
+          error: err.response.data.message,
+        });
+      }
+    }
+  };
 
   handleChange(e) {
     this.setState({
-      [e.target.name]: e.target.value,
+      formData: { ...this.state.formData, [e.target.name]: e.target.value },
     });
   }
-  // handleChange = (event) => {
-  //   this.setState({
-  //     [event.target.name]: event.target.value,
-  //   });
-  // };
-
-  // validateForm() {
-  //   return this.state.email.length > 0 && this.state.password.length > 0;
-  // }
 
   render() {
     return (
@@ -74,46 +79,31 @@ class Signin extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
-              <form melhod="POST" onSubmit={this.handleFormSubmit}>
-                <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                  <input
-                    className="mdl-textfield__input"
-                    type="text"
-                    id="cadEmail"
-                    name="username"
-                    // pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                    // value={this.state.email}
-                    onChange={this.handleChange}
-                  />
-                  <label className="mdl-textfield__label" htmlFor="cadEmail">
-                    {this.state.lbEmail}
-                  </label>
-                  <span className="mdl-textfield__error">
-                    {this.state.errEmail}
-                  </span>
-                </div>
+              <form melhod="POST" onSubmit={this.handleSignIn}>
+                {this.state.error && <p className="error">{this.state.error}</p>}
 
-                <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w100">
-                  <input
-                    className="mdl-textfield__input"
-                    name="password"
-                    type="password"
-                    id="cadPassword"
-                    // minLength="10"
-                    // pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                    // value={this.state.senha}
-                    onChange={this.handleChange}
-                  />
-                  <label className="mdl-textfield__label" htmlFor="cadPassword">
-                    {this.state.lbPassword}
-                  </label>
-                  <span className="mdl-textfield__error">
-                    {this.state.errPassword}
-                  </span>
-                </div>
+                <TextField
+                  className="w100"
+                  id="username"
+                  name="username"
+                  label="Email"
+                  margin="normal"
+                  onChange={this.handleChange}
+                />
+
+                <TextField
+                  className="w100"
+                  id="password"
+                  label="Senha"
+                  name="password"
+                  type="password"
+                  margin="normal"
+                  onChange={this.handleChange}
+                />
+
                 <div className="mdl-card__actions mdl-typography--text-right">
                   <Link
-                    type="submit"
+                    type="button"
                     className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
                     color="primary"
                     to="/signup"
@@ -138,4 +128,8 @@ class Signin extends Component {
   }
 }
 
-export default Signin;
+const mapStateToProps = state => ({
+  account: state.account,
+});
+
+export default withRouter(connect(mapStateToProps)(Signin));
