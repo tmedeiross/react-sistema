@@ -26,6 +26,7 @@ const Card = styled.header`
 class Signup extends Component {
   constructor(account, addUserDetails) {
     super(account, addUserDetails);
+
     this.handleChange = this.handleChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.state = {
@@ -33,6 +34,10 @@ class Signup extends Component {
       btnLogin: 'JÁ TENHO CONTA',
       bntCadastrar: 'CRIAR CONTA',
       formData: {},
+      emailValid: false,
+      passwordValid: false,
+      formValid: false,
+      validate: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -53,7 +58,7 @@ class Signup extends Component {
         const response = await api.post('/user', this.state.formData);
         login(this.state.formData.email);
         user(this.state.formData.email);
-        this.props.history.push('/');
+        this.props.history.push('/signin');
       } catch (err) {
         this.setState({
           error: err.response.data.message,
@@ -66,10 +71,23 @@ class Signup extends Component {
     this.setState({
       formData: { ...this.state.formData, [e.target.name]: e.target.value },
     });
+
+    if (this.state.formData.password) {
+      if (this.state.formData.password.length < 6) {
+        this.setState({ error: 'Sua senha deve conter mais de 6 caracteres.' });
+        this.setState({ validate: false });
+      } else {
+        this.setState({ error: '' });
+        this.setState({ validate: true });
+      }
+    }
   }
 
   validateForm() {
-    return this.state.formData.password === this.state.formData.confirmPassword;
+    return (
+      this.state.validate == true
+      && this.state.formData.password === this.state.formData.confirmPassword
+    );
   }
 
   render(addUserDetails, getUserDetails) {
