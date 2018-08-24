@@ -3,7 +3,7 @@ $appbar-height: 40px;
 $navbar-height: 50px;
 $list-width: 300px;
 $gap: 10px;
-$scrollbar-thickness: 17px;
+$scrollbar-thickness: 7px;
 $list-header-height: 36px;
 $list-footer-height: 36px;
 // Misc
@@ -25,6 +25,7 @@ body {
   height: 100vh;
 
   display: grid;
+
   grid-template-rows: $appbar-height $navbar-height 1fr;
   //grid-template-columns: 100%;
   background-color: $board-bg-color;

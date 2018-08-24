@@ -28,11 +28,11 @@ body {
 }
 .list {
   width: 300px;
-  background-color: #e2e4e6;
+  background-color: rgba(0, 104, 169, 9);
   height: calc(100% - 10px - 17px);
 }
 .list > * {
-  color: #333;
+  color: #fff;
   padding: 0 10px;
 }
 .list header {
@@ -55,6 +55,7 @@ body {
   overflow-y: auto;
 }
 .list ul li {
+  color: #1f2933;
   background-color: #fff;
   padding: 10px;
   border-radius: 3px;
@@ -99,8 +100,8 @@ p {
   font-size: 11px;
 }
 .footer {
-  background: #333;
-  color: #fff;
+  background: #1f2933;
+  color: #606d7a;
   padding: 0px 5px;
   position: absolute;
   font-size: 13px;
@@ -109,4 +110,19 @@ p {
   left: 0;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+}
+
+.list ::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.list ::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+.list ::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 10px;
 }
