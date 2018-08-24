@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import InputMask from 'react-input-mask';
 
 import styled from 'styled-components';
 

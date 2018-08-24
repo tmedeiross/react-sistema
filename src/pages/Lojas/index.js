@@ -119,7 +119,7 @@ class Lojas extends Component {
                           <Button
                             mini
                             variant="fab"
-                            className="fab btn-edit"
+                            className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
                             color="primary"
                             aria-label="Delete"
                           >
@@ -128,7 +128,7 @@ class Lojas extends Component {
                           <Button
                             mini
                             variant="fab"
-                            className="fab btn-delete"
+                            className="fab btn-delete mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
                             color="secondary"
                             aria-label="Edit"
                           >
@@ -140,7 +140,7 @@ class Lojas extends Component {
                   </tbody>
                 </table>
 
-                <div className="mdl-card__actions mdl-typography--text-right">
+                <div className="mdl-card__actions mdl-typography--text-right mt1">
                   <Link
                     to="/register"
                     type="button"
