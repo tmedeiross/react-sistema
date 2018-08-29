@@ -9,8 +9,8 @@ import If from '../../common/if';
 import ValidateForm from './validator';
 import LoginForm from './form';
 import * as AuthAPI from '../../../api/auth';
-import * as StoreAPI from '../../../api/store';
-import { setToken, setUser } from '../../../utils/services/auth';
+// import * as StoreAPI from '../../../api/store';
+import { setToken } from '../../../utils/services/auth';
 import { ROUTE_PREFIX as PREFIX } from '../../../config';
 import { addShops, addShop } from '../../../redux-flow/reducers/shops/action-creators';
 import { setAuth } from '../../../redux-flow/reducers/auth/action-creators';
@@ -73,6 +73,7 @@ export class Login extends Component {
         //   });
       })
       .catch((err) => {
+        console.log(err);
         if (err.status === 404) {
           this.setState({
             isLoading: false,
