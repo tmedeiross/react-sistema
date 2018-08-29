@@ -1,0 +1,25 @@
+.form-group {
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+select {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0px;
+}
+.form-control {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.85);
+  border-radius: 0 !important;
+}
+select:focus,
+input:focus,
+.form-control:focus {
+  outline: none !important;
+  box-shadow: none;
+  border-color: rgb(0, 104, 169) !important;
+  border-width: 3px;
+  border-radius: 0 !important;
+}
+.form-control:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+}
