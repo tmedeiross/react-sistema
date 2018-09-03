@@ -19,6 +19,20 @@ export const NavBar = ({ shop }) => (
         </Link>
         <div className="mdl-layout-spacer" />
         <nav className="mdl-navigation mdl-layout--large-screen-only">
+          {/* <form>
+            <div className="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+              <label className="mdl-button mdl-js-button mdl-button--icon" forHTML="sample6">
+                <i className="material-icons">search</i>
+              </label>
+              <div className="mdl-textfield__expandable-holder">
+                <input className="mdl-textfield__input" type="text" id="sample6" />
+                <label className="mdl-textfield__label" forHTML="sample-expandable">
+                  Expandable Input
+                </label>
+              </div>
+            </div>
+          </form> */}
+
           {/* <Link className="mdl-navigation__link" to={/}>
           Dashboard
         </Link> */}

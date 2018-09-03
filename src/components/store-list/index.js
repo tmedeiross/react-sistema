@@ -62,6 +62,8 @@ export class Home extends Component {
           break;
         case 'stayhere':
           break;
+        default:
+          break;
       }
     });
   };

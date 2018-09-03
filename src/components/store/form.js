@@ -50,8 +50,6 @@ const FormAddStore = ({
   neighborhood,
   city,
   state,
-  // isValid,
-  // isLoading,
 }) => (
   <form onSubmit={handleSubmit} autoComplete="off">
     <div className="mdl-grid">
@@ -61,7 +59,6 @@ const FormAddStore = ({
           id="cnpj"
           label="CNPJ"
           value={cnpj}
-          error={errors.cnpj}
           handleChange={handleChange}
           maxLength="14"
           showMsgError

@@ -240,6 +240,8 @@ export class Login extends Component {
             case 'stayhere':
               this.setState(...initialState, initialState);
               break;
+            default:
+              break;
           }
         });
       })
