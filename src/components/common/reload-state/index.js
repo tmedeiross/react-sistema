@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { setAuth } from '../../../redux-flow/reducers/auth/action-creators';
 import { addShop } from '../../../redux-flow/reducers/shops/action-creators';
 
-const props = this.props;
 class RecreateAuth extends Component {
   componentDidMount() {
     if (localStorage.getItem('token')) {
@@ -12,7 +11,8 @@ class RecreateAuth extends Component {
     }
 
     try {
-      const shop = JSON.parse(localStorage.getItem('shop'));
+      // const shop = JSON.parse(localStorage.getItem('shop'));
+      const shop = localStorage.getItem('shop');
 
       if (shop) {
         this.props.addShop(shop);

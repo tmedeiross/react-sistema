@@ -2,19 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import YoutubeModal from 'react-youtube-modal';
+// import YoutubeModal from 'react-youtube-modal';
 import If from '../../common/if';
 import { ROUTE_PREFIX as PREFIX } from '../../../config';
 import Logo from '../../../assets/img/logo-white.png';
 import { isAuthenticated } from '../../../utils/services/auth';
 
-export const NavBar = ({ shop, isAuthenticated }) => (
+export const NavBar = ({ shop }) => (
   <div className="mdl-layout mdl-layout--fixed-header">
     <header className="mdl-layout__header">
       <div className="mdl-layout__header-row">
-        <span className="mdl-layout-title">
-          <img className="nav-icon" src={Logo} alt="logo" />
-        </span>
+        <Link to={`${PREFIX}/`} className="nav-link">
+          <span className="mdl-layout-title">
+            <img className="nav-icon" src={Logo} alt="logo" />
+          </span>
+        </Link>
         <div className="mdl-layout-spacer" />
         <nav className="mdl-navigation mdl-layout--large-screen-only">
           {/* <Link className="mdl-navigation__link" to={/}>

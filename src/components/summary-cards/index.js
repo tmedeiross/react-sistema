@@ -13,7 +13,8 @@ class SummaryCards extends Component {
   }
 
   componentDidMount() {
-    const shop = JSON.parse(localStorage.getItem('shop'));
+    // const shop = JSON.parse(localStorage.getItem('shop'));
+    const shop = localStorage.getItem('shop');
     const shopId = shop !== null ? shop.id : 0;
 
     DashboardAPI.getDataDashboard(shopId).then(response => this.setCardsData(response.data));

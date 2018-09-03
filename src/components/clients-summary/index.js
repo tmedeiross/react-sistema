@@ -44,7 +44,8 @@ export class ClientsSummary extends Component {
       return;
     }
 
-    const shop = JSON.parse(localStorage.getItem('shop'));
+    // const shop = JSON.parse(localStorage.getItem('shop'));
+    const shop = localStorage.getItem('shop');
     const shopId = shop ? shop.id : 0;
 
     pageData

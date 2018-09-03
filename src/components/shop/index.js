@@ -17,7 +17,8 @@ export class Shop extends Component {
     const { shops } = this.props;
 
     try {
-      const shop = JSON.parse(localStorage.getItem('shop'));
+      // const shop = JSON.parse(localStorage.getItem('shop'));
+      const shop = localStorage.getItem('shop');
 
       if (shop) {
         this.setState({

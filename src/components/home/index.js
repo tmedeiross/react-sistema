@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { debounce } from 'lodash';
+// import { debounce } from 'lodash';
 
 // import SummaryCards from '../summary-cards';
 // import InputSearch from '../common/form/input-search';
@@ -39,7 +39,7 @@ export class Home extends Component {
   }
 
   render() {
-    const { searchValue } = this.state;
+    // const { searchValue } = this.state;
     return (
       <div>
         <div className="row">
@@ -49,7 +49,7 @@ export class Home extends Component {
             <br />
             <br />
             <br />
-            <h1>teste</h1>
+            <h1>Home</h1>
           </div>
         </div>
       </div>

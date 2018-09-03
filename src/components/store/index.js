@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Spinner from 'react-spinkit';
 import swal from 'sweetalert';
-import cep from 'cep-promise';
 import $ from 'jquery';
 
 import { Card } from './style';
@@ -15,12 +14,14 @@ import FormAddStore from './form';
 import * as AuthAPI from '../../api/auth';
 
 import { ROUTE_PREFIX as PREFIX } from '../../config';
-import { addShops, addShop } from '../../redux-flow/reducers/shops/action-creators';
-import { setAuth } from '../../redux-flow/reducers/auth/action-creators';
+// import { addShops, addShop } from '../../redux-flow/reducers/shops/action-creators';
+// import { setAuth } from '../../redux-flow/reducers/auth/action-creators';
 import { assignMasks } from '../client-details/client-data/form-address/masks';
 import * as ZipCodeService from '../../utils/services/zip-code';
+import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
 
 const initialState = {
+  id: '',
   cnpj: '',
   fantasyName: '',
   socialName: '',
@@ -46,11 +47,23 @@ export class Login extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    // const {
+    //   cnpj,
+    //   fantasyName,
+    //   socialName,
+    //   phoneNumber,
+    //   email,
+    //   address,
+    //   number,
+    //   complement,
+    //   zipCode,
+    //   neighborhood,
+    //   city,
+    //   state,
+    // } = this.state;
   }
 
-  handleBlurCpf = () => {
-    const cnpj = onlyNumbersCnpj(this.state.cpnj);
-  };
+  handleBlurCpf = () => onlyNumbersCnpj(this.state.cpnj);
 
   redirectToHome() {
     return this.props.history.push(`${PREFIX}`);
@@ -66,21 +79,33 @@ export class Login extends Component {
     return isValid;
   }
 
+  existParams() {
+    return !!this.props.match.params.id;
+  }
+
+  returnParams() {
+    return this.props.match.params.id;
+  }
+
   componentDidMount() {
     this.assignMasks();
+
+    if (this.existParams()) {
+      this.getStore();
+    }
   }
 
   handleBlurCep = (e) => {
     const { value } = e.target;
 
     if (!value) return;
-
+    this.setState({ isLoading: true });
     // this.props.loadingOn();
     ZipCodeService.searchAddressByZipCode(e.target.value)
       .then((response) => {
         if (response.status === 404) {
           swal('Atenção', 'Cep não encontrado', 'warning');
-          // this.props.loadingOff();
+          this.setState({ isLoading: false });
           return;
         }
 
@@ -96,10 +121,10 @@ export class Login extends Component {
         }
         $('#number').focus();
 
-        // this.props.loadingOff();
+        this.setState({ isLoading: false });
       })
       .catch(() => {
-        // this.props.loadingOff();
+        this.setState({ isLoading: false });
         swal('Atenção', 'Ocorreu um erro ao consultar o cep', 'error');
       });
   };
@@ -109,14 +134,56 @@ export class Login extends Component {
     $('#cnpj').focus();
   };
 
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+  getStore() {
+    const storeID = this.props.match.params.id;
+
+    AuthAPI.storeGet(storeID)
+      .then((response) => {
+        const getStoreData = response.data;
+        this.setState(...initialState, getStoreData);
+      })
+      .catch((response) => {
+        console.log(response);
+      });
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    // if (!this.isValid()) return;
+  putStore() {
+    const resetState = { errors: {}, errorMessage: '', isLoading: true };
+    this.setState(resetState);
 
+    // const {
+    //   cnpj,
+    //   fantasyName,
+    //   socialName,
+    //   phoneNumber,
+    //   email,
+    //   address,
+    //   number,
+    //   complement,
+    //   zipCode,
+    //   neighborhood,
+    //   city,
+    //   state,
+    // } = this.state;
+
+    const storeID = this.props.match.params.id;
+
+    AuthAPI.storePut(storeID)
+      .then((response) => {
+        console.log(response);
+        const getStoreData = response.data;
+        this.setState(...initialState, getStoreData);
+      })
+      .catch((response) => {
+        console.log(response);
+        this.setState({
+          isLoading: false,
+          errorMessage: 'Dados incorretos ou faltantes.',
+        });
+      });
+  }
+
+  newStore() {
     const resetState = { errors: {}, errorMessage: '', isLoading: true };
     this.setState(resetState);
 
@@ -134,7 +201,6 @@ export class Login extends Component {
       city,
       state,
     } = this.state;
-
     AuthAPI.storeNew({
       cnpj,
       fantasyName,
@@ -149,32 +215,33 @@ export class Login extends Component {
       city,
       state,
     })
-      .then((response) => {
+      .then(() => {
         this.setState({ ...resetState, isLoading: false });
 
-        this.props.history.push(`${PREFIX}/stores`);
-        // swal('Loja incluída com sucesso!', 'O que deseja fazer?', {
-        //   buttons: {
-        //     home: {
-        //       text: 'Ir para suas lojas',
-        //       value: 'store',
-        //     },
-        //     proximo: {
-        //       text: 'Cadastrar nova loja',
-        //       value: 'stayhere',
-        //     },
-        //   },
-        // }).then((value) => {
-        //   switch (value) {
-        //     case 'store':
-        //       this.props.history.push({
-        //         pathname: `${PREFIX}/stores`,
-        //       });
-        //       break;
-        //     case 'stayhere':
-        //       break;
-        //   }
-        // });
+        // this.props.history.push(`${PREFIX}/stores`);
+        swal('Loja incluída com sucesso!', 'O que deseja fazer?', {
+          buttons: {
+            home: {
+              text: 'Ir para suas lojas',
+              value: 'store',
+            },
+            proximo: {
+              text: 'Cadastrar nova loja',
+              value: 'stayhere',
+            },
+          },
+        }).then((value) => {
+          switch (value) {
+            case 'store':
+              this.props.history.push({
+                pathname: `${PREFIX}/stores`,
+              });
+              break;
+            case 'stayhere':
+              this.setState(...initialState, initialState);
+              break;
+          }
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -200,6 +267,21 @@ export class Login extends Component {
           });
         }
       });
+  }
+
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    // if (!this.isValid()) return;
+
+    if (this.existParams()) {
+      this.putStore();
+    } else {
+      this.newStore();
+    }
 
     e.target.reset();
   }
@@ -241,7 +323,9 @@ export class Login extends Component {
   }
 }
 
+const mapDispatchToProps = { loadingOn, loadingOff };
+
 export default connect(
   null,
-  { addShops, addShop, setAuth },
+  mapDispatchToProps,
 )(Login);

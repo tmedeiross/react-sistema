@@ -45,7 +45,6 @@ Input.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
   value: PropTypes.string,
-  label: PropTypes.string,
   handleChange: PropTypes.func,
   error: PropTypes.string,
   placeholder: PropTypes.string,

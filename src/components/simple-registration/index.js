@@ -13,7 +13,7 @@ import { handleError } from '../../utils/error-messages';
 import * as ClientAPI from '../../api/client';
 import * as PersonAPI from '../../api/person';
 import ClientInfo from '../client-details/client-data/form-info';
-import Breadcrumb from '../common/breadcrumb';
+// import Breadcrumb from '../common/breadcrumb';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
 import ErrorMessages from '../common/messages/error';
 import { assignMasks } from '../client-details/client-data/form-address/masks';

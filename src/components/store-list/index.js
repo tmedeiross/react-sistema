@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import swal from 'sweetalert';
 
 import './styles.css';
 
@@ -13,18 +14,64 @@ import { Card, Container } from './styles';
 import * as AuthAPI from '../../api/auth';
 
 export class Home extends Component {
-  constructor() {
-    super();
+  constructor(...props) {
+    super(...props);
     this.state = {
       stores: [],
     };
+    this.deleteStore = this.deleteStore.bind(this);
+    this.listAll = this.listAll.bind(this);
   }
 
   componentDidMount() {
+    this.listAll();
+  }
+
+  deleteStore = (ev) => {
+    const storeID = ev.currentTarget.id;
+
+    swal('Tem certeza que deseja excluir a loja?', 'O que deseja fazer?', {
+      buttons: {
+        home: {
+          text: 'Sim, quero excluir',
+          value: 'store',
+        },
+        proximo: {
+          text: 'Cancelar',
+          value: 'stayhere',
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case 'store':
+          AuthAPI.storeDel(storeID)
+            .then((response) => {
+              console.log(response);
+            })
+            .then(() => {
+              setTimeout(() => {
+                this.listAll();
+              }, 1000);
+            })
+            .catch((response) => {
+              console.log(response);
+            });
+          this.props.history.push({
+            pathname: `${PREFIX}/stores`,
+          });
+          break;
+        case 'stayhere':
+          break;
+      }
+    });
+  };
+
+  listAll() {
     const resetState = { errors: {}, errorMessage: '', isLoading: true };
 
     AuthAPI.storeAll()
       .then((response) => {
+        console.log(response);
         this.setState({ ...resetState });
 
         const stores = response.data.content;
@@ -36,6 +83,7 @@ export class Home extends Component {
   }
 
   render() {
+    const { stores } = this.state;
     return (
       <Container>
         <Card>
@@ -47,20 +95,25 @@ export class Home extends Component {
               <table className="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                 <thead>
                   <tr>
-                    <th className="mdl-data-table__cell--non-numeric">Nome Fantasia</th>
+                    <th className="mdl-data-table__cell--non-numeric">CNPJ</th>
+                    <th>ID</th>
+                    <th>Nome Fantasia</th>
                     <th>Telefone</th>
                     <th>UF</th>
                     <th />
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.stores.map(store => (
+                  {stores.map(store => (
                     <tr key={store.id}>
-                      <td className="mdl-data-table__cell--non-numeric">{store.fantasyName}</td>
+                      <td className="mdl-data-table__cell--non-numeric">{store.id}</td>
+                      <td className="mdl-data-table__cell--non-numeric">{store.cnpj}</td>
+                      <td>{store.fantasyName}</td>
                       <td>{store.phoneNumber}</td>
                       <td>{store.state}</td>
                       <td>
                         <Button
+                          href={`${PREFIX}/store/${store.id}`}
                           mini
                           variant="fab"
                           className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
@@ -75,6 +128,8 @@ export class Home extends Component {
                           className="fab btn-delete mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
                           color="secondary"
                           aria-label="Edit"
+                          id={store.id}
+                          onClick={this.deleteStore}
                         >
                           <DeleteIcon />
                         </Button>

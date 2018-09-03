@@ -50,8 +50,8 @@ const FormAddStore = ({
   neighborhood,
   city,
   state,
-  isValid,
-  isLoading,
+  // isValid,
+  // isLoading,
 }) => (
   <form onSubmit={handleSubmit} autoComplete="off">
     <div className="mdl-grid">
@@ -232,7 +232,7 @@ FormAddStore.propTypes = {
   neighborhood: PropTypes.string.isRequired,
   city: PropTypes.string.isRequired,
   state: PropTypes.string.isRequired,
-  handleBlurCep: PropTypes.func,
+  handleBlurCep: PropTypes.func.isRequired,
 };
 
 export default FormAddStore;

@@ -24,7 +24,8 @@ const AppRoutes = () => (
     <PrivateRoute path={`${PREFIX}/home`} component={Home} />
     <PrivateRoute path={`${PREFIX}/auth/logout`} component={Logout} />
     <PrivateRoute path={`${PREFIX}/stores`} component={Stores} />
-    <PrivateRoute path={`${PREFIX}/store`} component={Store} />
+    <PrivateRoute exact path={`${PREFIX}/store`} component={Store} />
+    <PrivateRoute path={`${PREFIX}/store/:id`} component={Store} />
     <PrivateRoute path={`${PREFIX}/client/new/:customerName?`} component={SimpleRegistration} />
     <PrivateRoute path={`${PREFIX}/clients/:summaryType`} component={ClientsSummary} />
     <PrivateRoute path={`${PREFIX}/client/:id`} component={ClientDetails} />
