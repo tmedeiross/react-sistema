@@ -6,7 +6,6 @@ export function searchAddressByZipCode(zipCode) {
   if (!token) {
     return getTokenAPI()
       .then((response) => {
-        console.log('token-cep', response.token);
         localStorage.setItem('token-cep', response.token);
       })
       .then(() => fetchZipCode(zipCode))
@@ -35,7 +34,6 @@ function getTokenAPI() {
 function fetchZipCode(zipCode) {
   const token = getToken();
   const url = `${API_URL_ZIPCODE}/cep/${zipCode}`;
-  console.log('token-cep', token);
   return fetch(url, {
     headers: {
       Accept: 'application/json',

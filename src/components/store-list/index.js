@@ -45,20 +45,19 @@ export class Home extends Component {
       switch (value) {
         case 'store':
           AuthAPI.storeDel(storeID)
-            .then((response) => {
-              console.log(response);
-            })
             .then(() => {
               setTimeout(() => {
                 this.listAll();
-              }, 1000);
+              }, 2000);
+            })
+            .then((response) => {
+              this.props.history.push({
+                pathname: `${PREFIX}/stores`,
+              });
             })
             .catch((response) => {
               console.log(response);
             });
-          this.props.history.push({
-            pathname: `${PREFIX}/stores`,
-          });
           break;
         case 'stayhere':
           break;
@@ -73,7 +72,6 @@ export class Home extends Component {
 
     AuthAPI.storeAll()
       .then((response) => {
-        console.log(response);
         this.setState({ ...resetState });
 
         const stores = response.data.content;
@@ -98,7 +96,6 @@ export class Home extends Component {
                 <thead>
                   <tr>
                     <th className="mdl-data-table__cell--non-numeric">CNPJ</th>
-                    <th>ID</th>
                     <th>Nome Fantasia</th>
                     <th>Telefone</th>
                     <th>UF</th>
@@ -108,7 +105,6 @@ export class Home extends Component {
                 <tbody>
                   {stores.map(store => (
                     <tr key={store.id}>
-                      <td className="mdl-data-table__cell--non-numeric">{store.id}</td>
                       <td className="mdl-data-table__cell--non-numeric">{store.cnpj}</td>
                       <td>{store.fantasyName}</td>
                       <td>{store.phoneNumber}</td>

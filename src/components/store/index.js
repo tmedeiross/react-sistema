@@ -47,20 +47,6 @@ export class Login extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    // const {
-    //   cnpj,
-    //   fantasyName,
-    //   socialName,
-    //   phoneNumber,
-    //   email,
-    //   address,
-    //   number,
-    //   complement,
-    //   zipCode,
-    //   neighborhood,
-    //   city,
-    //   state,
-    // } = this.state;
   }
 
   handleBlurCpf = () => onlyNumbersCnpj(this.state.cpnj);
@@ -183,7 +169,6 @@ export class Login extends Component {
       state,
     })
       .then((response) => {
-        console.log(response);
         this.props.history.push(`${PREFIX}/stores`);
       })
       .catch((response) => {

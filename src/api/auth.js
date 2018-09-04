@@ -4,6 +4,7 @@ setTokenHeader(localStorage.getItem('token'));
 
 export const login = data => http.post('/login', data);
 export const user = data => http.post('/user', data);
+export const getUser = email => http.get('/user', email);
 export const storeAll = data => http.get('/store', data);
 export const storeNew = data => http.post('/store', data);
 export const storeDel = id => http.delete(`/store/${id}`);
