@@ -151,28 +151,40 @@ export class Login extends Component {
     const resetState = { errors: {}, errorMessage: '', isLoading: true };
     this.setState(resetState);
 
-    // const {
-    //   cnpj,
-    //   fantasyName,
-    //   socialName,
-    //   phoneNumber,
-    //   email,
-    //   address,
-    //   number,
-    //   complement,
-    //   zipCode,
-    //   neighborhood,
-    //   city,
-    //   state,
-    // } = this.state;
+    const {
+      cnpj,
+      fantasyName,
+      socialName,
+      phoneNumber,
+      email,
+      address,
+      number,
+      complement,
+      zipCode,
+      neighborhood,
+      city,
+      state,
+    } = this.state;
 
     const storeID = this.props.match.params.id;
 
-    AuthAPI.storePut(storeID)
+    AuthAPI.storePut(storeID, {
+      cnpj,
+      fantasyName,
+      socialName,
+      phoneNumber,
+      email,
+      address,
+      number,
+      complement,
+      zipCode,
+      neighborhood,
+      city,
+      state,
+    })
       .then((response) => {
         console.log(response);
-        const getStoreData = response.data;
-        this.setState(...initialState, getStoreData);
+        this.props.history.push(`${PREFIX}/stores`);
       })
       .catch((response) => {
         console.log(response);
