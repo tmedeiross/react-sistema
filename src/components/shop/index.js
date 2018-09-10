@@ -10,12 +10,11 @@ import Typography from '@material-ui/core/Typography';
 
 import './styles.css';
 
-import Button from '@material-ui/core/Button';
-import EditIcon from '@material-ui/icons/Edit';
 import StoreDetails from '../shop-details';
+import ShopUser from '../shop-user';
 import { ROUTE_PREFIX as PREFIX } from '../../config';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
-import { Card, Container } from './styles';
+import { Container } from './styles';
 import * as AuthAPI from '../../api/auth';
 
 function TabContainer(props) {
@@ -99,7 +98,11 @@ export class Shop extends Component {
             </TabContainer>
           )}
           {value === 1 && <TabContainer>Fornecedores</TabContainer>}
-          {value === 2 && <TabContainer>Usuários</TabContainer>}
+          {value === 2 && (
+            <TabContainer>
+              <ShopUser paramId={this.props.match.params.id} />
+            </TabContainer>
+          )}
         </div>
       </Container>
     );

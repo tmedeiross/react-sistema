@@ -76,8 +76,6 @@ export class StoreDetails extends Component {
   }
 
   componentDidMount() {
-    console.log(this.returnParams())
-
     this.assignMasks();
 
     if (this.existParams()) {
@@ -157,7 +155,7 @@ export class StoreDetails extends Component {
       state,
     } = this.state;
 
-    const storeID = this.props.match.params.id;
+    const storeID = this.props.paramId;
 
     AuthAPI.storePut(storeID, {
       cnpj,
