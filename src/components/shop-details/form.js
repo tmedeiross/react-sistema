@@ -50,6 +50,7 @@ const FormAddStore = ({
   neighborhood,
   city,
   state,
+  textBtn,
 }) => (
   <form onSubmit={handleSubmit} autoComplete="off">
     <div className="mdl-grid">
@@ -206,7 +207,7 @@ const FormAddStore = ({
       <input
         type="submit"
         className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary"
-        value="Adicionar"
+        value={textBtn}
         // disabled={!isValid}
       />
     </div>
@@ -229,6 +230,7 @@ FormAddStore.propTypes = {
   neighborhood: PropTypes.string.isRequired,
   city: PropTypes.string.isRequired,
   state: PropTypes.string.isRequired,
+  textBtn: PropTypes.string.isRequired,
   handleBlurCep: PropTypes.func.isRequired,
 };
 

@@ -7,7 +7,6 @@ import { Card } from './style';
 
 import If from '../../common/if';
 import * as AuthAPI from '../../../api/auth';
-// import * as StoreAPI from '../../../api/store';
 import { ROUTE_PREFIX as PREFIX } from '../../../config';
 import { addShops, addShop } from '../../../redux-flow/reducers/shops/action-creators';
 import { setAuth } from '../../../redux-flow/reducers/auth/action-creators';
@@ -37,9 +36,10 @@ export class Login extends Component {
   passouSegundo() {
     const segundos = this.state.segundosRestantes - 1;
 
-    if (this.state.segundosRestantes === 0) {
+    if (this.state.segundosRestantes === 1) {
       this.setState.segundosRestantes = 0;
       this.redirectToLogin();
+      clearInterval(this.interval);
     }
 
     this.setState({ segundosRestantes: segundos });

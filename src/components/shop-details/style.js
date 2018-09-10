@@ -5,7 +5,7 @@ export const Card = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top: 200px;
+  padding-top: 150px;
 
   .mdl-cell {
     margin: 0 8px;

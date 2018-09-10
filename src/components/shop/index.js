@@ -1,330 +1,119 @@
 import React, { Component } from 'react';
+// import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Spinner from 'react-spinkit';
-import swal from 'sweetalert';
-import $ from 'jquery';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
 
-import { Card } from './style';
-import './store.css';
+import './styles.css';
 
-import { onlyNumbersCnpj } from '../../utils/string';
-import If from '../common/if';
-import ValidateForm from './validator';
-import FormAddStore from './form';
+import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import StoreDetails from '../shop-details';
+import { ROUTE_PREFIX as PREFIX } from '../../config';
+import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
+import { Card, Container } from './styles';
 import * as AuthAPI from '../../api/auth';
 
-import { ROUTE_PREFIX as PREFIX } from '../../config';
-// import { addShops, addShop } from '../../redux-flow/reducers/shops/action-creators';
-// import { setAuth } from '../../redux-flow/reducers/auth/action-creators';
-import { assignMasks } from '../client-details/client-data/form-address/masks';
-import * as ZipCodeService from '../../utils/services/zip-code';
-import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
 
-const initialState = {
-  id: '',
-  cnpj: '',
-  fantasyName: '',
-  socialName: '',
-  phoneNumber: '',
-  email: '',
-  address: '',
-  number: '',
-  complement: '',
-  zipCode: '',
-  neighborhood: '',
-  city: '',
-  state: '',
-  errors: {},
-  isLoading: false,
-  errorMessage: '',
-  formValid: 'false',
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
-export class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = initialState;
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+});
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleBlurCpf = () => onlyNumbersCnpj(this.state.cpnj);
-
-  redirectToHome() {
-    return this.props.history.push(`${PREFIX}`);
-  }
-
-  isValid() {
-    const { errors, isValid } = ValidateForm(this.state);
-
-    if (!isValid) {
-      this.setState({ errors });
-    }
-
-    return isValid;
-  }
-
-  existParams() {
-    return !!this.props.match.params.id;
-  }
-
-  returnParams() {
-    return this.props.match.params.id;
+export class Shop extends Component {
+  constructor(...props) {
+    super(...props);
+    this.state = {
+      stores: [],
+      value: 0,
+      paramId: this.props.match.params.id,
+    };
+    this.listAll = this.listAll.bind(this);
   }
 
   componentDidMount() {
-    this.assignMasks();
-
-    if (this.existParams()) {
-      this.getStore();
-    }
+    this.listAll();
   }
 
-  handleBlurCep = (e) => {
-    const { value } = e.target;
-
-    if (!value) return;
-    this.setState({ isLoading: true });
-    // this.props.loadingOn();
-    ZipCodeService.searchAddressByZipCode(e.target.value)
-      .then((response) => {
-        if (response.status === 404) {
-          swal('Atenção', 'Cep não encontrado', 'warning');
-          this.setState({ isLoading: false });
-          return;
-        }
-
-        const data = {
-          address: response.logradouro || '',
-          neighborhood: response.bairro || '',
-          city: response.cidade || '',
-          state: response.estado || '',
-        };
-
-        if (response.logradouro) {
-          this.setState({ ...data });
-        }
-        $('#number').focus();
-
-        this.setState({ isLoading: false });
-      })
-      .catch(() => {
-        this.setState({ isLoading: false });
-        swal('Atenção', 'Ocorreu um erro ao consultar o cep', 'error');
-      });
+  handleChange = (event, value) => {
+    this.setState({ value });
   };
 
-  assignMasks = () => {
-    assignMasks();
-    $('#cnpj').focus();
-  };
-
-  getStore() {
-    const storeID = this.props.match.params.id;
-
-    AuthAPI.storeGet(storeID)
-      .then((response) => {
-        const getStoreData = response.data;
-        this.setState(...initialState, getStoreData);
-      })
-      .catch((response) => {
-        console.log(response);
-      });
-  }
-
-  putStore() {
+  listAll() {
     const resetState = { errors: {}, errorMessage: '', isLoading: true };
-    this.setState(resetState);
 
-    const {
-      cnpj,
-      fantasyName,
-      socialName,
-      phoneNumber,
-      email,
-      address,
-      number,
-      complement,
-      zipCode,
-      neighborhood,
-      city,
-      state,
-    } = this.state;
-
-    const storeID = this.props.match.params.id;
-
-    AuthAPI.storePut(storeID, {
-      cnpj,
-      fantasyName,
-      socialName,
-      phoneNumber,
-      email,
-      address,
-      number,
-      complement,
-      zipCode,
-      neighborhood,
-      city,
-      state,
-    })
+    AuthAPI.storeAll()
       .then((response) => {
-        this.props.history.push(`${PREFIX}/stores`);
-      })
-      .catch((response) => {
-        console.log(response);
-        this.setState({
-          isLoading: false,
-          errorMessage: 'Dados incorretos ou faltantes.',
-        });
-      });
-  }
+        this.setState({ ...resetState });
 
-  newStore() {
-    const resetState = { errors: {}, errorMessage: '', isLoading: true };
-    this.setState(resetState);
-
-    const {
-      cnpj,
-      fantasyName,
-      socialName,
-      phoneNumber,
-      email,
-      address,
-      number,
-      complement,
-      zipCode,
-      neighborhood,
-      city,
-      state,
-    } = this.state;
-    AuthAPI.storeNew({
-      cnpj,
-      fantasyName,
-      socialName,
-      phoneNumber,
-      email,
-      address,
-      number,
-      complement,
-      zipCode,
-      neighborhood,
-      city,
-      state,
-    })
-      .then(() => {
-        this.setState({ ...resetState, isLoading: false });
-
-        // this.props.history.push(`${PREFIX}/stores`);
-        swal('Loja incluída com sucesso!', 'O que deseja fazer?', {
-          buttons: {
-            home: {
-              text: 'Ir para suas lojas',
-              value: 'store',
-            },
-            proximo: {
-              text: 'Cadastrar nova loja',
-              value: 'stayhere',
-            },
-          },
-        }).then((value) => {
-          switch (value) {
-            case 'store':
-              this.props.history.push({
-                pathname: `${PREFIX}/stores`,
-              });
-              break;
-            case 'stayhere':
-              this.setState(...initialState, initialState);
-              break;
-            default:
-              break;
-          }
-        });
+        const stores = response.data.content;
+        this.setState({ stores });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.data.message === 'Erro de Validação') {
-          this.setState({
-            isLoading: false,
-            errorMessage: 'Dados incorretos ou faltantes.',
-          });
-        } else if (err.data.message === 'Store CNPJ already in use!') {
-          this.setState({
-            isLoading: false,
-            errorMessage: 'Este CNPJ já está cadastrado',
-          });
-        } else if (err.status === 500) {
-          this.setState({
-            isLoading: false,
-            errorMessage: 'Houve um problema, por favor, tente novamente.',
-          });
-        } else {
-          this.setState({
-            isLoading: false,
-            errorMessage: err.data.message,
-          });
-        }
+        console.log(err.data.message);
       });
-  }
-
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    // if (!this.isValid()) return;
-
-    if (this.existParams()) {
-      this.putStore();
-    } else {
-      this.newStore();
-    }
-
-    e.target.reset();
   }
 
   render() {
-    const { errors, isLoading, errorMessage } = this.state;
+    const { stores, value } = this.state;
+    const { classes } = this.props;
 
     return (
-      <Card>
-        <div className="mdl-card mdl-shadow--2dp cadastro">
-          <div className="mdl-card__title bg-primary">
-            <h2 className="mdl-card__title-text mdl-typography--text-center w100 ">Nova loja</h2>
-          </div>
-          <div className="mdl-card__supporting-text w100">
-            <FormAddStore
-              {...this.state}
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-              handleBlurCpf={this.handleBlurCpf}
-              handleBlurCep={this.handleBlurCep}
-              isLoading={isLoading}
-              errors={errors}
-              // isValid={isValid}
-            />
-            <If test={isLoading}>
-              <div className="loading">
-                <Spinner name="ball-pulse-sync" fadeIn="none" />
-              </div>
-            </If>
-            <If test={errorMessage}>
-              <div className="alert alert-danger msg-error-login text-center" role="alert">
-                {errorMessage}
-              </div>
-            </If>
-          </div>
+      <Container>
+        <div className={classes.root}>
+          <AppBar position="static" color="default">
+            <Tabs
+              value={value}
+              onChange={this.handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              scrollable
+              scrollButtons="auto"
+            >
+              <Tab label="Informação da loja" />
+              <Tab label="Fornecedores" />
+              <Tab label="Usuários" />
+            </Tabs>
+          </AppBar>
+          {value === 0 && (
+            <TabContainer>
+              <StoreDetails paramId={this.props.match.params.id} />
+            </TabContainer>
+          )}
+          {value === 1 && <TabContainer>Fornecedores</TabContainer>}
+          {value === 2 && <TabContainer>Usuários</TabContainer>}
         </div>
-      </Card>
+      </Container>
     );
   }
 }
-
-const mapDispatchToProps = { loadingOn, loadingOff };
+Shop.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+const mapDispatchToProps = {
+  loadingOn,
+  loadingOff,
+};
 
 export default connect(
   null,
   mapDispatchToProps,
-)(Login);
+)(withStyles(styles)(Shop));

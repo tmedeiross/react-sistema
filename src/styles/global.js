@@ -8,5 +8,10 @@ import '../assets/css/material.acert.min.css';
 import '../assets/css/styles.css';
 
 injectGlobal`
-
+*,
+*:focus,
+::selection {
+  outline: none;
+  box-shadow: none;
+}
 `;

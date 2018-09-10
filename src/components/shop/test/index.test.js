@@ -1,22 +1,19 @@
-import moxios from 'moxios'
+import { MemoryRouter } from 'react-router-dom'
 
-import { Login } from '../index'
-import http from '../../../../services/http'
+import http from '../../../services/http'
+import { API_URL } from '../../../config'
+import { Home } from '../index'
 
-describe('<Login />', () => {
-  beforeEach(function () {
-    moxios.install(http)
+describe('<Home />', () => {
+  it('shallow renders correctly', () => {
+    expect(shallow(<Home />))
   })
 
-  afterEach(function () {
-    moxios.uninstall(http)
-  })
-
-  it('should shallow correctly', () => {
-    expect(shallow(<Login />))
-  })
-
-  it('should mount correctly', () => {
-    expect(mount(<Login />))
+  it('mount correctly', () => {
+    expect(mount(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>
+    ))
   })
 })

@@ -9,12 +9,12 @@ import Signup from './auth/signup';
 import Logout from './auth/logout';
 import NotFound from './layout/not-found';
 import PrivateRoute from './auth/private-route';
-import Stores from './store-list';
-import Store from './store';
+import Stores from './shop-list';
+import Store from './shop';
 import ClientsSummary from './clients-summary';
 import ClientDetails from './client-details';
 import SimpleRegistration from './simple-registration';
-import Shop from './shop';
+import Shop from './_shop';
 
 const AppRoutes = () => (
   <Switch>

@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import swal from 'sweetalert';
 
 import './styles.css';
 
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { ROUTE_PREFIX as PREFIX } from '../../config';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
@@ -18,8 +16,8 @@ export class Home extends Component {
     super(...props);
     this.state = {
       stores: [],
+      value: 0,
     };
-    this.deleteStore = this.deleteStore.bind(this);
     this.listAll = this.listAll.bind(this);
   }
 
@@ -27,44 +25,8 @@ export class Home extends Component {
     this.listAll();
   }
 
-  deleteStore = (ev) => {
-    const storeID = ev.currentTarget.id;
-
-    swal('Tem certeza que deseja excluir a loja?', 'O que deseja fazer?', {
-      buttons: {
-        home: {
-          text: 'Sim, quero excluir',
-          value: 'store',
-        },
-        proximo: {
-          text: 'Cancelar',
-          value: 'stayhere',
-        },
-      },
-    }).then((value) => {
-      switch (value) {
-        case 'store':
-          AuthAPI.storeDel(storeID)
-            .then(() => {
-              setTimeout(() => {
-                this.listAll();
-              }, 2000);
-            })
-            .then((response) => {
-              this.props.history.push({
-                pathname: `${PREFIX}/stores`,
-              });
-            })
-            .catch((response) => {
-              console.log(response);
-            });
-          break;
-        case 'stayhere':
-          break;
-        default:
-          break;
-      }
-    });
+  handleChange = (event, value) => {
+    this.setState({ value });
   };
 
   listAll() {
@@ -84,6 +46,7 @@ export class Home extends Component {
 
   render() {
     const { stores } = this.state;
+
     return (
       <Container>
         <Card>
@@ -109,7 +72,7 @@ export class Home extends Component {
                       <td>{store.fantasyName}</td>
                       <td>{store.phoneNumber}</td>
                       <td>{store.state}</td>
-                      <td>
+                      <td className="mdl-typography--text-right">
                         <Button
                           href={`${PREFIX}/store/${store.id}`}
                           mini
@@ -119,17 +82,6 @@ export class Home extends Component {
                           aria-label="Delete"
                         >
                           <EditIcon />
-                        </Button>
-                        <Button
-                          mini
-                          variant="fab"
-                          className="fab btn-delete mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
-                          color="secondary"
-                          aria-label="Edit"
-                          id={store.id}
-                          onClick={this.deleteStore}
-                        >
-                          <DeleteIcon />
                         </Button>
                       </td>
                     </tr>
