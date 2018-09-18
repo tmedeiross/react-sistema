@@ -1,0 +1,128 @@
+body {
+  margin: 0;
+  font-family: "Roboto";
+  font-size: 14px;
+  line-height: 1.3em;
+}
+.ui {
+  padding-top: 80px;
+  height: 100vh;
+  display: flex;
+  color: #eee;
+}
+
+.navbar.board {
+  font-size: 1.1rem;
+}
+.lists {
+  display: flex;
+  overflow-x: auto;
+}
+.lists > * {
+  flex: 0 0 auto;
+  margin-left: 10px;
+}
+.lists::after {
+  content: "";
+  flex: 0 0 10px;
+}
+.list {
+  width: 300px;
+  background-color: rgba(0, 104, 169, 0.4);
+  height: calc(100% - 10px - 17px);
+}
+.list > * {
+  color: #fff;
+  padding: 0 10px;
+}
+.list header {
+  line-height: 36px;
+  font-size: 16px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.list footer {
+  line-height: 36px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  color: #888;
+}
+.list ul {
+  list-style: none;
+  margin: 0;
+  max-height: calc(100% - 36px - 36px);
+  overflow-y: auto;
+}
+.list ul li {
+  color: #1f2933;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 3px;
+  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); */
+  position: relative;
+  padding-bottom: 30px;
+}
+.list ul li:not(:last-child) {
+  margin-bottom: 10px;
+}
+.list ul li img {
+  display: block;
+  width: calc(100% + 2 * 10px);
+  margin: -10px 0 10px -10px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.material-icons {
+  position: absolute;
+  right: 5px;
+}
+.material-icons.filter_list {
+  top: 5px;
+  right: 15px;
+}
+.list header {
+  position: relative;
+  padding: 0 15px;
+}
+p {
+  margin: 0;
+}
+.number {
+  font-weight: bold;
+  font-size: 20px;
+}
+.name {
+}
+.date {
+  font-weight: bold;
+  text-align: right;
+  font-size: 11px;
+}
+.footer {
+  background: rgb(57, 58, 59, 0.5);
+  color: #fff;
+  padding: 0px 5px;
+  position: absolute;
+  font-size: 13px;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.list ::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.list ::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+.list ::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 10px;
+}

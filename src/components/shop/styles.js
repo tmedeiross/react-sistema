@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding-top: 150px;
+  padding-top: 80px;
 `;
 
 export const Card = styled.div`
@@ -9,12 +9,11 @@ export const Card = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top: 50px;
 
   .mdl-card.cadastro {
     width: 1300px;
-    max-width: 90%;
-    margin-top: -100px;
+    max-width: 100%;
+    margin: 0%;
   }
   table,
   th,

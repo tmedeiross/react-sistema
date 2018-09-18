@@ -22,7 +22,7 @@ import Form from './form';
 import FormUpdate from './formUpdate';
 import * as AuthAPI from '../../api/auth';
 
-export class ShopUser extends Component {
+export class ShopSupplier extends Component {
   constructor(...props) {
     super(...props);
     this.state = {
@@ -268,7 +268,7 @@ export class ShopUser extends Component {
           <div className="mdl-card mdl-shadow--2dp cadastro">
             <div className="mdl-card__title bg-primary">
               <h2 className="mdl-card__title-text mdl-typography--text-center w100">
-                Adicionar novo usuários
+                Adicionar fornecedor
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
@@ -282,7 +282,7 @@ export class ShopUser extends Component {
 
             <div className="mdl-card__title bg-primary">
               <h2 className="mdl-card__title-text mdl-typography--text-center w100">
-                Usuários da loja
+                Fornecedor cadastrados
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
@@ -376,7 +376,7 @@ export class ShopUser extends Component {
     );
   }
 }
-// ShopUser.prototype = {
+// ShopSupplier.prototype = {
 
 // }
 
@@ -393,4 +393,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ShopUser);
+)(ShopSupplier);

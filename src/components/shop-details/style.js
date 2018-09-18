@@ -5,15 +5,14 @@ export const Card = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top: 150px;
 
   .mdl-cell {
     margin: 0 8px;
   }
   .mdl-card.cadastro {
     width: 1300px;
-    max-width: 90%;
-    margin-top: -100px;
+    max-width: 100%;
+    margin: 0;
   }
 `;
 

@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import './styles.css';
 // import { debounce } from 'lodash';
 
 // import SummaryCards from '../summary-cards';
@@ -41,18 +44,170 @@ export class Home extends Component {
   render() {
     // const { searchValue } = this.state;
     return (
-      <div>
-        <div className="row">
-          <div className="col col-md-8 mx-auto">
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <h1>Home</h1>
+      <Fragment>
+        <div className="ui">
+          <nav className="navbar app" />
+          <div className="lists">
+            <div className="list">
+              <header>
+                Pedido
+                <i className="material-icons filter_list">filter_list</i>
+              </header>
+              <ul>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  {/* <span className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      id="navbarDropdownMenuLink"
+                      role="button"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    />
+                    oioi
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <Link to={`${PREFIX}/shops`} className="dropdown-item">
+                        Minhas Lojas
+                      </Link>
+                      <Link to={`${PREFIX}/auth/logout`} className="dropdown-item">
+                        Minha conta
+                      </Link>
+                      <Link to={`${PREFIX}/auth/logout`} className="dropdown-item btn-logout">
+                        Sair
+                      </Link>
+                    </div>
+                  </span> */}
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="list">
+              <header>
+                Estoque
+                <i className="material-icons filter_list">filter_list</i>
+              </header>
+              <ul>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="list">
+              <header>
+                Laboratório de montagem
+                <i className="material-icons filter_list">filter_list</i>
+              </header>
+              <ul>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="list">
+              <header>
+                Loja
+                <i className="material-icons filter_list">filter_list</i>
+              </header>
+              <ul>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="list">
+              <header>
+                Entregue
+                <i className="material-icons filter_list">filter_list</i>
+              </header>
+              <ul>
+                <li>
+                  <i className="material-icons more_vert">more_vert</i>
+                  <p className="number">203.002</p>
+                  <p className="name">Nome Nome</p>
+                  <p className="date">jul,09</p>
+                  <div className="footer">Store: Amazing NY</div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

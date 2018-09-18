@@ -3,6 +3,7 @@ import { SET_AUTH } from './actions';
 
 const initialState = {
   isAuthenticated: false,
+  data: [],
 };
 
 const auth = createReducer(initialState, {

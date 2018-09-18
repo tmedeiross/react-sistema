@@ -12,20 +12,28 @@ import { isAuthenticated } from '../../../utils/services/auth';
 import * as AuthAPI from '../../../api/auth';
 
 export class NavBar extends Component {
-  constructor(...props) {
-    super(...props);
+  constructor(props) {
+    super(props);
     this.state = {
       shop: '',
       userData: [],
+      firstLetter: '',
     };
     this.getUser = this.getUser.bind(this);
+    this.getFirstLetter = this.getFirstLetter.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
-    if (isAuthenticated) {
-      // this.getUser();
+    if (isAuthenticated()) {
+      this.getUser();
+    }
+    if (!isAuthenticated()) {
+      this.logout();
     }
   }
+
+  componentDidUpdate() {}
 
   getUser() {
     const email = localStorage.getItem('user');
@@ -34,14 +42,33 @@ export class NavBar extends Component {
         const userData = response.data;
         this.setState({ userData });
         console.log(userData);
+        this.getFirstLetter();
       })
       .catch((err) => {
         console.log(err.data.message);
       });
   }
 
+  getFirstLetter() {
+    const { userData } = this.state;
+    const letter = userData.name;
+    const setFirstLetter = letter.substring(0, 1).toUpperCase();
+    this.setState({ firstLetter: setFirstLetter });
+  }
+
+  logout() {
+    const userData = [];
+    this.setState({ userData });
+    // const resetState = { userData: [], firstLetter: '', shop: '' };
+    // this.setState({ resetState });
+  }
+
+  redirectToHome() {
+    return this.props.history.push(`${PREFIX}`);
+  }
+
   render() {
-    const { shop, userData } = this.state;
+    const { shop, userData, firstLetter } = this.state;
     return (
       <div className="mdl-layout mdl-layout--fixed-header">
         <header className="mdl-layout__header">
@@ -51,43 +78,61 @@ export class NavBar extends Component {
                 <img className="nav-icon" src={Logo} alt="logo" />
               </span>
             </Link>
-            <form autoComplete="off">
-              <div className="mdl-grid">
-                <div className="mdl-cell mdl-cell--3-col">
-                  <Input type="text" name="search" id="search" placeholder="Procurar" />
+            <If test={isAuthenticated()}>
+              <form autoComplete="off">
+                <div className="mdl-grid">
+                  <div className="mdl-cell mdl-cell--3-col">
+                    <Input type="text" name="search" id="search" placeholder="Procurar" />
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </If>
             <div className="mdl-layout-spacer" />
             <nav className="mdl-navigation mdl-layout--large-screen-only">
-              {/* <form>
-              <div className="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
-                <label className="mdl-button mdl-js-button mdl-button--icon" forHTML="sample6">
-                  <i className="material-icons">search</i>
-                </label>
-                <div className="mdl-textfield__expandable-holder">
-                  <input className="mdl-textfield__input" type="text" id="sample6" />
-                  <label className="mdl-textfield__label" forHTML="sample-expandable">
-                    Expandable Input
-                  </label>
-                </div>
-              </div>
-            </form> */}
-
-              {/* <Link className="mdl-navigation__link" to={/}>
-            Dashboard
-          </Link> */}
-              <If test={isAuthenticated}>
-                <span className="avatar">T</span>
-                <p>{userData.name}</p>
-                <Link to={`${PREFIX}/stores`} className="nav-link">
-                  <i className="fa fa-shopping-bag" />
-                  {shop.name}
-                </Link>
+              <If test={isAuthenticated()}>
                 <If test={Object.keys(shop).length} />
-                <Link to={`${PREFIX}/auth/logout`} className="nav-link btn-logout">
-                  Logout
-                </Link>
+
+                <nav className="navbar navbar-expand-lg ">
+                  <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                  >
+                    <span className="navbar-toggler-icon" />
+                  </button>
+                  <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div className="navbar-nav">
+                      <span className="avatar">{firstLetter}</span>
+                      <li className="nav-item dropdown">
+                        <a
+                          className="nav-link dropdown-toggle"
+                          id="navbarDropdownMenuLink"
+                          role="button"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                        >
+                          {userData.name}
+                        </a>
+                        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <Link to={`${PREFIX}/shops`} className="dropdown-item">
+                            Minhas Lojas
+                          </Link>
+                          <Link to={`${PREFIX}/auth/logout`} className="dropdown-item">
+                            Minha conta
+                          </Link>
+                          <Link to={`${PREFIX}/auth/logout`} className="dropdown-item btn-logout">
+                            Sair
+                          </Link>
+                        </div>
+                      </li>
+                    </div>
+                  </div>
+                </nav>
               </If>
             </nav>
           </div>

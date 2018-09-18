@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Spinner from 'react-spinkit';
+// import Spinner from 'react-spinkit';
 import swal from 'sweetalert';
 import $ from 'jquery';
 
@@ -86,16 +86,16 @@ export class StoreDetails extends Component {
   }
 
   handleBlurCep = (e) => {
+    const { loadingOn, loadingOff } = this.props;
     const { value } = e.target;
 
     if (!value) return;
-    this.setState({ isLoading: true });
-    // this.props.loadingOn();
+    loadingOn();
     ZipCodeService.searchAddressByZipCode(e.target.value)
       .then((response) => {
         if (response.status === 404) {
           swal('Atenção', 'Cep não encontrado', 'warning');
-          this.setState({ isLoading: false });
+          loadingOff();
           return;
         }
 
@@ -110,11 +110,10 @@ export class StoreDetails extends Component {
           this.setState({ ...data });
         }
         $('#number').focus();
-
-        this.setState({ isLoading: false });
+        loadingOff();
       })
       .catch(() => {
-        this.setState({ isLoading: false });
+        loadingOff();
         swal('Atenção', 'Ocorreu um erro ao consultar o cep', 'error');
       });
   };
@@ -172,7 +171,7 @@ export class StoreDetails extends Component {
       state,
     })
       .then((response) => {
-        this.props.history.push(`${PREFIX}/stores`);
+        this.props.history.push(`${PREFIX}/shops`);
       })
       .catch((response) => {
         console.log(response);
@@ -217,8 +216,6 @@ export class StoreDetails extends Component {
     })
       .then(() => {
         this.setState({ ...resetState, isLoading: false });
-
-        // this.props.history.push(`${PREFIX}/stores`);
         swal('Loja incluída com sucesso!', 'O que deseja fazer?', {
           buttons: {
             home: {
@@ -234,7 +231,7 @@ export class StoreDetails extends Component {
           switch (value) {
             case 'store':
               this.props.history.push({
-                pathname: `${PREFIX}/stores`,
+                pathname: `${PREFIX}/shops`,
               });
               break;
             case 'stayhere':
@@ -289,7 +286,7 @@ export class StoreDetails extends Component {
   }
 
   render() {
-    const { errors, isLoading, errorMessage, title } = this.state;
+    const { errors, errorMessage, title } = this.state;
 
     return (
       <Card>
@@ -304,15 +301,8 @@ export class StoreDetails extends Component {
               handleChange={this.handleChange}
               handleBlurCpf={this.handleBlurCpf}
               handleBlurCep={this.handleBlurCep}
-              isLoading={isLoading}
               errors={errors}
-              // isValid={isValid}
             />
-            <If test={isLoading}>
-              <div className="loading">
-                <Spinner name="ball-pulse-sync" fadeIn="none" />
-              </div>
-            </If>
             <If test={errorMessage}>
               <div className="alert alert-danger msg-error-login text-center" role="alert">
                 {errorMessage}

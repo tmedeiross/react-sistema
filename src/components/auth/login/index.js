@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Spinner from 'react-spinkit';
 
@@ -9,7 +9,9 @@ import If from '../../common/if';
 import ValidateForm from './validator';
 import LoginForm from './form';
 import * as AuthAPI from '../../../api/auth';
+import Footer from '../../layout/footer';
 // import * as StoreAPI from '../../../api/store';
+// import { Creators as LoginActions } from '../../../redux-flow/ducks/login';
 import { setToken } from '../../../utils/services/auth';
 import { ROUTE_PREFIX as PREFIX } from '../../../config';
 import { addShops, addShop } from '../../../redux-flow/reducers/shops/action-creators';
@@ -38,7 +40,7 @@ export class Login extends Component {
 
     if (!this.isValid()) return;
 
-    const resetState = { errors: {}, errorMessage: '', isLoading: true };
+    const resetState = { errors: {}, errorMessage: '' };
     this.setState(resetState);
 
     const { username, password } = this.state;
@@ -50,7 +52,6 @@ export class Login extends Component {
         localStorage.setItem('shop', username);
         localStorage.setItem('user', username);
         this.props.setAuth(true);
-
         return this.redirectToHome();
         // const shop = JSON.parse(localStorage.getItem('shop'));
         // if (shop) {
@@ -76,12 +77,10 @@ export class Login extends Component {
         console.log(err);
         if (err.status === 404) {
           this.setState({
-            isLoading: false,
             errorMessage: err.message,
           });
         } else if (err.data.status === 401) {
           this.setState({
-            isLoading: false,
             errorMessage: 'Usuário inexistente ou senha inválida.',
           });
         }
@@ -107,33 +106,36 @@ export class Login extends Component {
       errors, username, password, isLoading, errorMessage,
     } = this.state;
     return (
-      <Card>
-        <div className="mdl-card mdl-shadow--2dp">
-          <div className="mdl-card__title bg-primary">
-            <h2 className="mdl-card__title-text mdl-typography--text-center w100">ENTRAR</h2>
+      <Fragment>
+        <Card>
+          <div className="mdl-card mdl-shadow--2dp">
+            <div className="mdl-card__title bg-primary">
+              <h2 className="mdl-card__title-text mdl-typography--text-center w100">ENTRAR</h2>
+            </div>
+            <div className="mdl-card__supporting-text w100">
+              <LoginForm
+                handleSubmit={this.handleSubmit}
+                handleChange={this.handleChange}
+                username={username}
+                password={password}
+                isLoading={isLoading}
+                errors={errors}
+              />
+              <If test={isLoading}>
+                <div className="loading">
+                  <Spinner name="ball-pulse-sync" fadeIn="none" />
+                </div>
+              </If>
+              <If test={errorMessage}>
+                <div className="alert alert-danger msg-error-login text-center" role="alert">
+                  {errorMessage}
+                </div>
+              </If>
+            </div>
           </div>
-          <div className="mdl-card__supporting-text w100">
-            <LoginForm
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-              username={username}
-              password={password}
-              isLoading={isLoading}
-              errors={errors}
-            />
-            <If test={isLoading}>
-              <div className="loading">
-                <Spinner name="ball-pulse-sync" fadeIn="none" />
-              </div>
-            </If>
-            <If test={errorMessage}>
-              <div className="alert alert-danger msg-error-login text-center" role="alert">
-                {errorMessage}
-              </div>
-            </If>
-          </div>
-        </div>
-      </Card>
+        </Card>
+        <Footer />
+      </Fragment>
     );
   }
 }

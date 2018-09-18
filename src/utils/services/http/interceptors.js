@@ -22,9 +22,7 @@ export default (http) => {
           return (window.location = '/app/auth/login');
         });
       }
-
       if (error.response.status === 403) {
-        // console.log('A sessão de usuário expirou, faça o login novamente.');
         return swal(
           'Atenção',
           'A sessão de usuário expirou, faça o login novamente.',

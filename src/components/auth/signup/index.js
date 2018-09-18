@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Spinner from 'react-spinkit';
 import swal from 'sweetalert';
+import Footer from '../../layout/footer';
 
 import './signup.css';
 import { Card } from './style';
@@ -102,35 +103,38 @@ export class Login extends Component {
     } = this.state;
 
     return (
-      <Card>
-        <div className="mdl-card mdl-shadow--2dp">
-          <div className="mdl-card__title bg-primary">
-            <h2 className="mdl-card__title-text mdl-typography--text-center w100">CADASTRE-SE</h2>
+      <Fragment>
+        <Card>
+          <div className="mdl-card mdl-shadow--2dp">
+            <div className="mdl-card__title bg-primary">
+              <h2 className="mdl-card__title-text mdl-typography--text-center w100">CADASTRE-SE</h2>
+            </div>
+            <div className="mdl-card__supporting-text w100">
+              <FormSignup
+                handleSubmit={this.handleSubmit}
+                handleChange={this.handleChange}
+                name={name}
+                email={email}
+                password={password}
+                confirmpassword={confirmpassword}
+                isLoading={isLoading}
+                errors={errors}
+              />
+              <If test={isLoading}>
+                <div className="loading">
+                  <Spinner name="ball-pulse-sync" fadeIn="none" />
+                </div>
+              </If>
+              <If test={errorMessage}>
+                <div className="alert alert-danger msg-error-login text-center" role="alert">
+                  {errorMessage}
+                </div>
+              </If>
+            </div>
           </div>
-          <div className="mdl-card__supporting-text w100">
-            <FormSignup
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-              name={name}
-              email={email}
-              password={password}
-              confirmpassword={confirmpassword}
-              isLoading={isLoading}
-              errors={errors}
-            />
-            <If test={isLoading}>
-              <div className="loading">
-                <Spinner name="ball-pulse-sync" fadeIn="none" />
-              </div>
-            </If>
-            <If test={errorMessage}>
-              <div className="alert alert-danger msg-error-login text-center" role="alert">
-                {errorMessage}
-              </div>
-            </If>
-          </div>
-        </div>
-      </Card>
+        </Card>
+        <Footer />
+      </Fragment>
     );
   }
 }

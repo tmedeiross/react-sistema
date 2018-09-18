@@ -16,6 +16,5 @@ export const logout = () => {
   localStorage.removeItem('token-cep');
   localStorage.removeItem('shop');
   localStorage.removeItem('user');
-  // localStorage.removeItem('shop')
   unsetTokenHeader();
 };
