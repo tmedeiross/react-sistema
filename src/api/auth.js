@@ -19,3 +19,5 @@ export const addUserShop = data => http.post('/user/store', data);
 export const deleteUserShop = id => http.delete(`/user/store/${id}`);
 // Changes a User Store
 export const updateUserShop = (id, data) => http.put(`/user/store/${id}`, data);
+// List all Users by Store
+export const allUsersStore = id => http.get(`/store/user/${id}`);

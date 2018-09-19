@@ -44,7 +44,7 @@ export class Shop extends Component {
     super(...props);
     this.state = {
       stores: [],
-      value: 1,
+      value: 2,
       paramId: this.props.match.params.id,
     };
     this.listAll = this.listAll.bind(this);

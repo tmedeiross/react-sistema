@@ -38,7 +38,7 @@ export class ShopUser extends Component {
       errorMessage: '',
       successMessage: '',
       userSelected: '',
-      openDialog: false
+      openDialog: false,
     };
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
@@ -51,16 +51,17 @@ export class ShopUser extends Component {
 
   handleOpenDialog() {
     this.setState({
-      openDialog: true
+      openDialog: true,
     });
-    console.log()
+    console.log();
   }
 
   handleCloseDialog() {
     this.setState({
-      openDialog: false
+      openDialog: false,
     });
   }
+
   componentDidMount() {
     this.props.loadingOn();
     const { getShopRequest } = this.props;
@@ -82,26 +83,6 @@ export class ShopUser extends Component {
     return isValid;
   }
 
-  listAllUsers() {
-    const resetState = {
-      shop: [],
-      errors: {},
-      errorMessage: '',
-      isLoading: true,
-    };
-
-    AuthAPI.storeGet(this.props.paramId)
-      .then((response) => {
-        this.setState({ ...resetState });
-
-        this.setState({ storeCnpj: response.data.cnpj });
-        this.setState({ shopUsers: response.data.userStore });
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err.data.message);
-      });
-  }
 
   apiDelUser() {
     const resetState = {
@@ -162,10 +143,10 @@ export class ShopUser extends Component {
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state.profileId)
+    console.log(this.state.profileId);
   }
 
-  handleUpdateUser(e){
+  handleUpdateUser(e) {
     e.preventDefault();
     const resetState = {
       errors: {},
@@ -176,7 +157,7 @@ export class ShopUser extends Component {
 
     this.setState(resetState);
     const { profileId } = this.state;
-    console.log(profileId)
+    console.log(profileId);
     AuthAPI.updateUserShop(this.state.shopUsers.id, {
       profileId,
       showSalesValues: false,
@@ -257,6 +238,26 @@ export class ShopUser extends Component {
     e.target.reset();
   }
 
+  listAllUsers() {
+    const resetState = {
+      shop: [],
+      errors: {},
+      errorMessage: '',
+      isLoading: true,
+    };
+
+    AuthAPI.allUsersStore(this.props.paramId)
+      .then((response) => {
+        this.setState({ ...resetState });
+
+        // this.setState({ storeCnpj: response.data.cnpj });
+        this.setState({ shopUsers: response.data.content });
+        console.log(response.data.content);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   render() {
     const {
       errors, errorMessage, successMessage, shopUsers,
@@ -295,19 +296,27 @@ export class ShopUser extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="mdl-data-table__cell--non-numeric">{shopUsers.userEmail}</td>
+                  {shopUsers.map(shopUser => (
+                    <tr>
+                  {/* {shopUsers.map(shopUser => (
+                    <tr>
+                      <p>{shopUser.profileId}</p>
+                      <p>{shopUser.userEmail}</p>
+                    </tr>
+                  ))} */}
+
+                  <td className="mdl-data-table__cell--non-numeric">{shopUser.userEmail}</td>
                     <td>
-                      <If test={shopUsers.profileId === 'SALESMAN'}>Vendedor</If>
-                      <If test={shopUsers.profileId === 'ADMIN'}>Admin</If>
-                      <If test={shopUsers.profileId === 'ASSEMBLY'}>Montador</If>
+                      <If test={shopUser.profileId === 'SALESMAN'}>Vendedor</If>
+                      <If test={shopUser.profileId === 'ADMIN'}>Admin</If>
+                      <If test={shopUser.profileId === 'ASSEMBLY'}>Montador</If>
                     </td>
                     <td className="mdl-typography--text-right">
                       <Button
                         // href={`${PREFIX}/store/${store.id}`}
                         onClick={this.handleOpenDialog}
-                        value={shopUsers.id}
-                        id={shopUsers.id}
+                        value={shopUser.id}
+                        id={shopUser.id}
                         mini
                         variant="fab"
                         className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
@@ -321,15 +330,16 @@ export class ShopUser extends Component {
                         mini
                         onClick={this.deleteUserShop}
                         variant="fab"
-                        value={shopUsers.id}
-                        id={shopUsers.id}
+                        value={shopUser.id}
+                        id={shopUser.id}
                         className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
                         aria-label="Delete"
                       >
-                        <i className="fas fa-trash" value={shopUsers.id} id={shopUsers.id} />
+                        <i className="fas fa-trash" value={shopUser.id} id={shopUser.id} />
                       </Button>
                     </td>
                   </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -346,7 +356,7 @@ export class ShopUser extends Component {
               </If>
             </div>
           </div>
-        <Dialog className="modalUser" open={this.state.openDialog}>
+          {/* <Dialog className="modalUser" open={this.state.openDialog}>
           <DialogTitle>Atualizar usuário {shopUsers.userEmail}</DialogTitle>
           <DialogContent>
           <FormUpdate
@@ -368,9 +378,9 @@ export class ShopUser extends Component {
               type="button"
               className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary btn-delete"
               value="Cancelar"
-            />            
+            />
           </DialogActions>
-        </Dialog>
+        </Dialog> */}
         </Card>
       </Container>
     );
