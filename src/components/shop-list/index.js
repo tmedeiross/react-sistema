@@ -14,22 +14,11 @@ import { Creators as ShopActions } from '../../redux-flow/ducks/shops';
 import { Card, Container } from './styles';
 
 export class Shops extends Component {
-  constructor(...props) {
-    super(...props);
-    this.state = {
-      value: 0,
-    };
-  }
-
   componentDidMount() {
     const { getShopRequest } = this.props;
     // loadingOn();
     getShopRequest();
   }
-
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
 
   render() {
     const { shops } = this.props;

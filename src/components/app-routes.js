@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { ROUTE_PREFIX as PREFIX } from '../config/index';
 import Home from './home';
 import Login from './auth/login';
+import Recover from './auth/recover';
 import Logout from './auth/logout';
 import Confirm from './auth/confirm';
 import Signup from './auth/signup';
@@ -17,6 +18,7 @@ const AppRoutes = () => (
     <Redirect exact from="/" to={`${PREFIX}`} />
     <PrivateRoute exact path={`${PREFIX}`} component={Home} />
     <Route path={`${PREFIX}/auth/login`} component={Login} />
+    <Route path={`${PREFIX}/auth/recover`} component={Recover} />
     <Route path={`${PREFIX}/auth/signup`} component={Signup} />
     <Route path={`${PREFIX}/auth/confirm`} component={Confirm} />
     <PrivateRoute path={`${PREFIX}/home`} component={Home} />

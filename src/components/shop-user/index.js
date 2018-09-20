@@ -49,11 +49,17 @@ export class ShopUser extends Component {
     this.deleteUserShop = this.deleteUserShop.bind(this);
   }
 
-  handleOpenDialog() {
+  componentDidMount() {
+    const { getShopRequest } = this.props;
+    this.listAllUsers();
+    getShopRequest();
+  }
+
+  handleOpenDialog(e) {
     this.setState({
       openDialog: true,
     });
-    console.log();
+    console.log(e.target);
   }
 
   handleCloseDialog() {
@@ -62,27 +68,36 @@ export class ShopUser extends Component {
     });
   }
 
-  componentDidMount() {
-    this.props.loadingOn();
-    const { getShopRequest } = this.props;
-    this.listAllUsers();
-    getShopRequest();
-  }
-
   returnParams() {
     return this.props.paramId;
   }
 
   isValid() {
     const { errors, isValid } = ValidateForm(this.state);
-
     if (!isValid) {
       this.setState({ errors });
     }
-
     return isValid;
   }
 
+  listAllUsers() {
+    const { paramId } = this.props;
+    const resetState = {
+      shop: [],
+      errors: {},
+      errorMessage: '',
+      isLoading: true,
+    };
+
+    AuthAPI.allUsersStore(paramId)
+      .then((response) => {
+        this.setState({ ...resetState });
+        this.setState({ shopUsers: response.data.content });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   apiDelUser() {
     const resetState = {
@@ -111,7 +126,6 @@ export class ShopUser extends Component {
   }
 
   deleteUserShop(e) {
-    // e.preventDefault();
     this.setState({ userSelected: e.target.id });
     swal(
       `Tem certeza que deseja excluir o usuário ${this.state.shopUsers.userEmail}?`,
@@ -143,11 +157,12 @@ export class ShopUser extends Component {
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state.profileId);
   }
 
   handleUpdateUser(e) {
+    const userId = e.target.id;
     e.preventDefault();
+
     const resetState = {
       errors: {},
       errorMessage: '',
@@ -157,8 +172,7 @@ export class ShopUser extends Component {
 
     this.setState(resetState);
     const { profileId } = this.state;
-    console.log(profileId);
-    AuthAPI.updateUserShop(this.state.shopUsers.id, {
+    AuthAPI.updateUserShop(this.state.userSelected, {
       profileId,
       showSalesValues: false,
     })
@@ -234,30 +248,10 @@ export class ShopUser extends Component {
           });
         }
       });
-
     e.target.reset();
   }
 
-  listAllUsers() {
-    const resetState = {
-      shop: [],
-      errors: {},
-      errorMessage: '',
-      isLoading: true,
-    };
 
-    AuthAPI.allUsersStore(this.props.paramId)
-      .then((response) => {
-        this.setState({ ...resetState });
-
-        // this.setState({ storeCnpj: response.data.cnpj });
-        this.setState({ shopUsers: response.data.content });
-        console.log(response.data.content);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
   render() {
     const {
       errors, errorMessage, successMessage, shopUsers,
@@ -297,48 +291,42 @@ export class ShopUser extends Component {
                 </thead>
                 <tbody>
                   {shopUsers.map(shopUser => (
-                    <tr>
-                  {/* {shopUsers.map(shopUser => (
-                    <tr>
-                      <p>{shopUser.profileId}</p>
-                      <p>{shopUser.userEmail}</p>
-                    </tr>
-                  ))} */}
 
-                  <td className="mdl-data-table__cell--non-numeric">{shopUser.userEmail}</td>
-                    <td>
-                      <If test={shopUser.profileId === 'SALESMAN'}>Vendedor</If>
-                      <If test={shopUser.profileId === 'ADMIN'}>Admin</If>
-                      <If test={shopUser.profileId === 'ASSEMBLY'}>Montador</If>
-                    </td>
-                    <td className="mdl-typography--text-right">
-                      <Button
-                        // href={`${PREFIX}/store/${store.id}`}
-                        onClick={this.handleOpenDialog}
-                        value={shopUser.id}
-                        id={shopUser.id}
-                        mini
-                        variant="fab"
-                        className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
-                        color="primary"
-                        aria-label="Edit"
-                      >
-                        <EditIcon />
-                      </Button>
-                      <Button
-                        // href={`${PREFIX}/store/${store.id}`}
-                        mini
-                        onClick={this.deleteUserShop}
-                        variant="fab"
-                        value={shopUser.id}
-                        id={shopUser.id}
-                        className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
-                        aria-label="Delete"
-                      >
-                        <i className="fas fa-trash" value={shopUser.id} id={shopUser.id} />
-                      </Button>
-                    </td>
-                  </tr>
+                    <tr key={shopUser.id}>
+                      <td className="mdl-data-table__cell--non-numeric">{shopUser.userEmail}</td>
+                      <td>
+                        <If test={shopUser.profileId === 'SALESMAN'}>Vendedor</If>
+                        <If test={shopUser.profileId === 'ADMIN'}>Admin</If>
+                        <If test={shopUser.profileId === 'ASSEMBLY'}>Montador</If>
+                      </td>
+                      <td className="mdl-typography--text-right">
+                        <span
+                          onClick={this.handleOpenDialog}
+                          value={shopUser.id}
+                          id={shopUser.id}
+                          name={shopUser.id}
+                        >
+                        <EditIcon 
+                          value={shopUser.id}
+                          id={shopUser.id}
+                          name={shopUser.id} 
+                        />
+                        </span>
+                        <Button
+                          mini
+                          onClick={this.deleteUserShop}
+                          variant="fab"
+                          value={shopUser.id}
+                          name={shopUser.id}
+                          id={shopUser.id}
+                          className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
+                          aria-label="Delete"
+                        >
+                          <i className="fas fa-trash" value={shopUser.id} id={shopUser.id} />
+                        </Button>
+                      </td>
+                    </tr>
+
                   ))}
                 </tbody>
               </table>
@@ -356,31 +344,33 @@ export class ShopUser extends Component {
               </If>
             </div>
           </div>
-          {/* <Dialog className="modalUser" open={this.state.openDialog}>
-          <DialogTitle>Atualizar usuário {shopUsers.userEmail}</DialogTitle>
-          <DialogContent>
-          <FormUpdate
-              {...this.state}
-              handleSubmit={this.handleUpdateUser}
-              handleChange={this.handleChange}
-              errors={errors}
-            />
-          </DialogContent>
-          <DialogActions>
-          <input
-            onClick={this.handleUpdateUser}
-            type="button"
-              className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary"
-              value="Alterar"
-            />
-            <input
-              onClick={this.handleCloseDialog}
-              type="button"
-              className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary btn-delete"
-              value="Cancelar"
-            />
-          </DialogActions>
-        </Dialog> */}
+
+          <Dialog className="modalUser" open={this.state.openDialog}>
+            <DialogTitle>Atualizar usuário </DialogTitle>
+            <DialogContent>
+              <FormUpdate
+                {...this.state}
+                handleSubmit={this.handleUpdateUser}
+                handleChange={this.handleChange}
+                errors={errors}
+              />
+            </DialogContent>
+            <DialogActions>
+              <input
+                onClick={this.handleUpdateUser}
+                type="button"
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary"
+                value="Alterar"
+              />
+              <input
+                onClick={this.handleCloseDialog}
+                type="button"
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary btn-delete"
+                value="Cancelar"
+              />
+            </DialogActions>
+          </Dialog>
+          
         </Card>
       </Container>
     );

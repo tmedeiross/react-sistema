@@ -3,6 +3,8 @@ import http, { setTokenHeader } from '../utils/services/http';
 setTokenHeader(localStorage.getItem('token'));
 
 export const login = data => http.post('/login', data);
+// Forget password
+export const forgetPassword = email => http.post(`/forget_password?email=${email}`);
 export const user = data => http.post('/user', data);
 export const getUser = email => http.get(`/user/${email}`);
 export const confirmUser = token => http.get(`/user/registration/confirm?token=${token}`);
