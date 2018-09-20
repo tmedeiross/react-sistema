@@ -16,7 +16,8 @@ export class Login extends Component {
     super(props);
     this.state = {
       // trocar pelo parametro token da URL enviada no email
-      token: 'bbe8c808-850e-4500-ab1e-f4d553c52dad',
+      // token: 'bbe8c808-850e-4500-ab1e-f4d553c52dad',
+      token: '',
       isLoading: false,
       errorMessage: '',
       segundosRestantes: 5,

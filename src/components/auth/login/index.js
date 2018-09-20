@@ -80,6 +80,10 @@ export class Login extends Component {
           this.setState({
             errorMessage: err.message,
           });
+        } else if (err.data.message === 'Usuário desabilitado') {
+          this.setState({
+            errorMessage: 'Por favor, consulte seu email para ativar o cadastro.',
+          });
         } else if (err.data.status === 401) {
           this.setState({
             errorMessage: 'Usuário inexistente ou senha inválida.',

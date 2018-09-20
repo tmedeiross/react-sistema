@@ -43,6 +43,7 @@ export class ShopUser extends Component {
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.listAllUsers = this.listAllUsers.bind(this);
+    this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdateUser = this.handleUpdateUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -52,6 +53,7 @@ export class ShopUser extends Component {
   componentDidMount() {
     const { getShopRequest } = this.props;
     this.listAllUsers();
+    this.shopSelectedDetails();
     getShopRequest();
   }
 
@@ -80,6 +82,20 @@ export class ShopUser extends Component {
     return isValid;
   }
 
+  shopSelectedDetails() {
+    AuthAPI.storeGet(this.props.paramId)
+      .then((response) => {
+        this.setState({ storeCnpj: response.data.cnpj });
+        console.log(response.data.cnpj);
+      })
+      .then(() => {
+        this.listAllUsers();
+      })
+      .catch((err) => {
+        console.log(err.data.message);
+      });
+  }
+
   listAllUsers() {
     const { paramId } = this.props;
     const resetState = {
@@ -91,6 +107,7 @@ export class ShopUser extends Component {
 
     AuthAPI.allUsersStore(paramId)
       .then((response) => {
+        console.log(response.data.content);
         this.setState({ ...resetState });
         this.setState({ shopUsers: response.data.content });
       })
@@ -251,7 +268,6 @@ export class ShopUser extends Component {
     e.target.reset();
   }
 
-
   render() {
     const {
       errors, errorMessage, successMessage, shopUsers,
@@ -291,7 +307,6 @@ export class ShopUser extends Component {
                 </thead>
                 <tbody>
                   {shopUsers.map(shopUser => (
-
                     <tr key={shopUser.id}>
                       <td className="mdl-data-table__cell--non-numeric">{shopUser.userEmail}</td>
                       <td>
@@ -300,18 +315,19 @@ export class ShopUser extends Component {
                         <If test={shopUser.profileId === 'ASSEMBLY'}>Montador</If>
                       </td>
                       <td className="mdl-typography--text-right">
-                        <span
+                        <Button
                           onClick={this.handleOpenDialog}
                           value={shopUser.id}
                           id={shopUser.id}
                           name={shopUser.id}
+                          mini
+                          variant="fab"
+                          className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
+                          color="primary"
+                          aria-label="Edit"
                         >
-                        <EditIcon 
-                          value={shopUser.id}
-                          id={shopUser.id}
-                          name={shopUser.id} 
-                        />
-                        </span>
+                          <EditIcon />
+                        </Button>
                         <Button
                           mini
                           onClick={this.deleteUserShop}
@@ -326,7 +342,6 @@ export class ShopUser extends Component {
                         </Button>
                       </td>
                     </tr>
-
                   ))}
                 </tbody>
               </table>
@@ -370,7 +385,6 @@ export class ShopUser extends Component {
               />
             </DialogActions>
           </Dialog>
-          
         </Card>
       </Container>
     );

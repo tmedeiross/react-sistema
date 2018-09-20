@@ -43,7 +43,7 @@ export class RecuperarSenha extends Component {
     const { email } = this.state;
 
     AuthAPI.forgetPassword(email)
-      .then((response) => {
+      .then(() => {
         this.setState({ ...resetState });
         this.setState({
           successMessage: 'Senha enviada com sucesso, por favor verifique seu email.',

@@ -44,7 +44,7 @@ export class Shop extends Component {
     super(...props);
     this.state = {
       stores: [],
-      value: 2,
+      value: 0,
       paramId: this.props.match.params.id,
     };
     this.listAll = this.listAll.bind(this);
@@ -59,14 +59,20 @@ export class Shop extends Component {
   };
 
   listAll() {
-    const resetState = { errors: {}, errorMessage: '', isLoading: true };
+    const resetState = {
+      errors: {},
+      errorMessage: '',
+      isLoading: true,
+      stores: [],
+    };
 
     AuthAPI.storeAll()
       .then((response) => {
         this.setState({ ...resetState });
 
         const stores = response.data.content;
-        this.setState({ stores });
+        this.setState({ stores: this.state.stores });
+        console.log(!!stores[0]);
       })
       .catch((err) => {
         console.log(err.data.message);
