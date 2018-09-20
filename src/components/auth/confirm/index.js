@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Spinner from 'react-spinkit';
 
 import './signup.css';
+import qs from 'query-string';
 import { Card } from './style';
 
 import If from '../../common/if';
@@ -21,6 +22,7 @@ export class Login extends Component {
       isLoading: false,
       errorMessage: '',
       segundosRestantes: 5,
+      isConfirmed: false,
     };
     this.confirm = this.confirm.bind(this);
     this.passouSegundo = this.passouSegundo.bind(this);
@@ -28,16 +30,33 @@ export class Login extends Component {
 
   componentDidMount() {
     this.interval = setInterval(this.passouSegundo, 1000);
+    this.existToken();
+    setTimeout(() => {
+      this.confirm();
+    }, 500);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  passouSegundo() {
-    const segundos = this.state.segundosRestantes - 1;
+  existToken() {
+    const { location } = this.props;
+    const params = qs.parse(location.search);
 
-    if (this.state.segundosRestantes === 1) {
+    if (params.token) {
+      const resetState = { token: params.token, isConfirmed: true };
+      this.setState({ ...resetState });
+    } else {
+      this.redirectToLogin();
+    }
+  }
+
+  passouSegundo() {
+    const { segundosRestantes } = this.state;
+    const segundos = segundosRestantes - 1;
+
+    if (segundosRestantes === 1) {
       this.setState.segundosRestantes = 0;
       this.redirectToLogin();
       clearInterval(this.interval);
@@ -47,7 +66,7 @@ export class Login extends Component {
   }
 
   confirm() {
-    const resetState = { errors: {}, errorMessage: '', isLoading: true };
+    const resetState = { errors: {}, errorMessage: '', isLoading: false };
     this.setState(resetState);
     const { token } = this.state;
     AuthAPI.confirmUser(token)
@@ -55,20 +74,22 @@ export class Login extends Component {
         this.setState({ ...resetState });
       })
       .catch((err) => {
+        console.log(err);
         this.setState({
           isLoading: false,
-          errorMessage: err.data.message,
+          errorMessage: 'Token não encontrado',
         });
       });
   }
 
-  // setTimeout(() => this.props.history.push(`${PREFIX}/auth/login`), 500);
   redirectToLogin() {
     return this.props.history.push(`${PREFIX}/auth/login`);
   }
 
   render() {
-    const { isLoading, errorMessage, segundosRestantes } = this.state;
+    const {
+      isLoading, errorMessage, segundosRestantes, isConfirmed,
+    } = this.state;
 
     return (
       <Card>
@@ -77,21 +98,24 @@ export class Login extends Component {
             <h2 className="mdl-card__title-text mdl-typography--text-center w100">BEM VINDO</h2>
           </div>
           <div className="mdl-card__supporting-text w100 text-center">
-            <h4>Sua conta foi confirmada com sucesso</h4>
-            <h6>
-              Você será redirecionado para a página de Login em &nbsp;
-              {segundosRestantes}
+            <If test={isConfirmed}>
+              <h4>Sua conta foi confirmada com sucesso</h4>
+              <h6>
+                Você será redirecionado para a página de Login em &nbsp;
+                {segundosRestantes}
 .
-            </h6>
+              </h6>
+            </If>
+
             <If test={isLoading}>
               <div className="loading">
                 <Spinner name="ball-pulse-sync" fadeIn="none" />
               </div>
             </If>
             <If test={errorMessage}>
-              <div className="alert alert-warning msg-error-login text-center" role="alert">
+              {/* <div className="alert alert-warning msg-error-login text-center" role="alert">
                 Clique aqui para reenviar o email de confirmação.
-              </div>
+              </div> */}
               <div className="alert alert-danger msg-error-login text-center" role="alert">
                 {errorMessage}
               </div>
