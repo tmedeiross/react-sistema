@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Autosuggest from 'react-autosuggest';
 
 import './styles.css';
 
-import swal from 'sweetalert';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,7 +14,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import ValidateForm from './validator';
 import If from '../common/if';
-// import { ROUTE_PREFIX as PREFIX } from '../../config';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
 import { Creators as ShopActions } from '../../redux-flow/ducks/shops';
 import { Card, Container } from './styles';
@@ -26,46 +25,56 @@ export class ShopSupplier extends Component {
   constructor(...props) {
     super(...props);
     this.state = {
+      suggestions: [],
+      suppliers: [],
       shopUsers: [],
       shopSelected: [],
       email: '',
       profile: '',
       errors: {},
-      textBtn: 'ADICIONAR',
+      textBtn: 'Adicionar fornecedor',
       profileId: '',
       userEmail: '',
       storeCnpj: '',
+      idCode: '',
       errorMessage: '',
       successMessage: '',
       userSelected: '',
-      openDialog: false
+      openDialog: false,
+      value: '',
+      awardscode: '',
+      purchaseCode: '',
+      defaultMessage: '',
+      priority: '',
     };
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
-    this.listAllUsers = this.listAllUsers.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleUpdateUser = this.handleUpdateUser.bind(this);
+    this.listAllSuppliers = this.listAllSuppliers.bind(this);
+    this.addSupplier = this.addSupplier.bind(this);
+    this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleUpdateUser = this.handleUpdateUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.deleteUserShop = this.deleteUserShop.bind(this);
   }
 
+  componentDidMount() {
+    const { getShopRequest } = this.props;
+    this.listAllSuppliers();
+    getShopRequest();
+    this.shopSelectedDetails();
+  }
+
   handleOpenDialog() {
     this.setState({
-      openDialog: true
+      openDialog: true,
     });
-    console.log()
   }
 
   handleCloseDialog() {
     this.setState({
-      openDialog: false
+      openDialog: false,
     });
-  }
-  componentDidMount() {
-    this.props.loadingOn();
-    const { getShopRequest } = this.props;
-    this.listAllUsers();
-    getShopRequest();
   }
 
   returnParams() {
@@ -82,21 +91,19 @@ export class ShopSupplier extends Component {
     return isValid;
   }
 
-  listAllUsers() {
+  listAllSuppliers() {
     const resetState = {
-      shop: [],
+      suppliers: [],
       errors: {},
       errorMessage: '',
       isLoading: true,
     };
 
-    AuthAPI.storeGet(this.props.paramId)
+    AuthAPI.listSupplier()
       .then((response) => {
+        console.log(response.data.content);
         this.setState({ ...resetState });
-
-        this.setState({ storeCnpj: response.data.cnpj });
-        this.setState({ shopUsers: response.data.userStore });
-        console.log(response);
+        this.setState({ suppliers: response.data.content });
       })
       .catch((err) => {
         console.log(err.data.message);
@@ -104,69 +111,69 @@ export class ShopSupplier extends Component {
   }
 
   apiDelUser() {
-    const resetState = {
-      shop: [],
-      errors: {},
-      errorMessage: '',
-      successMessage: '',
-      isLoading: true,
-    };
-
-    AuthAPI.deleteUserShop(this.state.userSelected)
-      .then((response) => {
-        this.setState({ ...resetState });
-        this.setState({
-          successMessage: 'Usuário deletado com sucesso.',
-        });
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err.data.message);
-        this.setState({ ...resetState });
-        this.setState({
-          errorMessage: 'Ocorreu um erro, por favor tente novamente.',
-        });
-      });
+    // const resetState = {
+    //   shop: [],
+    //   errors: {},
+    //   errorMessage: '',
+    //   successMessage: '',
+    //   isLoading: true,
+    // };
+    // AuthAPI.deleteUserShop(this.state.userSelected)
+    //   .then((response) => {
+    //     this.setState({ ...resetState });
+    //     this.setState({
+    //       successMessage: 'Usuário deletado com sucesso.',
+    //     });
+    //     console.log(response);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.data.message);
+    //     this.setState({ ...resetState });
+    //     this.setState({
+    //       errorMessage: 'Ocorreu um erro, por favor tente novamente.',
+    //     });
+    //   });
   }
 
   deleteUserShop(e) {
     // e.preventDefault();
-    this.setState({ userSelected: e.target.id });
-    swal(
-      `Tem certeza que deseja excluir o usuário ${this.state.shopUsers.userEmail}?`,
-      'O que deseja fazer?',
-      {
-        buttons: {
-          home: {
-            text: 'Deletar',
-            value: 'delete',
-          },
-          proximo: {
-            text: 'Cancelar',
-            value: 'cancel',
-          },
-        },
-      },
-    ).then((value) => {
-      switch (value) {
-        case 'delete':
-          this.apiDelUser();
-          break;
-        case 'cancel':
-          break;
-        default:
-          break;
-      }
-    });
+    // this.setState({ userSelected: e.target.id });
+    // swal(
+    //   `Tem certeza que deseja excluir o usuário ${this.state.shopUsers.userEmail}?`,
+    //   'O que deseja fazer?',
+    //   {
+    //     buttons: {
+    //       home: {
+    //         text: 'Deletar',
+    //         value: 'delete',
+    //       },
+    //       proximo: {
+    //         text: 'Cancelar',
+    //         value: 'cancel',
+    //       },
+    //     },
+    //   },
+    // ).then((value) => {
+    //   switch (value) {
+    //     case 'delete':
+    //       this.apiDelUser();
+    //       break;
+    //     case 'cancel':
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // });
   }
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state.profileId)
   }
 
-  handleUpdateUser(e){
+  addSupplier(e) {
     e.preventDefault();
+    console.log(this.state.value);
+
     const resetState = {
       errors: {},
       errorMessage: '',
@@ -175,92 +182,119 @@ export class ShopSupplier extends Component {
     };
 
     this.setState(resetState);
-    const { profileId } = this.state;
-    console.log(profileId)
-    AuthAPI.updateUserShop(this.state.shopUsers.id, {
-      profileId,
-      showSalesValues: false,
-    })
-      .then(() => {
-        this.handleCloseDialog();
-        this.setState({ ...resetState });
-        this.setState({
-          successMessage: 'Usuário alterado com sucesso.',
-        });
-
-        setTimeout(() => {
-          this.setState({
-            successMessage: '',
-          });
-          this.listAllUsers();
-        }, 3000);
-      })
-      .catch((err) => {
-        this.handleCloseDialog();
-        console.log(err);
-        if (err.status === 404) {
-          this.setState({
-            errorMessage: 'Usuário já está vinculado a esta loja.',
-          });
-        } else {
-          this.setState({
-            errorMessage: 'Dados incorretos ou faltantes.',
-          });
-        }
-      });
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    const resetState = {
-      errors: {},
-      errorMessage: '',
-      successMessage: '',
-      isLoading: true,
-    };
-
-    this.setState(resetState);
-    const { profileId, userEmail, storeCnpj } = this.state;
-
-    AuthAPI.addUserShop({
-      profileId,
-      userEmail,
+    const {
+      supplierCnpj,
       storeCnpj,
-      showSalesValues: false,
-    })
-      .then(() => {
-        this.setState({ ...resetState });
-        this.setState({
-          successMessage: 'Usuário inserido com sucesso.',
-        });
+      idCode,
+      awardsCode,
+      purchaseCode,
+      defaultMessage,
+      priority,
+    } = this.state;
 
-        setTimeout(() => {
-          this.setState({
-            successMessage: '',
-          });
-          this.listAllUsers();
-        }, 3000);
+    AuthAPI.addSupplierStore({
+      // supplierCnpj,
+      // storeCnpj,
+      // idCode,
+      // awardsCode,
+      // purchaseCode,
+      // defaultMessage,
+      // priority,
+      supplierCnpj: '44.444.444/4444-44',
+      storeCnpj: '21.354.694/3213-21',
+      idCode: 4,
+      awardsCode: 0,
+      purchaseCode: 0,
+      defaultMessage: 'string',
+      priority: 1,
+    })
+      .then((response) => {
+        console.log(response);
+        // this.handleCloseDialog();
+        // this.setState({ ...resetState });
+        // this.setState({
+        //   successMessage: 'Fornecedor alterado com sucesso.',
+        // });
+      })
+      .catch((err) => {
+        // this.handleCloseDialog();
+        console.log(err);
+        // if (err.status === 404) {
+        //   this.setState({
+        //     errorMessage: 'Fornecedor já está vinculado a esta loja.',
+        //   });
+        // } else {
+        //   this.setState({
+        //     errorMessage: 'Dados incorretos ou faltantes.',
+        //   });
+        // }
+      });
+  }
+
+  shopSelectedDetails() {
+    AuthAPI.storeGet(this.props.paramId)
+      .then((response) => {
+        this.setState({ storeCnpj: response.data.cnpj });
+        this.setState({ idCode: response.data.id });
       })
       .catch((err) => {
         console.log(err);
-        if (err.status === 404) {
-          this.setState({
-            errorMessage: 'Usuário já está vinculado a esta loja.',
-          });
-        } else {
-          this.setState({
-            errorMessage: 'Dados incorretos ou faltantes.',
-          });
-        }
       });
-
-    e.target.reset();
   }
+
+  getSuggestions = (value) => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+
+    return inputLength === 0
+      ? []
+      : this.state.suppliers.filter(
+        lang => lang.socialName.toLowerCase().slice(0, inputLength) === inputValue,
+      );
+  };
+
+  getSuggestionValue = suggestion => suggestion.socialName;
+
+  renderSuggestion = suggestion => (
+    <div className="suggestionsList" id={suggestion.id}>
+      {suggestion.socialName}
+    </div>
+  );
+
+  onChange = (event, { newValue }) => {
+    this.setState({
+      value: newValue,
+    });
+  };
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: this.getSuggestions(value),
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: [],
+    });
+  };
 
   render() {
     const {
-      errors, errorMessage, successMessage, shopUsers,
+      errors,
+      errorMessage,
+      successMessage,
+      shopUsers,
+      value,
+      suggestions,
     } = this.state;
+
+    const inputProps = {
+      placeholder: 'Procure seu fornecedor',
+      value,
+      onChange: this.onChange,
+      onBlur: this.onBlur,
+    };
 
     return (
       <Container>
@@ -271,13 +305,26 @@ export class ShopSupplier extends Component {
                 Adicionar fornecedor
               </h2>
             </div>
-            <div className="mdl-card__supporting-text w100">
-              <Form
-                {...this.state}
-                handleSubmit={this.handleSubmit}
-                handleChange={this.handleChange}
-                errors={errors}
-              />
+            <div className="mdl-card__supporting-text w100 mdl-grid autosuggest">
+              <div className="mdl-cell mdl-cell--10-col">
+                <Autosuggest
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  getSuggestionValue={this.getSuggestionValue}
+                  renderSuggestion={this.renderSuggestion}
+                  inputProps={inputProps}
+                />
+              </div>
+
+              <div className="mdl-cell mdl-cell--2-col">
+                <input
+                  onClick={this.handleOpenDialog}
+                  type="button"
+                  className="mdl-button btn-block mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary"
+                  value="Selecionar"
+                />
+              </div>
             </div>
 
             <div className="mdl-card__title bg-primary">
@@ -289,44 +336,36 @@ export class ShopSupplier extends Component {
               <table className="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                 <thead>
                   <tr>
-                    <th className="mdl-data-table__cell--non-numeric">Email</th>
-                    <th>Profile</th>
+                    <th className="mdl-data-table__cell--non-numeric">Nome</th>
+                    <th className="text-left">Mensagem</th>
+                    <th className="text-left">Código de compra</th>
                     <th />
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="mdl-data-table__cell--non-numeric">{shopUsers.userEmail}</td>
+                    <td className="mdl-data-table__cell--non-numeric">Supllier 1</td>
+                    <td className="text-left">Mensagem mensagem</td>
+                    <td className="text-left">123</td>
+                    {/* <td className="mdl-data-table__cell--non-numeric">{shopUsers.userEmail}</td>
                     <td>
                       <If test={shopUsers.profileId === 'SALESMAN'}>Vendedor</If>
                       <If test={shopUsers.profileId === 'ADMIN'}>Admin</If>
                       <If test={shopUsers.profileId === 'ASSEMBLY'}>Montador</If>
-                    </td>
+                    </td> */}
                     <td className="mdl-typography--text-right">
                       <Button
                         // href={`${PREFIX}/store/${store.id}`}
-                        onClick={this.handleOpenDialog}
-                        value={shopUsers.id}
-                        id={shopUsers.id}
+                        // onClick={this.deleteUserShop} */}
+                        // value={shopUsers.id}
+                        // id={shopUsers.id} */}
                         mini
                         variant="fab"
-                        className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
-                        color="primary"
-                        aria-label="Edit"
-                      >
-                        <EditIcon />
-                      </Button>
-                      <Button
-                        // href={`${PREFIX}/store/${store.id}`}
-                        mini
-                        onClick={this.deleteUserShop}
-                        variant="fab"
-                        value={shopUsers.id}
-                        id={shopUsers.id}
                         className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
                         aria-label="Delete"
                       >
-                        <i className="fas fa-trash" value={shopUsers.id} id={shopUsers.id} />
+                        {/* <i className="fas fa-trash" value={shopUsers.id} id={shopUsers.id} /> */}
+                        <i className="fas fa-trash" />
                       </Button>
                     </td>
                   </tr>
@@ -346,31 +385,31 @@ export class ShopSupplier extends Component {
               </If>
             </div>
           </div>
-        <Dialog className="modalUser" open={this.state.openDialog}>
-          <DialogTitle>Atualizar usuário {shopUsers.userEmail}</DialogTitle>
-          <DialogContent>
-          <FormUpdate
-              {...this.state}
-              handleSubmit={this.handleUpdateUser}
-              handleChange={this.handleChange}
-              errors={errors}
-            />
-          </DialogContent>
-          <DialogActions>
-          <input
-            onClick={this.handleUpdateUser}
-            type="button"
-              className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary"
-              value="Alterar"
-            />
-            <input
-              onClick={this.handleCloseDialog}
-              type="button"
-              className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary btn-delete"
-              value="Cancelar"
-            />            
-          </DialogActions>
-        </Dialog>
+          <Dialog className="modalUser" open={this.state.openDialog}>
+            <DialogTitle>Detalhes do fornecedor</DialogTitle>
+            <DialogContent>
+              <Form
+                {...this.state}
+                handleSubmit={this.addSupplier}
+                handleChange={this.handleChange}
+                errors={errors}
+              />
+            </DialogContent>
+            <DialogActions>
+              <input
+                onClick={this.addSupplier}
+                type="button"
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary"
+                value="Adicionar fornecedor"
+              />
+              <input
+                onClick={this.handleCloseDialog}
+                type="button"
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary btn-delete"
+                value="Cancelar"
+              />
+            </DialogActions>
+          </Dialog>
         </Card>
       </Container>
     );

@@ -6,11 +6,13 @@ select {
   -webkit-appearance: none;
   -webkit-border-radius: 0px;
 }
+input.react-autosuggest__input,
 .form-control {
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.85);
   border-radius: 0 !important;
 }
+input.react-autosuggest__input:focus,
 select:focus,
 input:focus,
 .form-control:focus {
@@ -20,6 +22,15 @@ input:focus,
   border-width: 3px;
   border-radius: 0 !important;
 }
+input.react-autosuggest__input {
+  width: 100%;
+}
 .form-control:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
+}
+.autosuggest {
+  padding: 50px 20px;
+}
+.suggestionsList:hover {
+  color: rgb(15, 92, 169) !important;
 }

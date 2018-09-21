@@ -77,7 +77,7 @@ export class Login extends Component {
         console.log(err);
         this.setState({
           isLoading: false,
-          errorMessage: 'Token não encontrado',
+          errorMessage: 'Acesso nao confirmado',
         });
       });
   }

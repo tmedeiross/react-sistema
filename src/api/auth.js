@@ -27,10 +27,17 @@ export const storePut = (id, data) => http.put(`/store/${id}`, data);
 // Insert a new User Store into the database
 export const addUserShop = data => http.post('/user/store', data);
 // List all Store by User
-export const getShopUser = id => http.get(`/user/store/${id}`);
+export const getShopUser = id => http.get(`/user/${id}/store/`);
 // Delete a User Store
 export const deleteUserShop = id => http.delete(`/user/store/${id}`);
 // Changes a User Store
 export const updateUserShop = (id, data) => http.put(`/user/store/${id}`, data);
 // List all Users by Store
-export const allUsersStore = id => http.get(`/store/user/${id}`);
+export const allUsersStore = id => http.get(`/store/${id}/user/`);
+
+// /supplier
+export const listSupplier = () => http.get('/supplier');
+// Insert a new Store's Supplier into the database
+export const addSupplierStore = data => http.post('/store/supplier', data);
+// List all Supplier by Store
+export const listSupplierStore = id => http.get(`/store/${id}/supplier`);

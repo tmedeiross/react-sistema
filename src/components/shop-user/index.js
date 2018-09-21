@@ -107,7 +107,7 @@ export class ShopUser extends Component {
 
     AuthAPI.allUsersStore(paramId)
       .then((response) => {
-        console.log(response.data.content);
+        // console.log(response.data.content);
         this.setState({ ...resetState });
         this.setState({ shopUsers: response.data.content });
       })
