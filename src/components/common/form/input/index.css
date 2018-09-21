@@ -16,7 +16,7 @@ input:focus,
 .form-control:focus {
   outline: none !important;
   box-shadow: none;
-  border-color: rgb(0, 104, 169) !important;
+  border-color: rgb(15, 92, 169) !important;
   border-width: 3px;
   border-radius: 0 !important;
 }

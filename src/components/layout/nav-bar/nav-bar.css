@@ -9,8 +9,8 @@ header .avatar {
   width: 35px;
   height: 35px;
   border-radius: 70px;
-  background: #ccc;
-  color: rgb(0, 104, 169);
+  background: rgb(185, 202, 41);
+  color: rgb(15, 92, 169);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -18,7 +18,7 @@ injectGlobal`
   color: #fff;
 }
 .dropdown-item {
-  color: rgb(0,104,169);
+  color: rgb(15, 92, 169);
 }
 .navbar-expand-lg .navbar-nav .dropdown-menu {
     position: absolute;
@@ -28,7 +28,7 @@ injectGlobal`
 .dropdown-item:focus, .dropdown-item:hover {
     color: #fff;
     text-decoration: none;
-    background-color: rgb(0,104,169);
+    background-color: rgb(15, 92, 169);
 }
 .mdl-card__title {
   padding: 5px 16px;

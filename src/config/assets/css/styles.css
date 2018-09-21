@@ -44,11 +44,11 @@ body {
   display: flex !important;
 }
 .bg-primary {
-  background-color: rgb(0, 104, 169) !important;
+  background-color: rgb(15, 92, 169) !important;
   color: #fff;
 }
 .bg-secondary {
-  background-color: rgb(173, 198, 102) !important;
+  background-color: rgb(185, 202, 41) !important;
   color: #fff;
 }
 .mdl-layout__header-row {
