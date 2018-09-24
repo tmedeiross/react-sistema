@@ -23,7 +23,6 @@ injectGlobal`
   font-weight: 400;
   src: url('https://fonts.gstatic.com/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2') format('woff2');
 }
-
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;

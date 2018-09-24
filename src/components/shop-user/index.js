@@ -86,7 +86,7 @@ export class ShopUser extends Component {
     AuthAPI.storeGet(this.props.paramId)
       .then((response) => {
         this.setState({ storeCnpj: response.data.cnpj });
-        console.log(response.data.cnpj);
+        // console.log(response.data.cnpj);
       })
       .then(() => {
         this.listAllUsers();

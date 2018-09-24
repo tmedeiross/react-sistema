@@ -22,6 +22,7 @@ export class Shops extends Component {
 
   render() {
     const { shops } = this.props;
+    const shouldDisplayNotFound = !shops.data.length;
     return (
       <Fragment>
         <div className="container-fluid content">
@@ -45,6 +46,13 @@ export class Shops extends Component {
                       </tr>
                     </thead>
                     <tbody>
+                      {shouldDisplayNotFound && (
+                        <tr>
+                          <td colSpan="5">
+                            <h5 className="text-center">NENHUMA LOJA CADASTRADA</h5>
+                          </td>
+                        </tr>
+                      )}
                       {shops.data.map(shopItem => (
                         <tr key={shopItem.id}>
                           <td className="mdl-data-table__cell--non-numeric">{shopItem.cnpj}</td>

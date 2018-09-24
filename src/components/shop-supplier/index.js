@@ -36,13 +36,14 @@ export class ShopSupplier extends Component {
       profileId: '',
       userEmail: '',
       storeCnpj: '',
+      supplierCnpj: '',
       idCode: '',
       errorMessage: '',
       successMessage: '',
       userSelected: '',
       openDialog: false,
       value: '',
-      awardscode: '',
+      awardsCode: '',
       purchaseCode: '',
       defaultMessage: '',
       priority: '',
@@ -52,10 +53,7 @@ export class ShopSupplier extends Component {
     this.listAllSuppliers = this.listAllSuppliers.bind(this);
     this.addSupplier = this.addSupplier.bind(this);
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    // this.handleUpdateUser = this.handleUpdateUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.deleteUserShop = this.deleteUserShop.bind(this);
   }
 
   componentDidMount() {
@@ -110,64 +108,19 @@ export class ShopSupplier extends Component {
       });
   }
 
-  apiDelUser() {
-    // const resetState = {
-    //   shop: [],
-    //   errors: {},
-    //   errorMessage: '',
-    //   successMessage: '',
-    //   isLoading: true,
-    // };
-    // AuthAPI.deleteUserShop(this.state.userSelected)
-    //   .then((response) => {
-    //     this.setState({ ...resetState });
-    //     this.setState({
-    //       successMessage: 'Usuário deletado com sucesso.',
-    //     });
-    //     console.log(response);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.data.message);
-    //     this.setState({ ...resetState });
-    //     this.setState({
-    //       errorMessage: 'Ocorreu um erro, por favor tente novamente.',
-    //     });
-    //   });
-  }
-
-  deleteUserShop(e) {
-    // e.preventDefault();
-    // this.setState({ userSelected: e.target.id });
-    // swal(
-    //   `Tem certeza que deseja excluir o usuário ${this.state.shopUsers.userEmail}?`,
-    //   'O que deseja fazer?',
-    //   {
-    //     buttons: {
-    //       home: {
-    //         text: 'Deletar',
-    //         value: 'delete',
-    //       },
-    //       proximo: {
-    //         text: 'Cancelar',
-    //         value: 'cancel',
-    //       },
-    //     },
-    //   },
-    // ).then((value) => {
-    //   switch (value) {
-    //     case 'delete':
-    //       this.apiDelUser();
-    //       break;
-    //     case 'cancel':
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
-  }
-
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  shopSelectedDetails() {
+    AuthAPI.storeGet(this.props.paramId)
+      .then((response) => {
+        this.setState({ storeCnpj: response.data.cnpj });
+        this.setState({ idCode: response.data.id });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   addSupplier(e) {
@@ -193,54 +146,38 @@ export class ShopSupplier extends Component {
     } = this.state;
 
     AuthAPI.addSupplierStore({
-      // supplierCnpj,
-      // storeCnpj,
-      // idCode,
-      // awardsCode,
-      // purchaseCode,
-      // defaultMessage,
-      // priority,
-      supplierCnpj: '44.444.444/4444-44',
-      storeCnpj: '21.354.694/3213-21',
-      idCode: 4,
-      awardsCode: 0,
-      purchaseCode: 0,
-      defaultMessage: 'string',
-      priority: 1,
+      supplierCnpj,
+      storeCnpj,
+      idCode,
+      awardsCode,
+      purchaseCode,
+      defaultMessage,
+      priority,
     })
       .then((response) => {
         console.log(response);
-        // this.handleCloseDialog();
-        // this.setState({ ...resetState });
-        // this.setState({
-        //   successMessage: 'Fornecedor alterado com sucesso.',
-        // });
+        this.handleCloseDialog();
+        this.setState({ ...resetState });
+        this.setState({
+          successMessage: 'Fornecedor incluído com sucesso.',
+        });
+
       })
       .catch((err) => {
-        // this.handleCloseDialog();
+        this.handleCloseDialog();
         console.log(err);
-        // if (err.status === 404) {
-        //   this.setState({
-        //     errorMessage: 'Fornecedor já está vinculado a esta loja.',
-        //   });
-        // } else {
-        //   this.setState({
-        //     errorMessage: 'Dados incorretos ou faltantes.',
-        //   });
-        // }
+        if (err.status === 404) {
+          this.setState({
+            errorMessage: 'Fornecedor já está vinculado a esta loja.',
+          });
+        } else {
+          this.setState({
+            errorMessage: 'Dados incorretos ou faltantes.',
+          });
+        }
       });
   }
 
-  shopSelectedDetails() {
-    AuthAPI.storeGet(this.props.paramId)
-      .then((response) => {
-        this.setState({ storeCnpj: response.data.cnpj });
-        this.setState({ idCode: response.data.id });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
   getSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
@@ -253,10 +190,15 @@ export class ShopSupplier extends Component {
       );
   };
 
+
+
   getSuggestionValue = suggestion => suggestion.socialName;
+  getCnpjSupplier = (e) => {
+    this.setState ({ supplierCnpj: e.target.id })
+  }
 
   renderSuggestion = suggestion => (
-    <div className="suggestionsList" id={suggestion.id}>
+    <div className="suggestionsList" onClick={this.getCnpjSupplier} id={suggestion.cnpj}>
       {suggestion.socialName}
     </div>
   );
@@ -284,14 +226,12 @@ export class ShopSupplier extends Component {
       errors,
       errorMessage,
       successMessage,
-      shopUsers,
-      value,
       suggestions,
     } = this.state;
 
     const inputProps = {
       placeholder: 'Procure seu fornecedor',
-      value,
+      value: this.state.value,
       onChange: this.onChange,
       onBlur: this.onBlur,
     };

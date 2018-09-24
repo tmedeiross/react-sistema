@@ -7,7 +7,7 @@ const Form = ({
   handleSubmit,
   handleChange,
   errors,
-  awardscode,
+  awardsCode,
   purchaseCode,
   defaultMessage,
   priority,
@@ -18,10 +18,10 @@ const Form = ({
       <div className="mdl-cell mdl-cell--6-col">
         <Input
           type="text"
-          name="awardscode"
-          id="awardscode"
+          name="awardsCode"
+          id="awardsCode"
           label="Código no clube de premios "
-          value={awardscode}
+          value={awardsCode}
           handleChange={handleChange}
           showMsgError
         />
@@ -74,7 +74,7 @@ Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   // errors: PropTypes.object.isRequired,
-  awardscode: PropTypes.string.isRequired,
+  awardsCode: PropTypes.string.isRequired,
   purchaseCode: PropTypes.string.isRequired,
   defaultMessage: PropTypes.string.isRequired,
   priority: PropTypes.string.isRequired,
