@@ -41,7 +41,7 @@ export class NavBar extends Component {
       .then((response) => {
         const userData = response.data;
         this.setState({ userData });
-        console.log(userData);
+        // console.log(userData);
         this.getFirstLetter();
       })
       .catch((err) => {

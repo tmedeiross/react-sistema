@@ -24,9 +24,12 @@ export class Login extends Component {
     this.state = {
       username: '',
       password: '',
+      idUser: '',
       errors: {},
       isLoading: false,
       errorMessage: '',
+      stores: '',
+      userData: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -50,29 +53,29 @@ export class Login extends Component {
       .then((response) => {
         this.setState({ ...resetState });
         setToken(response.data.token);
-        localStorage.setItem('shop', username);
         localStorage.setItem('user', username);
         this.props.setAuth(true);
-        return this.redirectToHome();
-        // const shop = JSON.parse(localStorage.getItem('shop'));
-        // if (shop) {
-        //   this.props.addShop(shop);
-        // }
-        // StoreAPI.getShops()
-        //   .then((response) => {
-        //     const stores = response.data.content;
 
-        //     if (!stores || stores.length === 0) {
-        //       return this.redirectToHome();
-        //     }
-        //     this.props.addShops(stores);
-
-        //     setTimeout(() => this.props.history.push(`${PREFIX}/shops`), 500);
-        //   })
-        //   .catch((response) => {
-        //     this.setState({ isLoading: false });
-        //     return this.redirectToHome();
-        //   });
+        AuthAPI.getUser(localStorage.getItem('user'))
+          .then((response) => {
+            AuthAPI.getShopUser(response.data.id)
+              .then((response) => {
+                const userStore = !!response.data.content[0];
+                console.log(userStore);
+                if (userStore === false) {
+                  this.redirectToStores();
+                } else {
+                  // localStorage.setItem('user', username);
+                  this.redirectToHome();
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -94,6 +97,10 @@ export class Login extends Component {
 
   redirectToHome() {
     return this.props.history.push(`${PREFIX}`);
+  }
+
+  redirectToStores() {
+    return this.props.history.push(`${PREFIX}/shops`);
   }
 
   isValid() {
