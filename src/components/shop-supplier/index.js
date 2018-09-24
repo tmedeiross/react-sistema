@@ -47,6 +47,7 @@ export class ShopSupplier extends Component {
       purchaseCode: '',
       defaultMessage: '',
       priority: '',
+      supplierStore: [],
     };
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
@@ -54,6 +55,7 @@ export class ShopSupplier extends Component {
     this.addSupplier = this.addSupplier.bind(this);
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.listSupplierStore = this.listSupplierStore.bind(this);
   }
 
   componentDidMount() {
@@ -61,6 +63,7 @@ export class ShopSupplier extends Component {
     this.listAllSuppliers();
     getShopRequest();
     this.shopSelectedDetails();
+    this.listSupplierStore();
   }
 
   handleOpenDialog() {
@@ -99,7 +102,6 @@ export class ShopSupplier extends Component {
 
     AuthAPI.listSupplier()
       .then((response) => {
-        console.log(response.data.content);
         this.setState({ ...resetState });
         this.setState({ suppliers: response.data.content });
       })
@@ -117,6 +119,18 @@ export class ShopSupplier extends Component {
       .then((response) => {
         this.setState({ storeCnpj: response.data.cnpj });
         this.setState({ idCode: response.data.id });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  listSupplierStore() {
+    AuthAPI.listSupplierStore(this.props.paramId)
+      .then((response) => {
+        console.log(response.data.content);
+        this.setState({ supplierStore: response.data.content });
+        // this.setState({ idCode: response.data.id });
       })
       .catch((err) => {
         console.log(err);
@@ -161,7 +175,6 @@ export class ShopSupplier extends Component {
         this.setState({
           successMessage: 'Fornecedor incluído com sucesso.',
         });
-
       })
       .catch((err) => {
         this.handleCloseDialog();
@@ -283,32 +296,28 @@ export class ShopSupplier extends Component {
                   </tr>
                 </thead>
                 <tbody>
+                {this.state.supplierStore.map(supplier => (
                   <tr>
-                    <td className="mdl-data-table__cell--non-numeric">Supllier 1</td>
-                    <td className="text-left">Mensagem mensagem</td>
-                    <td className="text-left">123</td>
-                    {/* <td className="mdl-data-table__cell--non-numeric">{shopUsers.userEmail}</td>
-                    <td>
-                      <If test={shopUsers.profileId === 'SALESMAN'}>Vendedor</If>
-                      <If test={shopUsers.profileId === 'ADMIN'}>Admin</If>
-                      <If test={shopUsers.profileId === 'ASSEMBLY'}>Montador</If>
-                    </td> */}
+                    <td className="mdl-data-table__cell--non-numeric">{supplier.fantasyName}</td>
+                    <td className="text-left">{supplier.defaultMessage}</td>
+                    <td className="text-left">{supplier.purchaseCode}</td>
                     <td className="mdl-typography--text-right">
                       <Button
                         // href={`${PREFIX}/store/${store.id}`}
                         // onClick={this.deleteUserShop} */}
-                        // value={shopUsers.id}
-                        // id={shopUsers.id} */}
+                        // value={suppliers.id}
+                        // id={suppliers.id} */}
                         mini
                         variant="fab"
                         className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
                         aria-label="Delete"
                       >
-                        {/* <i className="fas fa-trash" value={shopUsers.id} id={shopUsers.id} /> */}
-                        <i className="fas fa-trash" />
+                        <i className="fas fa-trash" value={supplier.id} id={supplier.id} />
+                        {/* <i className="fas fa-trash" /> */}
                       </Button>
                     </td>
                   </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
