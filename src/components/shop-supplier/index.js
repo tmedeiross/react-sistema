@@ -296,28 +296,28 @@ export class ShopSupplier extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                {this.state.supplierStore.map(supplier => (
-                  <tr>
-                    <td className="mdl-data-table__cell--non-numeric">{supplier.fantasyName}</td>
-                    <td className="text-left">{supplier.defaultMessage}</td>
-                    <td className="text-left">{supplier.purchaseCode}</td>
-                    <td className="mdl-typography--text-right">
-                      <Button
-                        // href={`${PREFIX}/store/${store.id}`}
-                        // onClick={this.deleteUserShop} */}
-                        // value={suppliers.id}
-                        // id={suppliers.id} */}
-                        mini
-                        variant="fab"
-                        className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
-                        aria-label="Delete"
-                      >
-                        <i className="fas fa-trash" value={supplier.id} id={supplier.id} />
-                        {/* <i className="fas fa-trash" /> */}
-                      </Button>
-                    </td>
-                  </tr>
-                  ))}
+                  {this.state.supplierStore.map(supplier => (
+                    <tr key={supplier.id}>
+                      <td className="mdl-data-table__cell--non-numeric">{supplier.fantasyName}</td>
+                      <td className="text-left">{supplier.defaultMessage}</td>
+                      <td className="text-left">{supplier.purchaseCode}</td>
+                      <td className="mdl-typography--text-right">
+                        <Button
+                          // href={`${PREFIX}/store/${store.id}`}
+                          value={supplier.id}
+                          id={supplier.id}
+                          onClick={this.deleteSupplier}
+                          mini
+                          variant="fab"
+                          className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
+                          aria-label="Delete"
+                        >
+                          <i className="fas fa-trash" value={supplier.id} id={supplier.id} />
+                          {/* <i className="fas fa-trash" /> */}
+                        </Button>
+                      </td>
+                    </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
