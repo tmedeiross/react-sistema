@@ -49,7 +49,7 @@ export class Shops extends Component {
                     <tbody>
                       {shouldDisplayNotFound && (
                         <tr>
-                          <td colSpan="5">
+                          <td colSpan="6">
                             <h5 className="text-center">NENHUMA LOJA CADASTRADA</h5>
                           </td>
                         </tr>

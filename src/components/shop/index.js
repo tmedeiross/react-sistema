@@ -13,6 +13,7 @@ import './styles.css';
 import StoreDetails from '../shop-details';
 import ShopUser from '../shop-user';
 import ShopSupplier from '../shop-supplier';
+import If from '../common/if';
 
 // import { ROUTE_PREFIX as PREFIX } from '../../config';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
@@ -80,7 +81,7 @@ export class Shop extends Component {
   }
 
   render() {
-    const { value } = this.state;
+    const { value, paramId } = this.state;
     const { classes } = this.props;
 
     return (
@@ -98,8 +99,10 @@ export class Shop extends Component {
                   scrollButtons="auto"
                 >
                   <Tab label="Informação da loja" />
-                  <Tab label="Fornecedores" />
-                  <Tab label="Usuários" />
+                  <If test={paramId}>
+                    <Tab label="Fornecedores" />
+                    <Tab label="Usuários" />
+                  </If>
                 </Tabs>
               </AppBar>
               {value === 0 && (
