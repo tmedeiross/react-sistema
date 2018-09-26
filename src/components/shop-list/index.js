@@ -12,11 +12,11 @@ import { ROUTE_PREFIX as PREFIX } from '../../config';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
 import { Creators as ShopActions } from '../../redux-flow/ducks/shops';
 import { Card, Container } from './styles';
+import If from '../common/if';
 
 export class Shops extends Component {
   componentDidMount() {
     const { getShopRequest } = this.props;
-    // loadingOn();
     getShopRequest();
   }
 
@@ -42,6 +42,7 @@ export class Shops extends Component {
                         <th>Nome Fantasia</th>
                         <th>Telefone</th>
                         <th>UF</th>
+                        <th>Perfil</th>
                         <th />
                       </tr>
                     </thead>
@@ -59,17 +60,24 @@ export class Shops extends Component {
                           <td>{shopItem.fantasyName}</td>
                           <td>{shopItem.phoneNumber}</td>
                           <td>{shopItem.state}</td>
+                          <td>
+                            <If test={shopItem.userStore.profileId === 'SALESMAN'}>Vendedor</If>
+                            <If test={shopItem.userStore.profileId === 'ADMIN'}>Admin</If>
+                            <If test={shopItem.userStore.profileId === 'ASSEMBLY'}>Montador</If>
+                          </td>
                           <td className="mdl-typography--text-right">
-                            <Button
-                              href={`${PREFIX}/shop/${shopItem.id}`}
-                              mini
-                              variant="fab"
-                              className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
-                              color="primary"
-                              aria-label="Delete"
-                            >
-                              <EditIcon />
-                            </Button>
+                            <If test={shopItem.userStore.profileId === 'ADMIN'}>
+                              <Button
+                                href={`${PREFIX}/shop/${shopItem.id}`}
+                                mini
+                                variant="fab"
+                                className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
+                                color="primary"
+                                aria-label="Delete"
+                              >
+                                <EditIcon />
+                              </Button>
+                            </If>
                           </td>
                         </tr>
                       ))}

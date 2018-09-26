@@ -61,7 +61,6 @@ export class ShopUser extends Component {
     this.setState({
       openDialog: true,
     });
-    console.log(e.target);
   }
 
   handleCloseDialog() {
@@ -117,6 +116,8 @@ export class ShopUser extends Component {
   }
 
   apiDelUser() {
+    const { shopUsers, profileId } = this.state;
+
     const resetState = {
       shop: [],
       errors: {},
@@ -124,14 +125,22 @@ export class ShopUser extends Component {
       successMessage: '',
       isLoading: true,
     };
+    const id = this.state.userSelected;
 
-    AuthAPI.deleteUserShop(this.state.userSelected)
+    AuthAPI.deleteUserShop(id)
       .then((response) => {
-        this.setState({ ...resetState });
+
+        const shopUser = { profileId };
+
+        const newList = shopUsers.filter((id) => {
+          if (id.id !== id) return id;
+        });
+
+        console.log(newList);
+        this.setState({ ...resetState, shopUsers: newList });
         this.setState({
           successMessage: 'Usuário deletado com sucesso.',
         });
-        console.log(response);
       })
       .catch((err) => {
         console.log(err.data.message);
@@ -193,12 +202,10 @@ export class ShopUser extends Component {
       profileId,
       showSalesValues: false,
     })
-      .then(() => {
+      .then((response) => {
+        console.log(response);
         this.handleCloseDialog();
-        this.setState({ ...resetState });
-        this.setState({
-          successMessage: 'Usuário alterado com sucesso.',
-        });
+        this.setState({ ...resetState, successMessage: 'Usuário alterado com sucesso.' });
 
         setTimeout(() => {
           this.setState({
@@ -212,7 +219,7 @@ export class ShopUser extends Component {
         console.log(err);
         if (err.status === 404) {
           this.setState({
-            errorMessage: 'Usuário já está vinculado a esta loja.',
+            errorMessage: 'Usuário não ainda cadastrado.',
           });
         } else {
           this.setState({
@@ -232,7 +239,9 @@ export class ShopUser extends Component {
     };
 
     this.setState(resetState);
-    const { profileId, userEmail, storeCnpj } = this.state;
+    const {
+      profileId, userEmail, storeCnpj, shopUsers,
+    } = this.state;
 
     AuthAPI.addUserShop({
       profileId,
@@ -241,8 +250,12 @@ export class ShopUser extends Component {
       showSalesValues: false,
     })
       .then(() => {
-        this.setState({ ...resetState });
+        const newUser = { profileId, userEmail, storeCnpj };
+        shopUsers.push(newUser);
+
         this.setState({
+          ...resetState,
+          shopUsers,
           successMessage: 'Usuário inserido com sucesso.',
         });
 
@@ -250,11 +263,9 @@ export class ShopUser extends Component {
           this.setState({
             successMessage: '',
           });
-          this.listAllUsers();
-        }, 3000);
+        }, 2000);
       })
       .catch((err) => {
-        console.log(err);
         if (err.status === 404) {
           this.setState({
             errorMessage: 'Usuário já está vinculado a esta loja.',

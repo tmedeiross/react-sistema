@@ -56,6 +56,7 @@ export class ShopSupplier extends Component {
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.listSupplierStore = this.listSupplierStore.bind(this);
+    this.deleteSupplier = this.deleteSupplier.bind(this);
   }
 
   componentDidMount() {
@@ -135,6 +136,18 @@ export class ShopSupplier extends Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  deleteSupplier(e) {
+    const idSupplier = e.target.id;
+
+    AuthAPI.listSupplierStore(idSupplier)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   addSupplier(e) {
@@ -303,7 +316,6 @@ export class ShopSupplier extends Component {
                       <td className="text-left">{supplier.purchaseCode}</td>
                       <td className="mdl-typography--text-right">
                         <Button
-                          // href={`${PREFIX}/store/${store.id}`}
                           value={supplier.id}
                           id={supplier.id}
                           onClick={this.deleteSupplier}
@@ -313,7 +325,6 @@ export class ShopSupplier extends Component {
                           aria-label="Delete"
                         >
                           <i className="fas fa-trash" value={supplier.id} id={supplier.id} />
-                          {/* <i className="fas fa-trash" /> */}
                         </Button>
                       </td>
                     </tr>

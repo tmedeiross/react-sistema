@@ -7,7 +7,7 @@ const options = [
   { value: '', text: 'Selecionar' },
   { value: 'ADMIN', text: 'Admin' },
   { value: 'SALESMAN', text: 'Vendedor' },
-  { value: 'ASSEMBLY', text: 'Montagem' },
+  { value: 'ASSEMBLY', text: 'Montador' },
 ];
 const Form = ({
   handleSubmit, handleChange, errors, profileId, textBtn, handleCloseDialog,
