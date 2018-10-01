@@ -21,7 +21,6 @@ export const getUserSuccess = (state = INITIAL_STATE, action) => ({
   ...state,
   errorMessage: '',
   successMessage: action.successMessage,
-  isLoading: false,
 });
 
 export const getUserFailure = (state = INITIAL_STATE, action) => ({

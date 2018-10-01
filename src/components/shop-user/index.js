@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
+import Spinner from 'react-spinkit';
 
 import './styles.css';
 
@@ -105,7 +106,6 @@ export class ShopUser extends Component {
       shop: [],
       errors: {},
       errorMessage: '',
-      isLoading: true,
     };
 
     AuthAPI.allUsersStore(paramId)
@@ -299,7 +299,6 @@ export class ShopUser extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
-              {JSON.stringify(this.state)}
               <Form
                 {...this.state}
                 handleSubmit={this.addUser}
@@ -307,7 +306,6 @@ export class ShopUser extends Component {
                 errors={errors}
               />
             </div>
-
             <div className="mdl-card__title bg-primary">
               <h2 className="mdl-card__title-text mdl-typography--text-center w100">
                 Usuários da loja
@@ -363,6 +361,11 @@ export class ShopUser extends Component {
                 </tbody>
               </table>
             </div>
+            <If test={this.state.isLoading}>
+              <div className="loading">
+                <Spinner name="ball-pulse-sync" fadeIn="none" />
+              </div>
+            </If>
             <div className="mdl-card__supporting-text w100">
               <If test={errorMessage}>
                 <div className="alert alert-danger msg-error-login text-center" role="alert">
@@ -418,8 +421,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addUser: (form, paramId, storeCnpj) => dispatch(ActionCreators.getUserRequest(form, paramId, storeCnpj)),
-  loadingOn,
-  loadingOff,
 });
 
 export default connect(
