@@ -57,7 +57,7 @@ export class ShopUser extends Component {
     getShopRequest();
   }
 
-  handleOpenDialog(e) {
+  handleOpenDialog() {
     this.setState({
       openDialog: true,
     });
@@ -129,7 +129,6 @@ export class ShopUser extends Component {
 
     AuthAPI.deleteUserShop(id)
       .then((response) => {
-
         const shopUser = { profileId };
 
         const newList = shopUsers.filter((id) => {
@@ -263,7 +262,7 @@ export class ShopUser extends Component {
           this.setState({
             successMessage: '',
           });
-        }, 2000);
+        }, 1000);
       })
       .catch((err) => {
         if (err.status === 404) {
@@ -379,6 +378,7 @@ export class ShopUser extends Component {
                 handleSubmit={this.handleUpdateUser}
                 handleChange={this.handleChange}
                 errors={errors}
+                value={this.state.profileId}
               />
             </DialogContent>
             <DialogActions>

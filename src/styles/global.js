@@ -68,4 +68,12 @@ injectGlobal`
   left: auto;
   right: 0;
 }
+.avatar img {
+  max-width: 150px;
+  display: block;
+  margin: auto;
+}
+.nav-link {
+  cursor: pointer;
+}
 `;

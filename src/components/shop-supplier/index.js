@@ -170,6 +170,7 @@ export class ShopSupplier extends Component {
       purchaseCode,
       defaultMessage,
       priority,
+      supplierStore
     } = this.state;
 
     AuthAPI.addSupplierStore({
@@ -183,11 +184,26 @@ export class ShopSupplier extends Component {
     })
       .then((response) => {
         console.log(response);
+        this.listSupplierStore();
+
+        //   const newUser = { fantasyName, defaultMessage, purchaseCode }
+        // this.setState({ supplierStore: response.data.content });
+
+        // this.state.value
+      // awardsCode,
+      // purchaseCode,
+      // defaultMessage,
+      // priority, };
+      //   supplierStore.push(newUser);
+
         this.handleCloseDialog();
-        this.setState({ ...resetState });
-        this.setState({
-          successMessage: 'Fornecedor incluído com sucesso.',
-        });
+        this.setState({ ...resetState, successMessage: 'Fornecedor incluído com sucesso.' });
+
+        setTimeout(() => {
+          this.setState({
+            successMessage: '',
+          });
+        }, 1000);
       })
       .catch((err) => {
         this.handleCloseDialog();

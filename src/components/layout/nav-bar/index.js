@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import jwdDecode from 'jwt-decode';
 import Input from '../../common/form/input';
-
+import ActionCreators from '../../../redux-flow/ducks/authCreators';
 import './nav-bar.css';
 
 import If from '../../common/if';
@@ -15,9 +16,10 @@ export class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      ...props,
       shop: '',
-      userData: [],
       firstLetter: '',
+      userData: [],
     };
     this.getUser = this.getUser.bind(this);
     this.getFirstLetter = this.getFirstLetter.bind(this);
@@ -33,19 +35,20 @@ export class NavBar extends Component {
     }
   }
 
-  componentDidUpdate() {}
-
   getUser() {
-    const email = localStorage.getItem('user');
-    AuthAPI.getUser(email)
+    const decoded = jwdDecode(localStorage.getItem('token'));
+    const emailToken = decoded.sub;
+
+    AuthAPI.getUser(emailToken)
       .then((response) => {
         const userData = response.data;
         this.setState({ userData });
-        // console.log(userData);
+      })
+      .then(() => {
         this.getFirstLetter();
       })
       .catch((err) => {
-        console.log(err.data.message);
+        console.log(err);
       });
   }
 
@@ -59,8 +62,6 @@ export class NavBar extends Component {
   logout() {
     const userData = [];
     this.setState({ userData });
-    // const resetState = { userData: [], firstLetter: '', shop: '' };
-    // this.setState({ resetState });
   }
 
   redirectToHome() {
@@ -68,7 +69,7 @@ export class NavBar extends Component {
   }
 
   render() {
-    const { shop, userData, firstLetter } = this.state;
+    const { shop, firstLetter, userData } = this.state;
     return (
       <div className="mdl-layout mdl-layout--fixed-header">
         <header className="mdl-layout__header">
@@ -90,8 +91,6 @@ export class NavBar extends Component {
             <div className="mdl-layout-spacer" />
             <nav className="mdl-navigation mdl-layout--large-screen-only">
               <If test={isAuthenticated()}>
-                <If test={Object.keys(shop).length} />
-
                 <nav className="navbar navbar-expand-lg ">
                   <button
                     className="navbar-toggler"
@@ -108,7 +107,7 @@ export class NavBar extends Component {
                     <div className="navbar-nav">
                       <span className="avatar">{firstLetter}</span>
                       <li className="nav-item dropdown">
-                        <a
+                        <span
                           className="nav-link dropdown-toggle"
                           id="navbarDropdownMenuLink"
                           role="button"
@@ -117,12 +116,12 @@ export class NavBar extends Component {
                           aria-expanded="false"
                         >
                           {userData.name}
-                        </a>
+                        </span>
                         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                           <Link to={`${PREFIX}/shops`} className="dropdown-item">
                             Minhas Lojas
                           </Link>
-                          <Link to={`${PREFIX}/auth/logout`} className="dropdown-item">
+                          <Link to={`${PREFIX}/auth/account`} className="dropdown-item">
                             Minha conta
                           </Link>
                           <Link to={`${PREFIX}/auth/logout`} className="dropdown-item btn-logout">
@@ -145,6 +144,7 @@ export class NavBar extends Component {
 const mapStateToProps = state => ({
   shop: state.shops.selectedShop,
   isAuthenticated: state.auth.isAuthenticated,
+  authData: state.authData,
 });
 
 export default connect(mapStateToProps)(NavBar);

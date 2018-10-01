@@ -53,6 +53,14 @@ export class StoreDetails extends Component {
 
   handleBlurCpf = () => onlyNumbersCnpj(this.state.cpnj);
 
+  // handleBlurNumber = () => onlyNumbersCnpj(this.state.number);
+  handleBlurNumber() {
+    console.log('sdf');
+    const value = this.state.cpnj;
+
+    return value.replace(/\.|-/g, '');
+  }
+
   redirectToHome() {
     return this.props.history.push(`${PREFIX}`);
   }
@@ -76,6 +84,8 @@ export class StoreDetails extends Component {
   }
 
   componentDidMount() {
+    $('#number').focus();
+
     this.assignMasks();
 
     if (this.existParams()) {
@@ -120,7 +130,7 @@ export class StoreDetails extends Component {
 
   assignMasks = () => {
     assignMasks();
-    $('#cnpj').focus();
+    // $('#cnpj').focus();
   };
 
   getStore() {
@@ -259,6 +269,11 @@ export class StoreDetails extends Component {
             isLoading: false,
             errorMessage: 'Houve um problema, por favor, tente novamente.',
           });
+        } else if (err.status === 422) {
+          this.setState({
+            isLoading: false,
+            errorMessage: 'Dados faltantes.',
+          });
         } else {
           this.setState({
             isLoading: false,
@@ -301,6 +316,7 @@ export class StoreDetails extends Component {
               handleChange={this.handleChange}
               handleBlurCpf={this.handleBlurCpf}
               handleBlurCep={this.handleBlurCep}
+              handleBlurNumber={this.handleBlurNumber}
               errors={errors}
             />
             <If test={errorMessage}>

@@ -75,7 +75,7 @@ const FormSignup = ({
           <input
             type="submit"
             className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary w100"
-            value="Entrar"
+            value="Confirmar"
             disabled={isLoading}
           />
         </div>

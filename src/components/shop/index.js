@@ -10,6 +10,7 @@ import Footer from '../layout/footer';
 
 import './styles.css';
 
+import NavBar from '../layout/nav-bar';
 import StoreDetails from '../shop-details';
 import ShopUser from '../shop-user';
 import ShopSupplier from '../shop-supplier';
@@ -83,9 +84,11 @@ export class Shop extends Component {
   render() {
     const { value, paramId } = this.state;
     const { classes } = this.props;
+    const shouldDisplayNotFound = paramId;
 
     return (
       <Fragment>
+        <NavBar />
         <div className="container-fluid content">
           <Container>
             <div className={classes.root}>
@@ -99,10 +102,8 @@ export class Shop extends Component {
                   scrollButtons="auto"
                 >
                   <Tab label="Informação da loja" />
-                  <If test={paramId}>
-                    <Tab label="Fornecedores" />
-                    <Tab label="Usuários" />
-                  </If>
+                  {shouldDisplayNotFound && <Tab label="Fornecedores" />}
+                  {shouldDisplayNotFound && <Tab label="Usuários" />}
                 </Tabs>
               </AppBar>
               {value === 0 && (
@@ -110,11 +111,13 @@ export class Shop extends Component {
                   <StoreDetails history={this.props.history} paramId={this.props.match.params.id} />
                 </TabContainer>
               )}
+
               {value === 1 && (
                 <TabContainer>
                   <ShopSupplier history={this.props.history} paramId={this.props.match.params.id} />
                 </TabContainer>
               )}
+
               {value === 2 && (
                 <TabContainer>
                   <ShopUser history={this.props.history} paramId={this.props.match.params.id} />

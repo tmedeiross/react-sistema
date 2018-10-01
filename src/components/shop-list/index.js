@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import Footer from '../layout/footer';
+import NavBar from '../layout/nav-bar';
 import { ROUTE_PREFIX as PREFIX } from '../../config';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
 import { Creators as ShopActions } from '../../redux-flow/ducks/shops';
@@ -18,6 +19,8 @@ export class Shops extends Component {
   componentDidMount() {
     const { getShopRequest } = this.props;
     getShopRequest();
+
+    console.log(this.props.shops);
   }
 
   render() {
@@ -25,6 +28,7 @@ export class Shops extends Component {
     const shouldDisplayNotFound = !shops.data.length;
     return (
       <Fragment>
+        <NavBar />
         <div className="container-fluid content">
           <Container>
             <Card>

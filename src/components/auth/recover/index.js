@@ -10,6 +10,7 @@ import ValidateForm from './validator';
 import LoginForm from './form';
 import * as AuthAPI from '../../../api/auth';
 import Footer from '../../layout/footer';
+import NavBar from '../../layout/nav-bar';
 import { ROUTE_PREFIX as PREFIX } from '../../../config';
 import { addShops, addShop } from '../../../redux-flow/reducers/shops/action-creators';
 import { setAuth } from '../../../redux-flow/reducers/auth/action-creators';
@@ -89,6 +90,7 @@ export class RecuperarSenha extends Component {
     } = this.state;
     return (
       <Fragment>
+        <NavBar />
         <Card>
           <div className="mdl-card mdl-shadow--2dp">
             <div className="mdl-card__title bg-primary">

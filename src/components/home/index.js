@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import NavBar from '../layout/nav-bar';
 
 import './styles.css';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
@@ -18,6 +19,7 @@ export class Home extends Component {
   render() {
     return (
       <Fragment>
+        <NavBar />
         <div className="ui">
           <nav className="navbar app" />
           <div className="lists">

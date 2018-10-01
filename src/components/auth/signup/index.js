@@ -6,6 +6,7 @@ import Footer from '../../layout/footer';
 
 import './signup.css';
 import { Card } from './style';
+import NavBar from '../../layout/nav-bar';
 
 import If from '../../common/if';
 import ValidateForm from './validator';
@@ -104,6 +105,7 @@ export class Login extends Component {
 
     return (
       <Fragment>
+        <NavBar />
         <Card>
           <div className="mdl-card mdl-shadow--2dp">
             <div className="mdl-card__title bg-primary">

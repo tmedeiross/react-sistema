@@ -37,6 +37,7 @@ const FormAddStore = ({
   handleSubmit,
   handleChange,
   handleBlurCep,
+  handleBlurNumber,
   errors,
   cnpj,
   fantasyName,
@@ -142,14 +143,16 @@ const FormAddStore = ({
       </div>
       <div className="mdl-cell mdl-cell--2-col">
         <Input
-          type="text"
+          type="number"
           name="number"
           id="number"
           label="Número"
           value={number}
           handleChange={handleChange}
+          onKeyDown={handleBlurNumber}
           showMsgError
           error={errors.number}
+          maxLength="10"
         />
       </div>
       <div className="mdl-cell mdl-cell--4-col">
@@ -232,6 +235,7 @@ FormAddStore.propTypes = {
   state: PropTypes.string.isRequired,
   textBtn: PropTypes.string.isRequired,
   handleBlurCep: PropTypes.func.isRequired,
+  handleBlurNumber: PropTypes.func.isRequired,
 };
 
 export default FormAddStore;

@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Spinner from 'react-spinkit';
 
 import './signup.css';
 import qs from 'query-string';
 import { Card } from './style';
+import NavBar from '../../layout/nav-bar';
 
 import If from '../../common/if';
 import * as AuthAPI from '../../../api/auth';
@@ -92,37 +93,40 @@ export class Login extends Component {
     } = this.state;
 
     return (
-      <Card>
-        <div className="mdl-card mdl-shadow--2dp">
-          <div className="mdl-card__title bg-primary">
-            <h2 className="mdl-card__title-text mdl-typography--text-center w100">BEM VINDO</h2>
-          </div>
-          <div className="mdl-card__supporting-text w100 text-center">
-            <If test={isConfirmed}>
-              <h4>Sua conta foi confirmada com sucesso</h4>
-              <h6>
-                Você será redirecionado para a página de Login em &nbsp;
-                {segundosRestantes}
+      <Fragment>
+        <NavBar />
+        <Card>
+          <div className="mdl-card mdl-shadow--2dp">
+            <div className="mdl-card__title bg-primary">
+              <h2 className="mdl-card__title-text mdl-typography--text-center w100">BEM VINDO</h2>
+            </div>
+            <div className="mdl-card__supporting-text w100 text-center">
+              <If test={isConfirmed}>
+                <h4>Sua conta foi confirmada com sucesso</h4>
+                <h6>
+                  Você será redirecionado para a página de Login em &nbsp;
+                  {segundosRestantes}
 .
-              </h6>
-            </If>
+                </h6>
+              </If>
 
-            <If test={isLoading}>
-              <div className="loading">
-                <Spinner name="ball-pulse-sync" fadeIn="none" />
-              </div>
-            </If>
-            <If test={errorMessage}>
-              {/* <div className="alert alert-warning msg-error-login text-center" role="alert">
+              <If test={isLoading}>
+                <div className="loading">
+                  <Spinner name="ball-pulse-sync" fadeIn="none" />
+                </div>
+              </If>
+              <If test={errorMessage}>
+                {/* <div className="alert alert-warning msg-error-login text-center" role="alert">
                 Clique aqui para reenviar o email de confirmação.
               </div> */}
-              <div className="alert alert-danger msg-error-login text-center" role="alert">
-                {errorMessage}
-              </div>
-            </If>
+                <div className="alert alert-danger msg-error-login text-center" role="alert">
+                  {errorMessage}
+                </div>
+              </If>
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </Fragment>
     );
   }
 }

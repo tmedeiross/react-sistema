@@ -12,6 +12,7 @@ import ValidateForm from './validator';
 import LoginForm from './form';
 import Footer from '../../layout/footer';
 import { ROUTE_PREFIX as PREFIX } from '../../../config';
+import Button from '@material-ui/core/Button';
 
 export class Login extends Component {
   constructor(props) {
@@ -69,7 +70,17 @@ export class Login extends Component {
         <Card>
           <div className="mdl-card mdl-shadow--2dp">
             <div className="mdl-card__title bg-primary">
-              <h2 className="mdl-card__title-text mdl-typography--text-center w100">ENTRAR</h2>
+              <h2 className="mdl-card__title-text mdl-typography--text-center w100">Minha conta</h2>
+            </div>
+            <div className="mdl-card__supporting-text w100">
+              <div className="avatar">
+                <img src="/img/avatar.png" alt="" />
+                <p className="text-center">
+                  <a href="/" color="primary">
+                    Trocar imagem
+                  </a>
+                </p>
+              </div>
             </div>
             <div className="mdl-card__supporting-text w100">
               <LoginForm
@@ -91,8 +102,42 @@ export class Login extends Component {
                 </div>
               </If>
               <Link to="/app/auth/recover" className="mdl-js-ripple-effect" color="primary">
-                Esqueci a senha
+                Trocar a senha
               </Link>
+            </div>
+            <div className="mdl-card__title bg-primary">
+              <h2 className="mdl-card__title-text mdl-typography--text-center w100">
+                Fornecedores
+              </h2>
+            </div>
+            <div className="mdl-card__supporting-text w100">
+              <table className="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                <thead>
+                  <tr>
+                    <th className="mdl-data-table__cell--non-numeric">Nome</th>
+                    <th className="text-left">Mensagem</th>
+                    <th className="text-left">Código de compra</th>
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="mdl-data-table__cell--non-numeric">fantasyName</td>
+                    <td className="text-left">supplier.defaultMessage</td>
+                    <td className="text-left">supplier.purchaseCode</td>
+                    <td className="mdl-typography--text-right">
+                      <Button
+                        mini
+                        variant="fab"
+                        className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
+                        aria-label="Delete"
+                      >
+                        <i className="fas fa-trash" />
+                      </Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </Card>
