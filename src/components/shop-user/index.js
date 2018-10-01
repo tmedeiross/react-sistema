@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+
 import './styles.css';
 
 import swal from 'sweetalert';
@@ -16,7 +17,8 @@ import ValidateForm from './validator';
 import If from '../common/if';
 // import { ROUTE_PREFIX as PREFIX } from '../../config';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
-import { Creators as ShopActions } from '../../redux-flow/ducks/shops';
+// import { Creators as ShopActions } from '../../redux-flow/ducks/shops';
+import ActionCreators from '../../redux-flow/ducks/shopCreators';
 import { Card, Container } from './styles';
 import Form from './form';
 import FormUpdate from './formUpdate';
@@ -26,19 +28,22 @@ export class ShopUser extends Component {
   constructor(...props) {
     super(...props);
     this.state = {
-      shopUsers: [],
       shopSelected: [],
+      shopUsers: [],
       email: '',
       profile: '',
       errors: {},
       textBtn: 'ADICIONAR',
-      profileId: '',
-      userEmail: '',
-      storeCnpj: '',
       errorMessage: '',
       successMessage: '',
       userSelected: '',
       openDialog: false,
+      form: {
+        profileId: '',
+        userEmail: '',
+        storeCnpj: '',
+        showSalesValues: true,
+      },
     };
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
@@ -51,10 +56,8 @@ export class ShopUser extends Component {
   }
 
   componentDidMount() {
-    const { getShopRequest } = this.props;
     this.listAllUsers();
-    this.shopSelectedDetails();
-    getShopRequest();
+    // this.shopSelectedDetails();
   }
 
   handleOpenDialog() {
@@ -180,8 +183,11 @@ export class ShopUser extends Component {
     });
   }
 
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+  handleChange(event) {
+    // this.setState({ [e.target.name]: e.target.value });
+    const form = { ...this.state.form };
+    form[event.target.name] = event.target.value;
+    this.setState({ form });
   }
 
   handleUpdateUser(e) {
@@ -230,52 +236,56 @@ export class ShopUser extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const resetState = {
-      errors: {},
-      errorMessage: '',
-      successMessage: '',
-      isLoading: true,
-    };
+    // const resetState = {
+    //   errors: {},
+    //   errorMessage: '',
+    //   successMessage: '',
+    //   isLoading: true,
+    // };
 
-    this.setState(resetState);
-    const {
-      profileId, userEmail, storeCnpj, shopUsers,
-    } = this.state;
+    // this.setState(resetState);
+    // const {
+    //   profileId, userEmail, storeCnpj, shopUsers,
+    // } = this.state;
 
-    AuthAPI.addUserShop({
-      profileId,
-      userEmail,
-      storeCnpj,
-      showSalesValues: false,
-    })
-      .then(() => {
-        const newUser = { profileId, userEmail, storeCnpj };
-        shopUsers.push(newUser);
+    // AuthAPI.addUserShop({
+    //   profileId,
+    //   userEmail,
+    //   storeCnpj,
+    //   showSalesValues: false,
+    // })
+    //   .then(() => {
+    //     const newUser = { profileId, userEmail, storeCnpj };
+    //     shopUsers.push(newUser);
 
-        this.setState({
-          ...resetState,
-          shopUsers,
-          successMessage: 'Usuário inserido com sucesso.',
-        });
+    //     this.setState({
+    //       ...resetState,
+    //       shopUsers,
+    //       successMessage: 'Usuário inserido com sucesso.',
+    //     });
 
-        setTimeout(() => {
-          this.setState({
-            successMessage: '',
-          });
-        }, 1000);
-      })
-      .catch((err) => {
-        if (err.status === 404) {
-          this.setState({
-            errorMessage: 'Usuário já está vinculado a esta loja.',
-          });
-        } else {
-          this.setState({
-            errorMessage: 'Dados incorretos ou faltantes.',
-          });
-        }
-      });
-    e.target.reset();
+    //     setTimeout(() => {
+    //       this.setState({
+    //         successMessage: '',
+    //       });
+    //     }, 1000);
+    //   })
+    //   .catch((err) => {
+    //     if (err.status === 404) {
+    //       this.setState({
+    //         errorMessage: 'Usuário já está vinculado a esta loja.',
+    //       });
+    //     } else {
+    //       this.setState({
+    //         errorMessage: 'Dados incorretos ou faltantes.',
+    //       });
+    //     }
+    //   });
+    // e.target.reset();
+  }
+  addUser = () => {
+    const { userEmail } = this.state.form
+    this.props.addUser(this.state.form.userEmail)
   }
 
   render() {
@@ -293,6 +303,7 @@ export class ShopUser extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
+              {JSON.stringify(this.props.shop)}
               <Form
                 {...this.state}
                 handleSubmit={this.handleSubmit}
@@ -406,11 +417,11 @@ export class ShopUser extends Component {
 // }
 
 const mapStateToProps = state => ({
-  shops: state.shopData,
+  shop: state.shop,
 });
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators(ShopActions, dispatch),
+  addUser: (userEmail) => dispatch(ActionCreators.getUserRequest(userEmail)),
   loadingOn,
   loadingOff,
 });

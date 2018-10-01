@@ -1,15 +1,15 @@
 import { call, put } from 'redux-saga/effects';
-import http, { setTokenHeader } from '../../utils/services/http';
+import history from '../../utils/history';
+import { setTokenHeader } from '../../utils/services/http';
 
-import { Creators as ShopActions } from '../ducks/shop';
+import { setToken } from '../../utils/services/auth';
+import * as AuthAPI from '../../api/auth';
+import { setAuth } from '../reducers/auth/action-creators';
+import ActionCreators from '../ducks/authCreators';
+import { ROUTE_PREFIX as PREFIX } from '../../config';
 
 setTokenHeader(localStorage.getItem('token'));
 
-export function* getShopId(action) {
-  try {
-    const response = yield call(http.get, `/store/${id}`);
-    yield put(ShopActions.getShopSuccess(response.data.content));
-  } catch (err) {
-    console.log(err);
-  }
+export function* getUserShop(action) {
+  console.log('getUserAuth');
 }

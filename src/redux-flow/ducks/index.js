@@ -4,6 +4,7 @@ import shops from '../reducers/shops';
 import auth from '../reducers/auth';
 import authData from './auth';
 import shopData from './shops';
+import shop from './shop';
 
 export default combineReducers({
   loader,
@@ -11,4 +12,5 @@ export default combineReducers({
   auth,
   authData,
   shopData,
+  shop,
 });

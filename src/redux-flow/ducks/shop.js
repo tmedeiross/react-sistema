@@ -1,34 +1,39 @@
-// Types
-export const Types = {
-  GET_REQUEST: 'shops/GET_SHOP_REQUEST',
-  GET_SUCCESS: 'shops/GET_SHOP_SUCCESS',
-};
+import { createReducer } from 'reduxsauce';
+import { Types } from './authCreators';
 
-// Reducer
+// Reducers
 const INITIAL_STATE = {
-  data: [],
-  loading: false,
+  user: {},
+  userShop: {},
+  errorMessage: '',
+  successMessage: '',
+  isLoading: false,
+  userStore: false,
 };
 
-export default function shop(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case Types.GET_REQUEST:
-      return { ...state, loading: false };
-    case Types.GET_SUCCESS:
-      return { ...state, loading: false, data: action.payload.data };
-    default:
-      return state;
-  }
-}
+export const getUserRequest = (state = INITIAL_STATE, action) => ({
+  ...state,
+  errorMessage: '',
+});
 
-// Actions
-export const Creators = {
-  getShopRequest: () => ({
-    type: Types.GET_REQUEST,
-  }),
+export const getUserSuccess = (state = INITIAL_STATE, action) => ({
+  ...state,
+  user: action.user,
+  errorMessage: '',
+  successMessage: action.success,
+  userStore: action.userStore,
+});
 
-  getShopSuccess: data => ({
-    type: Types.GET_SUCCESS,
-    payload: { data },
-  }),
+export const getUserFailure = (state = INITIAL_STATE, action) => ({
+  ...state,
+  user: {},
+  errorMessage: action.error,
+});
+
+export const HANDLERS = {
+  [Types.GET_REQUEST]: getUserRequest,
+  [Types.GET_SUCCESS]: getUserSuccess,
+  [Types.GET_FAILURE]: getUserFailure,
 };
+
+export default createReducer(INITIAL_STATE, HANDLERS);

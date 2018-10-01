@@ -143,7 +143,7 @@ const FormAddStore = ({
       </div>
       <div className="mdl-cell mdl-cell--2-col">
         <Input
-          type="number"
+          type="text"
           name="number"
           id="number"
           label="Número"

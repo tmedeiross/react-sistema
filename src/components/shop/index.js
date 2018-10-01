@@ -14,7 +14,7 @@ import NavBar from '../layout/nav-bar';
 import StoreDetails from '../shop-details';
 import ShopUser from '../shop-user';
 import ShopSupplier from '../shop-supplier';
-import If from '../common/if';
+// import If from '../common/if';
 
 // import { ROUTE_PREFIX as PREFIX } from '../../config';
 import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
