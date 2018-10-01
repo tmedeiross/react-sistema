@@ -10,7 +10,7 @@ const options = [
   { value: 'ASSEMBLY', text: 'Montador' },
 ];
 const Form = ({
-  handleSubmit, handleChange, errors, profileId, textBtn, handleCloseDialog,
+  handleSubmit, handleChange, errors, profileId, handleCloseDialog,
 }) => (
   <form onSubmit={handleSubmit} autoComplete="off">
     <div className="mdl-grid">
@@ -40,7 +40,6 @@ Form.propTypes = {
   handleChange: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
   profileId: PropTypes.string.isRequired,
-  textBtn: PropTypes.string.isRequired,
 };
 
 export default Form;

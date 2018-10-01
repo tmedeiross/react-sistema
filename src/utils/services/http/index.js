@@ -5,6 +5,9 @@ import { API_URL } from '../../../config';
 
 export const http = axios.create({
   baseURL: API_URL,
+  headers: {
+    'Cache-Control': 'no-cache',
+  },
   timeout: 10000,
 });
 

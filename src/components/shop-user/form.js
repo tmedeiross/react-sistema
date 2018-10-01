@@ -11,7 +11,7 @@ const options = [
   { value: 'ASSEMBLY', text: 'Montador' },
 ];
 const Form = ({
-  handleSubmit, handleChange, errors, userEmail, profileId, textBtn,
+  handleSubmit, handleChange, errors, userEmail, profileId,
 }) => (
   <form onSubmit={handleSubmit} autoComplete="off">
     <div className="mdl-grid">
@@ -43,7 +43,7 @@ const Form = ({
         <input
           type="submit"
           className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary"
-          value={textBtn}
+          value="ADICIONAR"
         />
       </div>
     </div>
@@ -56,7 +56,6 @@ Form.propTypes = {
   errors: PropTypes.object.isRequired,
   userEmail: PropTypes.string.isRequired,
   profileId: PropTypes.string.isRequired,
-  textBtn: PropTypes.string.isRequired,
 };
 
 export default Form;

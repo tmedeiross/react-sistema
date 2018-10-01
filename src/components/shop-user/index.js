@@ -33,17 +33,14 @@ export class ShopUser extends Component {
       email: '',
       profile: '',
       errors: {},
-      textBtn: 'ADICIONAR',
       errorMessage: '',
       successMessage: '',
       userSelected: '',
       openDialog: false,
-      profileId: '',
       storeCnpj: '',
       form: {
         profileId: '',
         userEmail: '',
-        storeCnpj: '',
         showSalesValues: true,
       },
     };
@@ -92,96 +89,88 @@ export class ShopUser extends Component {
       .then((response) => {
         this.setState({ storeCnpj: response.data.cnpj });
       })
-      .then(() => {
-        this.listAllUsers();
-      })
       .catch((err) => {
         console.log(err.data.message);
       });
   }
 
   listAllUsers() {
-    const { paramId } = this.props;
-    const resetState = {
-      shop: [],
-      errors: {},
-      errorMessage: '',
-    };
-
-    AuthAPI.allUsersStore(paramId)
-      .then((response) => {
-        // console.log(response.data.content);
-        this.setState({ ...resetState });
-        this.setState({ shopUsers: response.data.content });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // const { paramId } = this.props;
+    // const resetState = {
+    //   shop: [],
+    //   errors: {},
+    //   errorMessage: '',
+    // };
+    // AuthAPI.allUsersStore(paramId)
+    //   .then((response) => {
+    //     // console.log(response.data.content);
+    //     this.setState({ ...resetState });
+    //     this.setState({ shopUsers: response.data.content });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   apiDelUser() {
-    const { shopUsers, profileId } = this.state;
-
-    const resetState = {
-      shop: [],
-      errors: {},
-      errorMessage: '',
-      successMessage: '',
-      isLoading: true,
-    };
-    const id = this.state.userSelected;
-
-    AuthAPI.deleteUserShop(id)
-      .then((response) => {
-        const shopUser = { profileId };
-
-        const newList = shopUsers.filter((id) => {
-          if (id.id !== id) return id;
-        });
-
-        console.log(newList);
-        this.setState({ ...resetState, shopUsers: newList });
-        this.setState({
-          successMessage: 'Usuário deletado com sucesso.',
-        });
-      })
-      .catch((err) => {
-        console.log(err.data.message);
-        this.setState({ ...resetState });
-        this.setState({
-          errorMessage: 'Ocorreu um erro, por favor tente novamente.',
-        });
-      });
+    // const { shopUsers, profileId } = this.state;
+    // const resetState = {
+    //   shop: [],
+    //   errors: {},
+    //   errorMessage: '',
+    //   successMessage: '',
+    //   isLoading: true,
+    // };
+    // const id = this.state.userSelected;
+    // AuthAPI.deleteUserShop(id)
+    //   .then((response) => {
+    //     const shopUser = { profileId };
+    //     const newList = shopUsers.filter((id) => {
+    //       if (id.id !== id) return id;
+    //     });
+    //     console.log(newList);
+    //     this.setState({ ...resetState, shopUsers: newList });
+    //     this.setState({
+    //       successMessage: 'Usuário deletado com sucesso.',
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.data.message);
+    //     this.setState({ ...resetState });
+    //     this.setState({
+    //       errorMessage: 'Ocorreu um erro, por favor tente novamente.',
+    //     });
+    //   });
   }
 
   deleteUserShop(e) {
-    this.setState({ userSelected: e.target.id });
-    swal(
-      `Tem certeza que deseja excluir o usuário ${this.state.shopUsers.userEmail}?`,
-      'O que deseja fazer?',
-      {
-        buttons: {
-          home: {
-            text: 'Deletar',
-            value: 'delete',
-          },
-          proximo: {
-            text: 'Cancelar',
-            value: 'cancel',
-          },
-        },
-      },
-    ).then((value) => {
-      switch (value) {
-        case 'delete':
-          this.apiDelUser();
-          break;
-        case 'cancel':
-          break;
-        default:
-          break;
-      }
-    });
+    // this.setState({ userSelected: e.target.id });
+    // swal(
+    //   `Tem certeza que deseja excluir o usuário ${this.state.shopUsers.userEmail}?`,
+    //   'O que deseja fazer?',
+    //   {
+    //     buttons: {
+    //       home: {
+    //         text: 'Deletar',
+    //         value: 'delete',
+    //       },
+    //       proximo: {
+    //         text: 'Cancelar',
+    //         value: 'cancel',
+    //       },
+    //     },
+    //   },
+    // ).then((value) => {
+    //   switch (value) {
+    //     case 'delete':
+    //       this.apiDelUser();
+    //       break;
+    //     case 'cancel':
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // });
   }
 
   handleChange(event) {
@@ -192,91 +181,85 @@ export class ShopUser extends Component {
   }
 
   handleUpdateUser(e) {
-    const userId = e.target.id;
-    e.preventDefault();
-
-    const resetState = {
-      errors: {},
-      errorMessage: '',
-      successMessage: '',
-      isLoading: true,
-    };
-
-    this.setState(resetState);
-    const { profileId } = this.state;
-    AuthAPI.updateUserShop(this.state.userSelected, {
-      profileId,
-      showSalesValues: false,
-    })
-      .then((response) => {
-        console.log(response);
-        this.handleCloseDialog();
-        this.setState({ ...resetState, successMessage: 'Usuário alterado com sucesso.' });
-
-        setTimeout(() => {
-          this.setState({
-            successMessage: '',
-          });
-          this.listAllUsers();
-        }, 3000);
-      })
-      .catch((err) => {
-        this.handleCloseDialog();
-        console.log(err);
-        if (err.status === 404) {
-          this.setState({
-            errorMessage: 'Usuário não ainda cadastrado.',
-          });
-        } else {
-          this.setState({
-            errorMessage: 'Dados incorretos ou faltantes.',
-          });
-        }
-      });
+    // const userId = e.target.id;
+    // e.preventDefault();
+    // const resetState = {
+    //   errors: {},
+    //   errorMessage: '',
+    //   successMessage: '',
+    //   isLoading: true,
+    // };
+    // this.setState(resetState);
+    // const { profileId } = this.state;
+    // AuthAPI.updateUserShop(this.state.userSelected, {
+    //   profileId,
+    //   showSalesValues: false,
+    // })
+    //   .then((response) => {
+    //     console.log(response);
+    //     this.handleCloseDialog();
+    //     this.setState({ ...resetState, successMessage: 'Usuário alterado com sucesso.' });
+    //     setTimeout(() => {
+    //       this.setState({
+    //         successMessage: '',
+    //       });
+    //       this.listAllUsers();
+    //     }, 3000);
+    //   })
+    //   .catch((err) => {
+    //     this.handleCloseDialog();
+    //     console.log(err);
+    //     if (err.status === 404) {
+    //       this.setState({
+    //         errorMessage: 'Usuário não ainda cadastrado.',
+    //       });
+    //     } else {
+    //       this.setState({
+    //         errorMessage: 'Dados incorretos ou faltantes.',
+    //       });
+    //     }
+    //   });
   }
 
   handleSubmit(e) {
-    e.preventDefault();
-    const resetState = {
-      errors: {},
-      errorMessage: '',
-      successMessage: '',
-      isLoading: true,
-    };
-
-    this.setState(resetState);
-    const { profileId, userEmail, storeCnpj } = this.state.form;
-
-    AuthAPI.addUserShop({
-      profileId,
-      userEmail,
-      storeCnpj,
-      showSalesValues: false,
-    })
-      .then(() => {
-        this.setState({
-          ...resetState,
-          successMessage: 'Usuário inserido com sucesso.',
-        });
-
-        setTimeout(() => {
-          this.setState({
-            successMessage: '',
-          });
-        }, 1000);
-      })
-      .catch((err) => {
-        if (err.status === 404) {
-          this.setState({
-            errorMessage: 'Usuário já está vinculado a esta loja.',
-          });
-        } else {
-          this.setState({
-            errorMessage: 'Dados incorretos ou faltantes.',
-          });
-        }
-      });
-    e.target.reset();
+    // e.preventDefault();
+    // const resetState = {
+    //   errors: {},
+    //   errorMessage: '',
+    //   successMessage: '',
+    //   isLoading: true,
+    // };
+    // this.setState(resetState);
+    // const { profileId, userEmail, storeCnpj } = this.state.form;
+    // AuthAPI.addUserShop({
+    //   profileId,
+    //   userEmail,
+    //   storeCnpj,
+    //   showSalesValues: false,
+    // })
+    //   .then(() => {
+    //     this.setState({
+    //       ...resetState,
+    //       successMessage: 'Usuário inserido com sucesso.',
+    //     });
+    //     setTimeout(() => {
+    //       this.setState({
+    //         successMessage: '',
+    //       });
+    //     }, 1000);
+    //   })
+    //   .catch((err) => {
+    //     if (err.status === 404) {
+    //       this.setState({
+    //         errorMessage: 'Usuário já está vinculado a esta loja.',
+    //       });
+    //     } else {
+    //       this.setState({
+    //         errorMessage: 'Dados incorretos ou faltantes.',
+    //       });
+    //     }
+    //   });
+    // e.target.reset();
   }
 
   addUser(e) {
@@ -299,8 +282,9 @@ export class ShopUser extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
+              {JSON.stringify(this.state)}
               <Form
-                {...this.state}
+                {...this.state.form}
                 handleSubmit={this.addUser}
                 handleChange={this.handleChange}
                 errors={errors}

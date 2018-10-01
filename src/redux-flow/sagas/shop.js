@@ -18,9 +18,8 @@ function* listAllUsers(action) {
   }
 }
 
-export function* getUserShop(state, action) {
+export function* getUserShop(action) {
   console.log('getUserAuth', action);
-  console.log('getUserAuth state', state);
 
   const { storeCnpj, paramId } = action;
   const { profileId, userEmail, showSalesValues } = action.user;
@@ -33,15 +32,17 @@ export function* getUserShop(state, action) {
       showSalesValues,
     });
     yield put(ActionCreators.getUserSuccess('Usuário inserido com sucesso.'));
-    yield call(delay, 1000);
+    yield call(delay, 2000);
     yield put(ActionCreators.getUserSuccess(''));
 
-    // try {
-    //   const response = yield call(AuthAPI.allUsersStore, paramId);
-    //   console.log(response);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      // yield call(delay, 3000);
+      const response = yield call(AuthAPI.allUsersStore, paramId);
+      console.log(response);
+      console.log(response.data.content);
+    } catch (err) {
+      console.log(err);
+    }
   } catch (err) {
     yield console.log(err);
     if (err.status === 404) {
