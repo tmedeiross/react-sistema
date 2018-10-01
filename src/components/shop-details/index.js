@@ -96,36 +96,33 @@ export class StoreDetails extends Component {
   }
 
   handleBlurCep = (e) => {
-    const { loadingOn, loadingOff } = this.props;
-    const { value } = e.target;
-
-    if (!value) return;
-    loadingOn();
-    ZipCodeService.searchAddressByZipCode(e.target.value)
-      .then((response) => {
-        if (response.status === 404) {
-          swal('Atenção', 'Cep não encontrado', 'warning');
-          loadingOff();
-          return;
-        }
-
-        const data = {
-          address: response.logradouro || '',
-          neighborhood: response.bairro || '',
-          city: response.cidade || '',
-          state: response.estado || '',
-        };
-
-        if (response.logradouro) {
-          this.setState({ ...data });
-        }
-        $('#number').focus();
-        loadingOff();
-      })
-      .catch(() => {
-        loadingOff();
-        swal('Atenção', 'Ocorreu um erro ao consultar o cep', 'error');
-      });
+    // const { loadingOn, loadingOff } = this.props;
+    // const { value } = e.target;
+    // if (!value) return;
+    // loadingOn();
+    // ZipCodeService.searchAddressByZipCode(e.target.value)
+    //   .then((response) => {
+    //     if (response.status === 404) {
+    //       swal('Atenção', 'Cep não encontrado', 'warning');
+    //       loadingOff();
+    //       return;
+    //     }
+    //     const data = {
+    //       address: response.logradouro || '',
+    //       neighborhood: response.bairro || '',
+    //       city: response.cidade || '',
+    //       state: response.estado || '',
+    //     };
+    //     if (response.logradouro) {
+    //       this.setState({ ...data });
+    //     }
+    //     $('#number').focus();
+    //     loadingOff();
+    //   })
+    //   .catch(() => {
+    //     loadingOff();
+    //     swal('Atenção', 'Ocorreu um erro ao consultar o cep', 'error');
+    //   });
   };
 
   assignMasks = () => {

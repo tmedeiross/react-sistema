@@ -19,8 +19,6 @@ export class Shops extends Component {
   componentDidMount() {
     const { getShopRequest } = this.props;
     getShopRequest();
-
-    console.log(this.props.shops);
   }
 
   render() {

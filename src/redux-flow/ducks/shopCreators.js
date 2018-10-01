@@ -1,8 +1,8 @@
 import { createActions } from 'reduxsauce';
 
 export const { Types, Creators } = createActions({
-  getUserRequest: [''],
-  getUserSuccess: ['user'],
+  getUserRequest: ['user', 'paramId', 'storeCnpj'],
+  getUserSuccess: ['successMessage'],
   getUserFailure: ['error'],
 });
 

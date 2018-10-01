@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-
 import './styles.css';
 
 import swal from 'sweetalert';
@@ -34,8 +33,6 @@ export class ShopUser extends Component {
       profile: '',
       errors: {},
       textBtn: 'ADICIONAR',
-      errorMessage: '',
-      successMessage: '',
       userSelected: '',
       openDialog: false,
       form: {
@@ -49,15 +46,16 @@ export class ShopUser extends Component {
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.listAllUsers = this.listAllUsers.bind(this);
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
+    this.addUser = this.addUser.bind(this);
     this.handleUpdateUser = this.handleUpdateUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.deleteUserShop = this.deleteUserShop.bind(this);
   }
 
   componentDidMount() {
-    this.listAllUsers();
-    // this.shopSelectedDetails();
+    // this.listAllUsers();
+    this.shopSelectedDetails();
   }
 
   handleOpenDialog() {
@@ -88,10 +86,6 @@ export class ShopUser extends Component {
     AuthAPI.storeGet(this.props.paramId)
       .then((response) => {
         this.setState({ storeCnpj: response.data.cnpj });
-        // console.log(response.data.cnpj);
-      })
-      .then(() => {
-        this.listAllUsers();
       })
       .catch((err) => {
         console.log(err.data.message);
@@ -99,23 +93,23 @@ export class ShopUser extends Component {
   }
 
   listAllUsers() {
-    const { paramId } = this.props;
-    const resetState = {
-      shop: [],
-      errors: {},
-      errorMessage: '',
-      isLoading: true,
-    };
+    // const { paramId } = this.props;
+    // const resetState = {
+    //   shop: [],
+    //   errors: {},
+    //   errorMessage: '',
+    //   isLoading: true,
+    // };
 
-    AuthAPI.allUsersStore(paramId)
-      .then((response) => {
-        // console.log(response.data.content);
-        this.setState({ ...resetState });
-        this.setState({ shopUsers: response.data.content });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // AuthAPI.allUsersStore(paramId)
+    //   .then((response) => {
+    //     // console.log(response.data.content);
+    //     this.setState({ ...resetState });
+    //     this.setState({ shopUsers: response.data.content });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   apiDelUser() {
@@ -184,7 +178,7 @@ export class ShopUser extends Component {
   }
 
   handleChange(event) {
-    // this.setState({ [e.target.name]: e.target.value });
+    // this.setState({ [event.target.name]: event.target.value });
     const form = { ...this.state.form };
     form[event.target.name] = event.target.value;
     this.setState({ form });
@@ -234,65 +228,60 @@ export class ShopUser extends Component {
       });
   }
 
-  handleSubmit(e) {
+  // handleSubmit(e) {
+  //   e.preventDefault();
+  //   const resetState = {
+  //     errors: {},
+  //     errorMessage: '',
+  //     successMessage: '',
+  //     isLoading: true,
+  //   };
+
+  //   this.setState(resetState);
+  //   const { profileId, userEmail, storeCnpj } = this.state.form;
+
+  //   AuthAPI.addUserShop({
+  //     profileId,
+  //     userEmail,
+  //     storeCnpj,
+  //     showSalesValues: false,
+  //   })
+  //     .then(() => {
+  //       this.setState({
+  //         ...resetState,
+  //         successMessage: 'Usuário inserido com sucesso.',
+  //       });
+
+  //       setTimeout(() => {
+  //         this.setState({
+  //           successMessage: '',
+  //         });
+  //       }, 1000);
+  //     })
+  //     .catch((err) => {
+  //       if (err.status === 404) {
+  //         this.setState({
+  //           errorMessage: 'Usuário já está vinculado a esta loja.',
+  //         });
+  //       } else {
+  //         this.setState({
+  //           errorMessage: 'Dados incorretos ou faltantes.',
+  //         });
+  //       }
+  //     });
+  //   e.target.reset();
+  // }
+
+  addUser(e) {
     e.preventDefault();
-    // const resetState = {
-    //   errors: {},
-    //   errorMessage: '',
-    //   successMessage: '',
-    //   isLoading: true,
-    // };
+    const { form, storeCnpj } = this.state;
 
-    // this.setState(resetState);
-    // const {
-    //   profileId, userEmail, storeCnpj, shopUsers,
-    // } = this.state;
-
-    // AuthAPI.addUserShop({
-    //   profileId,
-    //   userEmail,
-    //   storeCnpj,
-    //   showSalesValues: false,
-    // })
-    //   .then(() => {
-    //     const newUser = { profileId, userEmail, storeCnpj };
-    //     shopUsers.push(newUser);
-
-    //     this.setState({
-    //       ...resetState,
-    //       shopUsers,
-    //       successMessage: 'Usuário inserido com sucesso.',
-    //     });
-
-    //     setTimeout(() => {
-    //       this.setState({
-    //         successMessage: '',
-    //       });
-    //     }, 1000);
-    //   })
-    //   .catch((err) => {
-    //     if (err.status === 404) {
-    //       this.setState({
-    //         errorMessage: 'Usuário já está vinculado a esta loja.',
-    //       });
-    //     } else {
-    //       this.setState({
-    //         errorMessage: 'Dados incorretos ou faltantes.',
-    //       });
-    //     }
-    //   });
-    // e.target.reset();
-  }
-  addUser = () => {
-    const { userEmail } = this.state.form
-    this.props.addUser(this.state.form.userEmail)
+    this.props.addUser(form, this.props.paramId, storeCnpj);
   }
 
   render() {
-    const {
-      errors, errorMessage, successMessage, shopUsers,
-    } = this.state;
-
+    const { errors, shopUsers } = this.state;
+    const { errorMessage, successMessage } = this.props.shop;
     return (
       <Container>
         <Card>
@@ -303,10 +292,10 @@ export class ShopUser extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
-              {JSON.stringify(this.props.shop)}
+              {JSON.stringify(this.props)}
               <Form
                 {...this.state}
-                handleSubmit={this.handleSubmit}
+                handleSubmit={this.addUser}
                 handleChange={this.handleChange}
                 errors={errors}
               />
@@ -389,7 +378,7 @@ export class ShopUser extends Component {
                 handleSubmit={this.handleUpdateUser}
                 handleChange={this.handleChange}
                 errors={errors}
-                value={this.state.profileId}
+                value={this.state.form.profileId}
               />
             </DialogContent>
             <DialogActions>
@@ -415,13 +404,13 @@ export class ShopUser extends Component {
 // ShopUser.prototype = {
 
 // }
-
 const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
   shop: state.shop,
 });
 
 const mapDispatchToProps = dispatch => ({
-  addUser: (userEmail) => dispatch(ActionCreators.getUserRequest(userEmail)),
+  addUser: (form, paramId, storeCnpj) => dispatch(ActionCreators.getUserRequest(form, paramId, storeCnpj)),
   loadingOn,
   loadingOff,
 });

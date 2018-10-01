@@ -9,6 +9,7 @@ export function* getShop(action) {
   try {
     const response = yield call(http.get, '/store');
     yield put(ShopActions.getShopSuccess(response.data.content));
+    yield console.log(response.data.content);
   } catch (err) {
     console.log(err);
   }
