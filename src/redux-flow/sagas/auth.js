@@ -16,13 +16,13 @@ export function* getAuth(action) {
   try {
     const response = yield call(AuthAPI.login, { username, password });
     const token = response.data.token;
+    setToken(token);
+    setAuth(true);
     // getUser
     try {
       const response = yield call(AuthAPI.getUser, username);
       const userData = response.data;
       yield put(ActionCreators.getSuccess(userData));
-      setToken(token);
-      setAuth(true);
       // getShop
       try {
         const response = yield call(AuthAPI.getShopUser, userData.id);
