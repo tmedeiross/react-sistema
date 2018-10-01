@@ -33,8 +33,12 @@ export class ShopUser extends Component {
       profile: '',
       errors: {},
       textBtn: 'ADICIONAR',
+      errorMessage: '',
+      successMessage: '',
       userSelected: '',
       openDialog: false,
+      profileId: '',
+      storeCnpj: '',
       form: {
         profileId: '',
         userEmail: '',
@@ -46,7 +50,7 @@ export class ShopUser extends Component {
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.listAllUsers = this.listAllUsers.bind(this);
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.addUser = this.addUser.bind(this);
     this.handleUpdateUser = this.handleUpdateUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -54,7 +58,7 @@ export class ShopUser extends Component {
   }
 
   componentDidMount() {
-    // this.listAllUsers();
+    this.listAllUsers();
     this.shopSelectedDetails();
   }
 
@@ -87,29 +91,32 @@ export class ShopUser extends Component {
       .then((response) => {
         this.setState({ storeCnpj: response.data.cnpj });
       })
+      .then(() => {
+        this.listAllUsers();
+      })
       .catch((err) => {
         console.log(err.data.message);
       });
   }
 
   listAllUsers() {
-    // const { paramId } = this.props;
-    // const resetState = {
-    //   shop: [],
-    //   errors: {},
-    //   errorMessage: '',
-    //   isLoading: true,
-    // };
+    const { paramId } = this.props;
+    const resetState = {
+      shop: [],
+      errors: {},
+      errorMessage: '',
+      isLoading: true,
+    };
 
-    // AuthAPI.allUsersStore(paramId)
-    //   .then((response) => {
-    //     // console.log(response.data.content);
-    //     this.setState({ ...resetState });
-    //     this.setState({ shopUsers: response.data.content });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    AuthAPI.allUsersStore(paramId)
+      .then((response) => {
+        // console.log(response.data.content);
+        this.setState({ ...resetState });
+        this.setState({ shopUsers: response.data.content });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   apiDelUser() {
@@ -228,49 +235,49 @@ export class ShopUser extends Component {
       });
   }
 
-  // handleSubmit(e) {
-  //   e.preventDefault();
-  //   const resetState = {
-  //     errors: {},
-  //     errorMessage: '',
-  //     successMessage: '',
-  //     isLoading: true,
-  //   };
+  handleSubmit(e) {
+    e.preventDefault();
+    const resetState = {
+      errors: {},
+      errorMessage: '',
+      successMessage: '',
+      isLoading: true,
+    };
 
-  //   this.setState(resetState);
-  //   const { profileId, userEmail, storeCnpj } = this.state.form;
+    this.setState(resetState);
+    const { profileId, userEmail, storeCnpj } = this.state.form;
 
-  //   AuthAPI.addUserShop({
-  //     profileId,
-  //     userEmail,
-  //     storeCnpj,
-  //     showSalesValues: false,
-  //   })
-  //     .then(() => {
-  //       this.setState({
-  //         ...resetState,
-  //         successMessage: 'Usuário inserido com sucesso.',
-  //       });
+    AuthAPI.addUserShop({
+      profileId,
+      userEmail,
+      storeCnpj,
+      showSalesValues: false,
+    })
+      .then(() => {
+        this.setState({
+          ...resetState,
+          successMessage: 'Usuário inserido com sucesso.',
+        });
 
-  //       setTimeout(() => {
-  //         this.setState({
-  //           successMessage: '',
-  //         });
-  //       }, 1000);
-  //     })
-  //     .catch((err) => {
-  //       if (err.status === 404) {
-  //         this.setState({
-  //           errorMessage: 'Usuário já está vinculado a esta loja.',
-  //         });
-  //       } else {
-  //         this.setState({
-  //           errorMessage: 'Dados incorretos ou faltantes.',
-  //         });
-  //       }
-  //     });
-  //   e.target.reset();
-  // }
+        setTimeout(() => {
+          this.setState({
+            successMessage: '',
+          });
+        }, 1000);
+      })
+      .catch((err) => {
+        if (err.status === 404) {
+          this.setState({
+            errorMessage: 'Usuário já está vinculado a esta loja.',
+          });
+        } else {
+          this.setState({
+            errorMessage: 'Dados incorretos ou faltantes.',
+          });
+        }
+      });
+    e.target.reset();
+  }
 
   addUser(e) {
     e.preventDefault();
@@ -292,7 +299,7 @@ export class ShopUser extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
-              {JSON.stringify(this.props)}
+              {JSON.stringify(this.state)}
               <Form
                 {...this.state}
                 handleSubmit={this.addUser}

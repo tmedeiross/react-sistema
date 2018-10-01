@@ -55,7 +55,6 @@ export class StoreDetails extends Component {
 
   // handleBlurNumber = () => onlyNumbersCnpj(this.state.number);
   handleBlurNumber() {
-    console.log('sdf');
     const value = this.state.cpnj;
 
     return value.replace(/\.|-/g, '');
