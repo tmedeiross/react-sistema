@@ -9,6 +9,10 @@ export const { Types, Creators } = createActions({
   deleteUserSuccess: ['successMessage'],
   deleteUserFailure: ['error'],
 
+  editUserRequest: ['userSelected', 'paramId'],
+  editUserSuccess: ['successMessage'],
+  editUserFailure: ['error'],
+
   getListRequest: ['paramId', 'storeCnpj'],
   getListSuccess: ['shopUsers'],
 });

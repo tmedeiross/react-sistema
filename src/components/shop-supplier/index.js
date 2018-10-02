@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Autosuggest from 'react-autosuggest';
@@ -56,6 +57,7 @@ export class ShopSupplier extends Component {
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.listSupplierStore = this.listSupplierStore.bind(this);
+    this.deleteSupplierShopModal = this.deleteSupplierShopModal.bind(this);
     this.deleteSupplier = this.deleteSupplier.bind(this);
   }
 
@@ -127,29 +129,13 @@ export class ShopSupplier extends Component {
   }
 
   listSupplierStore() {
-    console.log('listSupplierStore');
     AuthAPI.listSupplierStore(this.props.paramId)
       .then((response) => {
-        console.log(response.data.content);
         this.setState({ supplierStore: response.data.content });
-        // this.setState({ idCode: response.data.id });
       })
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  deleteSupplier(e) {
-    const idSupplier = e.target.id;
-
-    AuthAPI.deleteSupplier(idSupplier)
-    .then((response) => {
-      console.log(response);
-      this.listSupplierStore();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
   }
 
   addSupplier(e) {
@@ -172,7 +158,7 @@ export class ShopSupplier extends Component {
       purchaseCode,
       defaultMessage,
       priority,
-      supplierStore
+      supplierStore,
     } = this.state;
 
     AuthAPI.addSupplierStore({
@@ -211,7 +197,6 @@ export class ShopSupplier extends Component {
       });
   }
 
-
   getSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
@@ -223,12 +208,11 @@ export class ShopSupplier extends Component {
       );
   };
 
-
-
   getSuggestionValue = suggestion => suggestion.socialName;
+
   getCnpjSupplier = (e) => {
-    this.setState ({ supplierCnpj: e.target.id })
-  }
+    this.setState({ supplierCnpj: e.target.id });
+  };
 
   renderSuggestion = suggestion => (
     <div className="suggestionsList" onClick={this.getCnpjSupplier} id={suggestion.cnpj}>
@@ -254,12 +238,56 @@ export class ShopSupplier extends Component {
     });
   };
 
+  deleteSupplierShopModal(e) {
+    const idSupplier = e.target.id;
+    swal('Tem certeza que deseja excluir este fornecedor?', 'O que deseja fazer?', {
+      buttons: {
+        home: {
+          text: 'Deletar',
+          value: 'delete',
+        },
+        proximo: {
+          text: 'Cancelar',
+          value: 'cancel',
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case 'delete':
+          AuthAPI.deleteSupplier(idSupplier)
+            .then((response) => {
+              console.log(response);
+              this.listSupplierStore();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          // this.props.deleteUserShop(userSelected, this.props.paramId);
+          break;
+        case 'cancel':
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  deleteSupplier(e) {
+    const idSupplier = e.target.id;
+
+    AuthAPI.deleteSupplier(idSupplier)
+      .then((response) => {
+        console.log(response);
+        this.listSupplierStore();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
     const {
-      errors,
-      errorMessage,
-      successMessage,
-      suggestions,
+      errors, errorMessage, successMessage, suggestions,
     } = this.state;
 
     const inputProps = {
@@ -325,7 +353,7 @@ export class ShopSupplier extends Component {
                         <Button
                           value={supplier.id}
                           id={supplier.id}
-                          onClick={this.deleteSupplier}
+                          onClick={this.deleteSupplierShopModal}
                           mini
                           variant="fab"
                           className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
@@ -335,7 +363,7 @@ export class ShopSupplier extends Component {
                         </Button>
                       </td>
                     </tr>
-                    ))}
+                  ))}
                 </tbody>
               </table>
             </div>

@@ -15,9 +15,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import ValidateForm from './validator';
 import If from '../common/if';
-// import { ROUTE_PREFIX as PREFIX } from '../../config';
-import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-creators';
-// import { Creators as ShopActions } from '../../redux-flow/ducks/shops';
 import ActionCreators from '../../redux-flow/ducks/shopCreators';
 import { Card, Container } from './styles';
 import Form from './form';
@@ -44,19 +41,16 @@ export class ShopUser extends Component {
     };
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
-    this.listAllUsers = this.listAllUsers.bind(this);
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
     this.addUser = this.addUser.bind(this);
     this.handleUpdateUser = this.handleUpdateUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.deleteUserShop = this.deleteUserShop.bind(this);
     this.deleteUserShopModal = this.deleteUserShopModal.bind(this);
     this.listUser = this.listUser.bind(this);
   }
 
   componentDidMount() {
     this.listUser();
-    // this.listAllUsers();
     this.shopSelectedDetails();
   }
 
@@ -94,30 +88,9 @@ export class ShopUser extends Component {
       });
   }
 
-  listAllUsers() {
-    const { paramId } = this.props;
-    const resetState = {
-      shop: [],
-      errors: {},
-      errorMessage: '',
-    };
-    AuthAPI.allUsersStore(paramId)
-      .then((response) => {
-        // console.log(response.data.content);
-        this.setState({ ...resetState });
-        this.setState({ shopUsers: response.data.content });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  deleteUserShop() {}
-
   deleteUserShopModal(e) {
     const userSelected = e.target.id;
-
-    swal(`Tem certeza que deseja excluir o usuário ${e.target.name}?`, 'O que deseja fazer?', {
+    swal('Tem certeza que deseja excluir este usuário?', 'O que deseja fazer?', {
       buttons: {
         home: {
           text: 'Deletar',
@@ -234,7 +207,6 @@ export class ShopUser extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {shopUsers} */}
                   {shopUsers.map(shopUser => (
                     <tr key={shopUser.id}>
                       <td className="mdl-data-table__cell--non-numeric">{shopUser.userEmail}</td>
@@ -295,7 +267,7 @@ export class ShopUser extends Component {
           </div>
 
           <Dialog className="modalUser" open={this.state.openDialog}>
-            <DialogTitle>Atualizar usuário </DialogTitle>
+            <DialogTitle>Atualizar usuário</DialogTitle>
             <DialogContent>
               <FormUpdate
                 {...this.state}
@@ -338,6 +310,7 @@ const mapDispatchToProps = dispatch => ({
   addUser: (form, paramId, storeCnpj) => dispatch(ActionCreators.getUserRequest(form, paramId, storeCnpj)),
   listUser: (paramId, storeCnpj) => dispatch(ActionCreators.getListRequest(paramId, storeCnpj)),
   deleteUserShop: (profileId, paramId) => dispatch(ActionCreators.deleteUserRequest(profileId, paramId)),
+  editUserShop: (id, profileId, paramId) => dispatch(ActionCreators.editUserRequest(profileId, paramId)),
 });
 
 export default connect(
