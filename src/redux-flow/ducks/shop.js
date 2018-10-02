@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   storeCnpj: '',
   showSalesValues: true,
   shopUsers: [],
+  userSelected: '',
 };
 
 export const getUserRequest = (state = INITIAL_STATE, action) => ({
@@ -31,6 +32,25 @@ export const getUserFailure = (state = INITIAL_STATE, action) => ({
   isLoading: false,
 });
 
+export const deleteUserRequest = (state = INITIAL_STATE, action) => ({
+  ...state,
+  errorMessage: '',
+  isLoading: true,
+});
+
+export const deleteUserSuccess = (state = INITIAL_STATE, action) => ({
+  ...state,
+  errorMessage: '',
+  isLoading: true,
+  successMessage: action.successMessage,
+});
+
+export const deleteUserFailure = (state = INITIAL_STATE, action) => ({
+  ...state,
+  errorMessage: action.error,
+  isLoading: false,
+});
+
 export const getListRequest = (state = INITIAL_STATE, action) => ({
   ...state,
   isLoading: true,
@@ -46,6 +66,10 @@ export const HANDLERS = {
   [Types.GET_USER_REQUEST]: getUserRequest,
   [Types.GET_USER_SUCCESS]: getUserSuccess,
   [Types.GET_USER_FAILURE]: getUserFailure,
+
+  [Types.DELETE_USER_REQUEST]: deleteUserRequest,
+  [Types.DELETE_USER_SUCCESS]: deleteUserSuccess,
+  [Types.DELETE_USER_FAILURE]: deleteUserFailure,
 
   [Types.GET_LIST_REQUEST]: getListRequest,
   [Types.GET_LIST_SUCCESS]: getListSuccess,

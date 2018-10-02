@@ -8,6 +8,7 @@ import ActionCreators from '../ducks/shopCreators';
 setTokenHeader(localStorage.getItem('token'));
 
 export function* getUserList(action) {
+  console.log('getUserList');
   const { paramId } = action;
   try {
     const response = yield call(AuthAPI.allUsersStore, paramId);
@@ -46,5 +47,26 @@ export function* getUserShop(action) {
     } else {
       yield put(ActionCreators.getUserFailure('Dados incorretos ou faltantes.'));
     }
+  }
+}
+
+export function* deleteUserShop(event, action) {
+  console.log('deleteUserShop', event);
+  const { paramId } = event;
+
+  try {
+    yield call(AuthAPI.deleteUserShop, event.userSelected);
+    yield put(ActionCreators.deleteUserSuccess('Usuário deletado com sucesso'));
+    // List all user
+    try {
+      const response = yield call(AuthAPI.allUsersStore, paramId);
+      console.log(response);
+      yield put(ActionCreators.getListSuccess(response.data.content));
+    } catch (err) {
+      console.log(err);
+    }
+  } catch (err) {
+    yield console.log(err);
+    yield put(ActionCreators.deleteUserFailure('Ocorreu um erro, por favor tente novamente.'));
   }
 }

@@ -52,6 +52,7 @@ export class ShopUser extends Component {
     this.handleUpdateUser = this.handleUpdateUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.deleteUserShop = this.deleteUserShop.bind(this);
+    this.deleteUserShopModal = this.deleteUserShopModal.bind(this);
     this.listUser = this.listUser.bind(this);
   }
 
@@ -113,69 +114,36 @@ export class ShopUser extends Component {
       });
   }
 
-  apiDelUser() {
-    // const { shopUsers, profileId } = this.state;
-    // const resetState = {
-    //   shop: [],
-    //   errors: {},
-    //   errorMessage: '',
-    //   successMessage: '',
-    //   isLoading: true,
-    // };
-    // const id = this.state.userSelected;
-    // AuthAPI.deleteUserShop(id)
-    //   .then((response) => {
-    //     const shopUser = { profileId };
-    //     const newList = shopUsers.filter((id) => {
-    //       if (id.id !== id) return id;
-    //     });
-    //     console.log(newList);
-    //     this.setState({ ...resetState, shopUsers: newList });
-    //     this.setState({
-    //       successMessage: 'Usuário deletado com sucesso.',
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.data.message);
-    //     this.setState({ ...resetState });
-    //     this.setState({
-    //       errorMessage: 'Ocorreu um erro, por favor tente novamente.',
-    //     });
-    //   });
-  }
+  deleteUserShop() {}
 
-  deleteUserShop(e) {
-    // this.setState({ userSelected: e.target.id });
-    // swal(
-    //   `Tem certeza que deseja excluir o usuário ${this.state.shopUsers.userEmail}?`,
-    //   'O que deseja fazer?',
-    //   {
-    //     buttons: {
-    //       home: {
-    //         text: 'Deletar',
-    //         value: 'delete',
-    //       },
-    //       proximo: {
-    //         text: 'Cancelar',
-    //         value: 'cancel',
-    //       },
-    //     },
-    //   },
-    // ).then((value) => {
-    //   switch (value) {
-    //     case 'delete':
-    //       this.apiDelUser();
-    //       break;
-    //     case 'cancel':
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
+  deleteUserShopModal(e) {
+    const userSelected = e.target.id;
+
+    swal(`Tem certeza que deseja excluir o usuário ${e.target.name}?`, 'O que deseja fazer?', {
+      buttons: {
+        home: {
+          text: 'Deletar',
+          value: 'delete',
+        },
+        proximo: {
+          text: 'Cancelar',
+          value: 'cancel',
+        },
+      },
+    }).then((value) => {
+      switch (value) {
+        case 'delete':
+          this.props.deleteUserShop(userSelected, this.props.paramId);
+          break;
+        case 'cancel':
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   handleChange(event) {
-    // this.setState({ [event.target.name]: event.target.value });
     const form = { ...this.state.form };
     form[event.target.name] = event.target.value;
     this.setState({ form });
@@ -225,7 +193,6 @@ export class ShopUser extends Component {
   addUser(e) {
     e.preventDefault();
     const { form, storeCnpj } = this.state;
-
     this.props.addUser(form, this.props.paramId, storeCnpj);
   }
 
@@ -283,7 +250,7 @@ export class ShopUser extends Component {
                           onClick={this.handleOpenDialog}
                           value={shopUser.id}
                           id={shopUser.id}
-                          name={shopUser.id}
+                          name={shopUser.userEmail}
                           mini
                           variant="fab"
                           className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
@@ -294,10 +261,10 @@ export class ShopUser extends Component {
                         </Button>
                         <Button
                           mini
-                          onClick={this.deleteUserShop}
+                          onClick={this.deleteUserShopModal}
                           variant="fab"
                           value={shopUser.id}
-                          name={shopUser.id}
+                          name={shopUser.userEmail}
                           id={shopUser.id}
                           className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
                           aria-label="Delete"
@@ -372,6 +339,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addUser: (form, paramId, storeCnpj) => dispatch(ActionCreators.getUserRequest(form, paramId, storeCnpj)),
   listUser: (paramId, storeCnpj) => dispatch(ActionCreators.getListRequest(paramId, storeCnpj)),
+  deleteUserShop: (profileId, paramId) => dispatch(ActionCreators.deleteUserRequest(profileId, paramId)),
 });
 
 export default connect(
