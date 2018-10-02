@@ -1,8 +1,10 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700");
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   outline: none;
+  font-family: "Nunito", sans-serif;
 }
 *,
 *:after,
@@ -16,6 +18,11 @@
   list-style-type: none;
   outline: none;
 }
+p {
+  font-size: 0.85rem;
+  line-height: 1.3rem;
+  font-family: "Nunito", sans-serif;
+}
 .mdl-card__supporting-text {
   height: auto !important;
   overflow: -webkit-paged-x;
@@ -26,6 +33,7 @@ body {
   background: url("http://www.grupoacert.com.br/App_Themes/Acert/images/section-contact-bg.jpg")
     no-repeat center fixed;
   background-size: cover;
+  font-family: "Nunito", sans-serif;
 }
 .mdl-typography--text-center {
   align-items: center;

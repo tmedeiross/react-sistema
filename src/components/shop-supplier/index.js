@@ -19,7 +19,6 @@ import { loadingOn, loadingOff } from '../../redux-flow/reducers/loader/action-c
 import { Creators as ShopActions } from '../../redux-flow/ducks/shops';
 import { Card, Container } from './styles';
 import Form from './form';
-import FormUpdate from './formUpdate';
 import * as AuthAPI from '../../api/auth';
 
 export class ShopSupplier extends Component {
@@ -70,9 +69,16 @@ export class ShopSupplier extends Component {
   }
 
   handleOpenDialog() {
-    this.setState({
-      openDialog: true,
-    });
+    const { supplierCnpj } = this.state;
+    if (supplierCnpj) {
+      this.setState({
+        openDialog: true,
+      });
+    } else {
+      this.setState({
+        errorMessage: 'Por favor, selecione um fornecedor',
+      });
+    }
   }
 
   handleCloseDialog() {
@@ -86,6 +92,7 @@ export class ShopSupplier extends Component {
   }
 
   isValid() {
+    console.log('!isValid')
     const { errors, isValid } = ValidateForm(this.state);
 
     if (!isValid) {
@@ -139,6 +146,10 @@ export class ShopSupplier extends Component {
   }
 
   addSupplier(e) {
+    if (!this.isValid()) {
+      this.setState({ errorMessage: 'Campos obrigatórios' })
+      return;
+    } 
     e.preventDefault();
     console.log(this.state.value);
 
@@ -389,6 +400,11 @@ export class ShopSupplier extends Component {
                 handleChange={this.handleChange}
                 errors={errors}
               />
+              <If test={errorMessage}>
+                <div className="alert alert-danger msg-error-login text-center" role="alert">
+                  {errorMessage}
+                </div>
+              </If>
             </DialogContent>
             <DialogActions>
               <input
