@@ -48,14 +48,15 @@ export class ShopUser extends Component {
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.listAllUsers = this.listAllUsers.bind(this);
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.addUser = this.addUser.bind(this);
     this.handleUpdateUser = this.handleUpdateUser.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.deleteUserShop = this.deleteUserShop.bind(this);
+    this.listUser = this.listUser.bind(this);
   }
 
   componentDidMount() {
+    this.listUser();
     this.listAllUsers();
     this.shopSelectedDetails();
   }
@@ -95,21 +96,21 @@ export class ShopUser extends Component {
   }
 
   listAllUsers() {
-    // const { paramId } = this.props;
-    // const resetState = {
-    //   shop: [],
-    //   errors: {},
-    //   errorMessage: '',
-    // };
-    // AuthAPI.allUsersStore(paramId)
-    //   .then((response) => {
-    //     // console.log(response.data.content);
-    //     this.setState({ ...resetState });
-    //     this.setState({ shopUsers: response.data.content });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    const { paramId } = this.props;
+    const resetState = {
+      shop: [],
+      errors: {},
+      errorMessage: '',
+    };
+    AuthAPI.allUsersStore(paramId)
+      .then((response) => {
+        // console.log(response.data.content);
+        this.setState({ ...resetState });
+        this.setState({ shopUsers: response.data.content });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   apiDelUser() {
@@ -221,47 +222,6 @@ export class ShopUser extends Component {
     //   });
   }
 
-  handleSubmit(e) {
-    // e.preventDefault();
-    // const resetState = {
-    //   errors: {},
-    //   errorMessage: '',
-    //   successMessage: '',
-    //   isLoading: true,
-    // };
-    // this.setState(resetState);
-    // const { profileId, userEmail, storeCnpj } = this.state.form;
-    // AuthAPI.addUserShop({
-    //   profileId,
-    //   userEmail,
-    //   storeCnpj,
-    //   showSalesValues: false,
-    // })
-    //   .then(() => {
-    //     this.setState({
-    //       ...resetState,
-    //       successMessage: 'Usuário inserido com sucesso.',
-    //     });
-    //     setTimeout(() => {
-    //       this.setState({
-    //         successMessage: '',
-    //       });
-    //     }, 1000);
-    //   })
-    //   .catch((err) => {
-    //     if (err.status === 404) {
-    //       this.setState({
-    //         errorMessage: 'Usuário já está vinculado a esta loja.',
-    //       });
-    //     } else {
-    //       this.setState({
-    //         errorMessage: 'Dados incorretos ou faltantes.',
-    //       });
-    //     }
-    //   });
-    // e.target.reset();
-  }
-
   addUser(e) {
     e.preventDefault();
     const { form, storeCnpj } = this.state;
@@ -269,9 +229,14 @@ export class ShopUser extends Component {
     this.props.addUser(form, this.props.paramId, storeCnpj);
   }
 
+  listUser() {
+    const { storeCnpj } = this.state;
+    this.props.listUser(this.props.paramId, storeCnpj);
+  }
+
   render() {
-    const { errors, shopUsers } = this.state;
-    const { errorMessage, successMessage } = this.props.shop;
+    const { errors } = this.state;
+    const { errorMessage, successMessage, shopUsers } = this.props.shop;
     return (
       <Container>
         <Card>
@@ -282,7 +247,6 @@ export class ShopUser extends Component {
               </h2>
             </div>
             <div className="mdl-card__supporting-text w100">
-              {JSON.stringify(this.state)}
               <Form
                 {...this.state.form}
                 handleSubmit={this.addUser}
@@ -305,6 +269,7 @@ export class ShopUser extends Component {
                   </tr>
                 </thead>
                 <tbody>
+                  {/* {shopUsers} */}
                   {shopUsers.map(shopUser => (
                     <tr key={shopUser.id}>
                       <td className="mdl-data-table__cell--non-numeric">{shopUser.userEmail}</td>
@@ -401,10 +366,12 @@ export class ShopUser extends Component {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   shop: state.shop,
+  shopUsers: state.shopUsers,
 });
 
 const mapDispatchToProps = dispatch => ({
   addUser: (form, paramId, storeCnpj) => dispatch(ActionCreators.getUserRequest(form, paramId, storeCnpj)),
+  listUser: (paramId, storeCnpj) => dispatch(ActionCreators.getListRequest(paramId, storeCnpj)),
 });
 
 export default connect(

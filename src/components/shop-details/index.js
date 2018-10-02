@@ -126,7 +126,7 @@ export class StoreDetails extends Component {
 
   assignMasks = () => {
     assignMasks();
-    // $('#cnpj').focus();
+    $('#cnpj').focus();
   };
 
   getStore() {
