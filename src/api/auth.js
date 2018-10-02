@@ -42,4 +42,4 @@ export const addSupplierStore = data => http.post('/store/supplier', data);
 // List all Supplier by Store
 export const listSupplierStore = id => http.get(`/store/${id}/supplier`);
 // Delete a Store's Supplier
-export const deleteSupplier = id => http.get(`/store/supplier/${id}`);
+export const deleteSupplier = id => http.delete(`/store/supplier/${id}`);

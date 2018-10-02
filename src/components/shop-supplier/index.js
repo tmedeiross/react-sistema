@@ -127,6 +127,7 @@ export class ShopSupplier extends Component {
   }
 
   listSupplierStore() {
+    console.log('listSupplierStore');
     AuthAPI.listSupplierStore(this.props.paramId)
       .then((response) => {
         console.log(response.data.content);
@@ -141,9 +142,10 @@ export class ShopSupplier extends Component {
   deleteSupplier(e) {
     const idSupplier = e.target.id;
 
-    AuthAPI.listSupplierStore(idSupplier)
+    AuthAPI.deleteSupplier(idSupplier)
     .then((response) => {
       console.log(response);
+      this.listSupplierStore();
     })
     .catch((err) => {
       console.log(err);
@@ -185,17 +187,6 @@ export class ShopSupplier extends Component {
       .then((response) => {
         console.log(response);
         this.listSupplierStore();
-
-        //   const newUser = { fantasyName, defaultMessage, purchaseCode }
-        // this.setState({ supplierStore: response.data.content });
-
-        // this.state.value
-      // awardsCode,
-      // purchaseCode,
-      // defaultMessage,
-      // priority, };
-      //   supplierStore.push(newUser);
-
         this.handleCloseDialog();
         this.setState({ ...resetState, successMessage: 'Fornecedor incluído com sucesso.' });
 

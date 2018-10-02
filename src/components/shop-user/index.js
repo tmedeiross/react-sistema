@@ -33,8 +33,6 @@ export class ShopUser extends Component {
       email: '',
       profile: '',
       errors: {},
-      errorMessage: '',
-      successMessage: '',
       userSelected: '',
       openDialog: false,
       storeCnpj: '',
@@ -58,7 +56,7 @@ export class ShopUser extends Component {
 
   componentDidMount() {
     this.listUser();
-    this.listAllUsers();
+    // this.listAllUsers();
     this.shopSelectedDetails();
   }
 
