@@ -92,7 +92,7 @@ export class ShopSupplier extends Component {
   }
 
   isValid() {
-    console.log('!isValid')
+    console.log('!isValid');
     const { errors, isValid } = ValidateForm(this.state);
 
     if (!isValid) {
@@ -147,9 +147,9 @@ export class ShopSupplier extends Component {
 
   addSupplier(e) {
     if (!this.isValid()) {
-      this.setState({ errorMessage: 'Campos obrigatórios' })
+      this.setState({ errorMessage: 'Campos obrigatórios' });
       return;
-    } 
+    }
     e.preventDefault();
     console.log(this.state.value);
 
@@ -158,6 +158,11 @@ export class ShopSupplier extends Component {
       errorMessage: '',
       successMessage: '',
       isLoading: true,
+      idCode: '',
+      awardsCode: '',
+      purchaseCode: '',
+      defaultMessage: '',
+      priority: '',
     };
 
     this.setState(resetState);
