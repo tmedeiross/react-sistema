@@ -10,6 +10,10 @@ import { ROUTE_PREFIX as PREFIX } from '../../config';
 
 setTokenHeader(localStorage.getItem('token'));
 
+export function* editProfile(action) {
+  yield console.log('editProfile');
+}
+
 export function* getAuth(action) {
   const { username, password } = action;
   // token

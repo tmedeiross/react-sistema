@@ -54,7 +54,7 @@ export class RecuperarSenha extends Component {
           this.setState({
             successMessage: '',
           });
-          return this.redirectToHome();
+          return this.redirectToLogin();
         }, 3000);
       })
       .catch((err) => {
@@ -70,8 +70,8 @@ export class RecuperarSenha extends Component {
       });
   }
 
-  redirectToHome() {
-    return this.props.history.push(`${PREFIX}`);
+  redirectToLogin() {
+    return this.props.history.push(`${PREFIX}/auth/login`);
   }
 
   isValid() {
