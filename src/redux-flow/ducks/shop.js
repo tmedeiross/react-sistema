@@ -10,7 +10,8 @@ const INITIAL_STATE = {
   storeCnpj: '',
   showSalesValues: true,
   shopUsers: [],
-  userSelected: '',
+  userSelected: true,
+  userEmail: '',
 };
 
 export const getUserRequest = (state = INITIAL_STATE, action) => ({

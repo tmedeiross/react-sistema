@@ -158,7 +158,6 @@ export class ShopSupplier extends Component {
       errorMessage: '',
       successMessage: '',
       isLoading: true,
-      idCode: '',
       awardsCode: '',
       purchaseCode: '',
       defaultMessage: '',

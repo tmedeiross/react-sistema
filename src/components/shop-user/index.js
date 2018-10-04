@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
 import Spinner from 'react-spinkit';
 
 import './styles.css';
 
 import swal from 'sweetalert';
 import Button from '@material-ui/core/Button';
-import EditIcon from '@material-ui/icons/Edit';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -33,17 +30,18 @@ export class ShopUser extends Component {
       userSelected: '',
       openDialog: false,
       storeCnpj: '',
+      showSalesValues: true,
       form: {
+        showSalesValues: true,
         profileId: '',
         userEmail: '',
-        showSalesValues: true,
       },
     };
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
     this.addUser = this.addUser.bind(this);
-    this.handleUpdateUser = this.handleUpdateUser.bind(this);
+    this.editUserShop = this.editUserShop.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.deleteUserShopModal = this.deleteUserShopModal.bind(this);
     this.listUser = this.listUser.bind(this);
@@ -52,12 +50,6 @@ export class ShopUser extends Component {
   componentDidMount() {
     this.listUser();
     this.shopSelectedDetails();
-  }
-
-  handleOpenDialog() {
-    this.setState({
-      openDialog: true,
-    });
   }
 
   handleCloseDialog() {
@@ -86,6 +78,24 @@ export class ShopUser extends Component {
       .catch((err) => {
         console.log(err.data.message);
       });
+  }
+
+  handleOpenDialog(e) {
+    const form = {
+      profileId: e.target.dataset.id,
+      userEmail: e.target.dataset.name,
+      showSalesValues: e.target.dataset.showvalues === 'true',
+    };
+    setTimeout(() => {
+      this.setState({ form });
+    }, 300);
+
+    this.setState({
+      openDialog: true,
+      userSelected: e.target.id,
+    });
+    console.log('form ', form);
+    console.log('form ', e.target.dataset.showvalues);
   }
 
   deleteUserShopModal(e) {
@@ -117,54 +127,21 @@ export class ShopUser extends Component {
   handleChange(event) {
     const form = { ...this.state.form };
     form[event.target.name] = event.target.value;
+    form.showSalesValues = event.target.checked;
     this.setState({ form });
-  }
-
-  handleUpdateUser(e) {
-    // const userId = e.target.id;
-    // e.preventDefault();
-    // const resetState = {
-    //   errors: {},
-    //   errorMessage: '',
-    //   successMessage: '',
-    //   isLoading: true,
-    // };
-    // this.setState(resetState);
-    // const { profileId } = this.state;
-    // AuthAPI.updateUserShop(this.state.userSelected, {
-    //   profileId,
-    //   showSalesValues: false,
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     this.handleCloseDialog();
-    //     this.setState({ ...resetState, successMessage: 'Usuário alterado com sucesso.' });
-    //     setTimeout(() => {
-    //       this.setState({
-    //         successMessage: '',
-    //       });
-    //       this.listAllUsers();
-    //     }, 3000);
-    //   })
-    //   .catch((err) => {
-    //     this.handleCloseDialog();
-    //     console.log(err);
-    //     if (err.status === 404) {
-    //       this.setState({
-    //         errorMessage: 'Usuário não ainda cadastrado.',
-    //       });
-    //     } else {
-    //       this.setState({
-    //         errorMessage: 'Dados incorretos ou faltantes.',
-    //       });
-    //     }
-    //   });
   }
 
   addUser(e) {
     e.preventDefault();
     const { form, storeCnpj } = this.state;
     this.props.addUser(form, this.props.paramId, storeCnpj);
+  }
+
+  editUserShop(e) {
+    e.preventDefault();
+    const { form, storeCnpj, userSelected } = this.state;
+    this.props.editUserShop(form, this.props.paramId, storeCnpj, userSelected);
+    this.handleCloseDialog();
   }
 
   listUser() {
@@ -203,6 +180,7 @@ export class ShopUser extends Component {
                   <tr>
                     <th className="mdl-data-table__cell--non-numeric">Email</th>
                     <th>Profile</th>
+                    <th>showSalesValues</th>
                     <th />
                   </tr>
                 </thead>
@@ -215,28 +193,37 @@ export class ShopUser extends Component {
                         <If test={shopUser.profileId === 'ADMIN'}>Admin</If>
                         <If test={shopUser.profileId === 'ASSEMBLY'}>Montador</If>
                       </td>
+                      <td>
+                        <If test={shopUser.showSalesValues === true}>True</If>
+                        <If test={shopUser.showSalesValues === false}>False</If>
+                      </td>
                       <td className="mdl-typography--text-right">
                         <Button
-                          onClick={this.handleOpenDialog}
-                          value={shopUser.id}
-                          id={shopUser.id}
-                          name={shopUser.userEmail}
-                          mini
                           variant="fab"
-                          className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1 mdl-js-ripple-effect"
-                          color="primary"
-                          aria-label="Edit"
+                          mini
+                          className="fab btn-edit mdl-button mdl-js-button mdl-button--raised mdl-button--primary ml1"
+                          onClick={this.handleOpenDialog}
+                          id={shopUser.id}
+                          data-name={shopUser.userEmail}
+                          data-id={shopUser.profileId}
+                          data-showvalues={shopUser.showSalesValues}
                         >
-                          <EditIcon />
+                          <i
+                            className="fas fa-pen"
+                            id={shopUser.id}
+                            data-name={shopUser.userEmail}
+                            data-id={shopUser.profileId}
+                            data-showvalues={shopUser.showSalesValues}
+                          />
                         </Button>
                         <Button
                           mini
                           onClick={this.deleteUserShopModal}
                           variant="fab"
                           value={shopUser.id}
-                          name={shopUser.userEmail}
+                          name={shopUser.id}
                           id={shopUser.id}
-                          className="fab btn-delete mdl-button mdl-js-button mdl-button--raised  ml1 mdl-js-ripple-effect btn-secondary"
+                          className="fab btn-delete mdl-button mdl-js-button mdl-button--raised ml1 btn-secondary"
                           aria-label="Delete"
                         >
                           <i className="fas fa-trash" value={shopUser.id} id={shopUser.id} />
@@ -270,16 +257,16 @@ export class ShopUser extends Component {
             <DialogTitle>Atualizar usuário</DialogTitle>
             <DialogContent>
               <FormUpdate
-                {...this.state}
-                handleSubmit={this.handleUpdateUser}
+                {...this.state.form}
+                handleSubmit={this.editUserShop}
                 handleChange={this.handleChange}
+                onChange={this.onChange}
                 errors={errors}
-                value={this.state.form.profileId}
               />
             </DialogContent>
             <DialogActions>
               <input
-                onClick={this.handleUpdateUser}
+                onClick={this.editUserShop}
                 type="button"
                 className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect bg-primary"
                 value="Alterar"
@@ -297,9 +284,7 @@ export class ShopUser extends Component {
     );
   }
 }
-// ShopUser.prototype = {
 
-// }
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   shop: state.shop,
@@ -310,7 +295,7 @@ const mapDispatchToProps = dispatch => ({
   addUser: (form, paramId, storeCnpj) => dispatch(ActionCreators.getUserRequest(form, paramId, storeCnpj)),
   listUser: (paramId, storeCnpj) => dispatch(ActionCreators.getListRequest(paramId, storeCnpj)),
   deleteUserShop: (profileId, paramId) => dispatch(ActionCreators.deleteUserRequest(profileId, paramId)),
-  editUserShop: (id, profileId, paramId) => dispatch(ActionCreators.editUserRequest(profileId, paramId)),
+  editUserShop: (form, paramId, storeCnpj, userSelected) => dispatch(ActionCreators.editUserRequest(form, paramId, storeCnpj, userSelected)),
 });
 
 export default connect(

@@ -8,7 +8,6 @@ import ActionCreators from '../ducks/shopCreators';
 setTokenHeader(localStorage.getItem('token'));
 
 export function* getUserList(action) {
-  console.log('getUserList');
   const { paramId } = action;
   try {
     const response = yield call(AuthAPI.allUsersStore, paramId);
@@ -19,60 +18,42 @@ export function* getUserList(action) {
 }
 
 export function* editUserShop(action) {
-  console.log('editUserShop');
+  const { storeCnpj, userSelected, paramId } = action;
+  const { profileId, userEmail, showSalesValues } = action.user;
 
-    // const userId = e.target.id;
-    // e.preventDefault();
-    // const resetState = {
-    //   errors: {},
-    //   errorMessage: '',
-    //   successMessage: '',
-    //   isLoading: true,
-    // };
-    // this.setState(resetState);
-    // const { profileId } = this.state;
-    // AuthAPI.updateUserShop(this.state.userSelected, {
-    //   profileId,
-    //   showSalesValues: false,
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     this.handleCloseDialog();
-    //     this.setState({ ...resetState, successMessage: 'Usuário alterado com sucesso.' });
-    //     setTimeout(() => {
-    //       this.setState({
-    //         successMessage: '',
-    //       });
-    //       this.listAllUsers();
-    //     }, 3000);
-    //   })
-    //   .catch((err) => {
-    //     this.handleCloseDialog();
-    //     console.log(err);
-    //     if (err.status === 404) {
-    //       this.setState({
-    //         errorMessage: 'Usuário não ainda cadastrado.',
-    //       });
-    //     } else {
-    //       this.setState({
-    //         errorMessage: 'Dados incorretos ou faltantes.',
-    //       });
-    //     }
-    //   });  
-  // const { paramId } = action;
-  // try {
-  //   const response = yield call(AuthAPI.allUsersStore, paramId);
-  //   yield put(ActionCreators.getListSuccess(response.data.content));
-  // } catch (err) {
-  //   console.log(err);
-  // }
+  console.log('action.user', action.user);
+
+  try {
+    yield call(AuthAPI.updateUserShop, userSelected, {
+      profileId,
+      userEmail,
+      storeCnpj,
+      showSalesValues,
+    });
+    yield put(ActionCreators.getUserSuccess('Usuário alterado com sucesso.'));
+
+    // List all user
+    try {
+      const response = yield call(AuthAPI.allUsersStore, paramId);
+      console.log(response);
+      yield put(ActionCreators.getListSuccess(response.data.content));
+    } catch (err) {
+      console.log(err);
+    }
+
+    yield call(delay, 2000);
+    yield put(ActionCreators.getUserSuccess(''));
+  } catch (err) {
+    console.log(err);
+    yield put(ActionCreators.getUserFailure('Dados incorretos ou faltantes.'));
+  }
 }
 
 export function* getUserShop(action) {
+  console.log(action);
   const { storeCnpj, paramId } = action;
   const { profileId, userEmail, showSalesValues } = action.user;
   // Insert a new User Store into the database
-  console.log(profileId, userEmail, storeCnpj, showSalesValues);
   try {
     yield call(AuthAPI.addUserShop, {
       profileId,
@@ -81,16 +62,19 @@ export function* getUserShop(action) {
       showSalesValues,
     });
     yield put(ActionCreators.getUserSuccess('Usuário inserido com sucesso.'));
+
+    // List all user
     try {
       const response = yield call(AuthAPI.allUsersStore, paramId);
       console.log(response);
       yield put(ActionCreators.getListSuccess(response.data.content));
+      yield put((action.user.userEmail = ''));
+      yield put((action.user.profileId = ''));
     } catch (err) {
       console.log(err);
     }
-    yield call(delay, 1500);
+    yield call(delay, 2000);
     yield put(ActionCreators.getUserSuccess(''));
-    // List all user
   } catch (err) {
     yield console.log(err);
     if (err.status === 404) {
@@ -109,7 +93,6 @@ export function* deleteUserShop(event, action) {
     // List all user
     try {
       const response = yield call(AuthAPI.allUsersStore, paramId);
-      console.log(response);
       yield put(ActionCreators.getListSuccess(response.data.content));
     } catch (err) {
       console.log(err);

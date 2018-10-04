@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch } from 'react-mdl';
 import SelectSimple from '../common/form/select-simple';
 
 const options = [
-  { value: '', text: 'Selecionar' },
   { value: 'ADMIN', text: 'Admin' },
   { value: 'SALESMAN', text: 'Vendedor' },
   { value: 'ASSEMBLY', text: 'Montador' },
 ];
 const Form = ({
-  handleSubmit, handleChange, errors, profileId, handleCloseDialog,
+  handleSubmit, handleChange, errors, profileId, showSalesValues, onChange,
 }) => (
   <form onSubmit={handleSubmit} autoComplete="off">
     <div className="mdl-grid">
@@ -27,9 +25,16 @@ const Form = ({
       </div>
 
       <div className="mdl-cell mdl-cell--12-col">
-        <Switch ripple id="switch1" defaultChecked>
+        <label>
+          <input
+            type="checkbox"
+            onChange={handleChange}
+            checked={showSalesValues}
+            value={showSalesValues}
+            name="showSalesValues"
+          />
           Valores visíveis
-        </Switch>
+        </label>
       </div>
     </div>
   </form>

@@ -1,7 +1,7 @@
 import { createActions } from 'reduxsauce';
 
 export const { Types, Creators } = createActions({
-  getUserRequest: ['user', 'paramId', 'storeCnpj'],
+  getUserRequest: ['user', 'paramId', 'storeCnpj', 'showSalesValues'],
   getUserSuccess: ['successMessage'],
   getUserFailure: ['error'],
 
@@ -9,7 +9,7 @@ export const { Types, Creators } = createActions({
   deleteUserSuccess: ['successMessage'],
   deleteUserFailure: ['error'],
 
-  editUserRequest: ['userSelected', 'paramId'],
+  editUserRequest: ['user', 'paramId', 'storeCnpj', 'userSelected', 'showSalesValues'],
   editUserSuccess: ['successMessage'],
   editUserFailure: ['error'],
 
