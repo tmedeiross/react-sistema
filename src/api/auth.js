@@ -6,6 +6,8 @@ setTokenHeader(localStorage.getItem('token'));
 export const login = data => http.post('/login', data);
 // Forget password
 export const forgetPassword = email => http.post(`/forget_password?email=${email}`);
+// Changes a User password passed by token
+export const changePassword = data => http.post('/change_password', data);
 // Insert a new User into the database
 export const user = data => http.post('/user', data);
 // Search for a User by the informed email

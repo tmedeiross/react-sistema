@@ -1,16 +1,18 @@
 import { all, takeLatest } from 'redux-saga/effects';
-import { Types } from '../ducks/authCreators';
+import { Types as AuthTypes } from '../ducks/authCreators';
 import { Types as ShopUserTypes } from '../ducks/shopCreators';
-import { getAuth } from './auth';
+import { Types as ShopTypes } from '../ducks/shops';
+// import * as AuthAPI from '../../../api/auth';
+import { getAuth, changePass } from './auth';
 import { getShop } from './shops';
 import {
   getUserShop, getUserList, deleteUserShop, editUserShop,
 } from './shop';
-import { Types as ShopTypes } from '../ducks/shops';
 
 export default function* rootSaga() {
   yield all([
-    takeLatest(Types.GET_REQUEST, getAuth),
+    takeLatest(AuthTypes.GET_REQUEST, getAuth),
+    takeLatest(AuthTypes.GET_PASS_REQUEST, changePass),
     takeLatest(ShopTypes.GET_REQUEST, getShop),
     takeLatest(ShopUserTypes.GET_USER_REQUEST, getUserShop),
     takeLatest(ShopUserTypes.GET_LIST_REQUEST, getUserList),

@@ -101,7 +101,7 @@ export class Login extends Component {
                   {errorMessage}
                 </div>
               </If>
-              <Link to="/app/auth/recover" className="mdl-js-ripple-effect" color="primary">
+              <Link to="/app/auth/change-pass" className="mdl-js-ripple-effect" color="primary">
                 Trocar a senha
               </Link>
             </div>

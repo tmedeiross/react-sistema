@@ -94,9 +94,7 @@ export class RecuperarSenha extends Component {
         <Card>
           <div className="mdl-card mdl-shadow--2dp">
             <div className="mdl-card__title bg-primary">
-              <h2 className="mdl-card__title-text mdl-typography--text-center w100">
-                RECUPERAR SENHA
-              </h2>
+              <h2 className="mdl-card__title-text mdl-typography--text-center w100">RECUPERAR</h2>
             </div>
             <div className="mdl-card__supporting-text w100">
               <LoginForm

@@ -116,9 +116,6 @@ export class Login extends Component {
                 </div>
               </If>
               <If test={errorMessage}>
-                {/* <div className="alert alert-warning msg-error-login text-center" role="alert">
-                Clique aqui para reenviar o email de confirmação.
-              </div> */}
                 <div className="alert alert-danger msg-error-login text-center" role="alert">
                   {errorMessage}
                 </div>

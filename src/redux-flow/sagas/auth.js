@@ -10,6 +10,23 @@ import { ROUTE_PREFIX as PREFIX } from '../../config';
 
 setTokenHeader(localStorage.getItem('token'));
 
+export function* changePass(action) {
+  const { oldPassword, newPassword } = action;
+
+  if (newPassword && oldPassword) {
+    try {
+      const response = yield call(AuthAPI.changePassword, { oldPassword, newPassword });
+      console.log(response);
+      yield put(ActionCreators.getPassSuccess('Senha alterada com sucesso!'));
+    } catch (err) {
+      console.log(err.data.error);
+      yield put(ActionCreators.getPassFailure(err.data.error));
+    }
+  } else {
+    yield put(ActionCreators.getPassFailure('Campos obrigatórios'));
+  }
+}
+
 export function* editProfile(action) {
   yield console.log('editProfile');
 }
