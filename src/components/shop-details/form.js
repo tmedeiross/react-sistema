@@ -62,7 +62,7 @@ const FormAddStore = ({
           label="CNPJ"
           value={cnpj}
           handleChange={handleChange}
-          maxLength="14"
+          maxLength="18"
           showMsgError
           error={errors.cnpj}
         />
@@ -77,6 +77,7 @@ const FormAddStore = ({
           handleChange={handleChange}
           showMsgError
           error={errors.phoneNumber}
+          maxLength="17"
         />
       </div>
       <div className="mdl-cell mdl-cell--3-col">
@@ -101,6 +102,7 @@ const FormAddStore = ({
           handleChange={handleChange}
           showMsgError
           error={errors.fantasyName}
+          maxLength="30"
         />
       </div>
       <div className="mdl-cell mdl-cell--7-col">
@@ -113,6 +115,8 @@ const FormAddStore = ({
           handleChange={handleChange}
           showMsgError
           error={errors.socialName}
+          minLenght="5"
+          maxLength="65"
         />
       </div>
       <div className="mdl-cell mdl-cell--3-col">
@@ -139,6 +143,8 @@ const FormAddStore = ({
           handleChange={handleChange}
           showMsgError
           error={errors.address}
+          minLength="5"
+          maxLength="60"
         />
       </div>
       <div className="mdl-cell mdl-cell--2-col">
@@ -165,6 +171,7 @@ const FormAddStore = ({
           handleChange={handleChange}
           showMsgError
           error={errors.complement}
+          maxLength="20"
         />
       </div>
 
@@ -178,6 +185,7 @@ const FormAddStore = ({
           handleChange={handleChange}
           showMsgError
           error={errors.neighborhood}
+          maxLength="30"
         />
       </div>
       <div className="mdl-cell mdl-cell--3-col">
@@ -190,6 +198,7 @@ const FormAddStore = ({
           handleChange={handleChange}
           showMsgError
           error={errors.city}
+          maxLength="30"
         />
       </div>
       <div className="mdl-cell mdl-cell--2-col">
@@ -202,6 +211,7 @@ const FormAddStore = ({
           options={options}
           showMsgError
           error={errors.state}
+          maxLength="2"
         />
       </div>
     </div>

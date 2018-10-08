@@ -24,6 +24,7 @@ const Form = ({
           value={awardsCode}
           handleChange={handleChange}
           showMsgError
+          maxLength="10"
         />
       </div>
       <div className="mdl-cell mdl-cell--6-col">
@@ -35,6 +36,7 @@ const Form = ({
           value={purchaseCode}
           handleChange={handleChange}
           showMsgError
+          maxLength="10"
         />
       </div>
       <div className="mdl-cell mdl-cell--8-col">
@@ -46,6 +48,7 @@ const Form = ({
           value={defaultMessage}
           handleChange={handleChange}
           showMsgError
+          maxLength="65"
         />
       </div>
       <div className="mdl-cell mdl-cell--4-col">
@@ -57,6 +60,7 @@ const Form = ({
           value={priority}
           handleChange={handleChange}
           showMsgError
+          maxLength="6"
         />
       </div>
       {/* <div className="mdl-cell mdl-cell--2-col botao">

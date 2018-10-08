@@ -30,7 +30,6 @@ export class ShopUser extends Component {
       userSelected: '',
       openDialog: false,
       storeCnpj: '',
-      showSalesValues: true,
       form: {
         showSalesValues: true,
         profileId: '',
@@ -125,9 +124,12 @@ export class ShopUser extends Component {
   }
 
   handleChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+
     const form = { ...this.state.form };
-    form[event.target.name] = event.target.value;
-    form.showSalesValues = event.target.checked;
+    form[target.name] = value;
+
     this.setState({ form });
   }
 

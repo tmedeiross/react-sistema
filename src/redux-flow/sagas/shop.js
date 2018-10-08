@@ -21,7 +21,7 @@ export function* editUserShop(action) {
   const { storeCnpj, userSelected, paramId } = action;
   const { profileId, userEmail, showSalesValues } = action.user;
 
-  console.log('action.user', action.user);
+  // console.log('action.user', action.user);
 
   try {
     yield call(AuthAPI.updateUserShop, userSelected, {
@@ -35,7 +35,7 @@ export function* editUserShop(action) {
     // List all user
     try {
       const response = yield call(AuthAPI.allUsersStore, paramId);
-      console.log(response);
+      // console.log(response);
       yield put(ActionCreators.getListSuccess(response.data.content));
     } catch (err) {
       console.log(err);
