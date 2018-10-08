@@ -6,12 +6,10 @@ import Input from '../common/form/input';
 const Form = ({
   handleSubmit,
   handleChange,
-  errors,
   awardsCode,
   purchaseCode,
   defaultMessage,
   priority,
-  textBtn,
 }) => (
   <form onSubmit={handleSubmit} autoComplete="off">
     <div className="mdl-grid">
@@ -82,7 +80,6 @@ Form.propTypes = {
   purchaseCode: PropTypes.string.isRequired,
   defaultMessage: PropTypes.string.isRequired,
   priority: PropTypes.string.isRequired,
-  textBtn: PropTypes.string.isRequired,
 };
 
 export default Form;

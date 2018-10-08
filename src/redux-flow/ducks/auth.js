@@ -51,10 +51,33 @@ export const getPassFailure = (state = INITIAL_STATE, action) => ({
   errorMessage: action.error,
 });
 
+export const updateUserRequest = (state = INITIAL_STATE, action) => ({
+  ...state,
+  errorMessage: '',
+});
+
+export const updateUserSuccess = (state = INITIAL_STATE, action) => ({
+  ...state,
+  user: action.user,
+  errorMessage: '',
+  userStore: action.name,
+  successMessage: action.successMessage,
+});
+
+export const updateUserFailure = (state = INITIAL_STATE, action) => ({
+  ...state,
+  user: {},
+  errorMessage: action.error,
+});
+
 export const HANDLERS = {
   [Types.GET_REQUEST]: getRequest,
   [Types.GET_SUCCESS]: getSuccess,
   [Types.GET_FAILURE]: getFailure,
+
+  [Types.UPDATE_USER_REQUEST]: updateUserRequest,
+  [Types.UPDATE_USER_SUCCESS]: updateUserSuccess,
+  [Types.UPDATE_USER_FAILURE]: updateUserFailure,
 
   [Types.GET_SHOP_SUCCESS]: getShopSuccess,
 

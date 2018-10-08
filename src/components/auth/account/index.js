@@ -2,7 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from 'react-spinkit';
-import ActionCreators from '../../../redux-flow/ducks/authCreators';
+import $ from 'jquery';
+import Button from '@material-ui/core/Button';
+import jwdDecode from 'jwt-decode';
 import './login.css';
 import NavBar from '../../layout/nav-bar';
 
@@ -11,36 +13,87 @@ import If from '../../common/if';
 import ValidateForm from './validator';
 import LoginForm from './form';
 import Footer from '../../layout/footer';
+import * as AuthAPI from '../../../api/auth';
 import { ROUTE_PREFIX as PREFIX } from '../../../config';
-import Button from '@material-ui/core/Button';
+
+import ActionCreators from '../../../redux-flow/ducks/authCreators';
+import { assignMasks } from '../../client-details/client-data/form-address/masks';
 
 export class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      form: {
-        username: '',
-        password: '',
+      authData: [],
+      username: '',
+      user: {
+        name: '',
+        userDetail: {
+          phoneNumber: '',
+          gender: 'MALE',
+        },
       },
       errors: {},
     };
-    this.login = this.login.bind(this);
+    this.updateLogin = this.updateLogin.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangeName = this.handleChangeName.bind(this);
+    this.assignMasks = this.assignMasks.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getUser();
+    this.assignMasks();
+  }
+
+  getUser() {
+    const decoded = jwdDecode(localStorage.getItem('token'));
+    const emailToken = decoded.sub;
+
+    AuthAPI.getUser(emailToken)
+      .then((response) => {
+        const user = response.data;
+        this.setState({ user });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  assignMasks = () => {
+    assignMasks();
+    $('#phoneNumber').focus();
+  };
+
+  handleChangeName(event) {
+    this.setState({
+      user: {
+        ...this.state.user,
+        name: event.target.value,
+      },
+    });
+  }
 
   handleChange(event) {
-    const form = { ...this.state.form };
-    form[event.target.name] = event.target.value;
-    this.setState({ form });
+    const target = event.target;
+    const value = target.type === 'radio' ? target.value : target.value;
+
+    const userDetail = { ...this.state.user.userDetail };
+    userDetail[target.name] = value;
+
+    this.setState({
+      user: {
+        ...this.state.user,
+        userDetail,
+      },
+    });
   }
 
-  login(e) {
+  updateLogin(e) {
     e.preventDefault();
-    // if (!this.isValid()) return;
-    const { username, password } = this.state.form;
-    this.props.login(username, password);
+    this.props.updateLogin(this.state.user);
+    setTimeout(() => {
+      this.getUser();
+    }, 500);
   }
 
   redirectToHome() {
@@ -53,17 +106,16 @@ export class Login extends Component {
 
   isValid() {
     const { errors, isValid } = ValidateForm(this.state);
-
     if (!isValid) {
       this.setState({ errors });
     }
-
     return isValid;
   }
 
   render() {
-    const { errors, form } = this.state;
-    const { errorMessage, isLoading } = this.props.authData;
+    const { errors, user } = this.state;
+    const { userDetail } = this.state.user;
+    const { errorMessage, isLoading, successMessage } = this.props.authData;
     return (
       <Fragment>
         <NavBar />
@@ -84,10 +136,13 @@ export class Login extends Component {
             </div>
             <div className="mdl-card__supporting-text w100">
               <LoginForm
-                handleSubmit={this.login}
+                {...this.state.user}
+                handleSubmit={this.updateLogin}
                 handleChange={this.handleChange}
-                username={form.username}
-                password={form.password}
+                handleChangeName={this.handleChangeName}
+                name={user.name}
+                phoneNumber={userDetail.phoneNumber}
+                gender={userDetail.gender}
                 isLoading={isLoading}
                 errors={errors}
               />
@@ -101,11 +156,16 @@ export class Login extends Component {
                   {errorMessage}
                 </div>
               </If>
+              <If test={successMessage}>
+                <div className="alert alert-success msg-success-login text-center" role="alert">
+                  {successMessage}
+                </div>
+              </If>
               <Link to="/app/auth/change-pass" className="mdl-js-ripple-effect" color="primary">
                 Trocar a senha
               </Link>
             </div>
-            <div className="mdl-card__title bg-primary">
+            {/* <div className="mdl-card__title bg-primary">
               <h2 className="mdl-card__title-text mdl-typography--text-center w100">
                 Fornecedores
               </h2>
@@ -138,7 +198,7 @@ export class Login extends Component {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </div> */}
           </div>
         </Card>
         <Footer />
@@ -153,7 +213,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  login: (username, password) => dispatch(ActionCreators.getRequest(username, password)),
+  updateLogin: user => dispatch(ActionCreators.updateUserRequest(user)),
 });
 
 export default connect(

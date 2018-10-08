@@ -93,8 +93,6 @@ export class ShopUser extends Component {
       openDialog: true,
       userSelected: e.target.id,
     });
-    console.log('form ', form);
-    console.log('form ', e.target.dataset.showvalues);
   }
 
   deleteUserShopModal(e) {

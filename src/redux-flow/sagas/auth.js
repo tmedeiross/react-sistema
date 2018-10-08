@@ -1,4 +1,5 @@
 import { call, put } from 'redux-saga/effects';
+import jwdDecode from 'jwt-decode';
 import history from '../../utils/history';
 import { setTokenHeader } from '../../utils/services/http';
 
@@ -9,6 +10,48 @@ import ActionCreators from '../ducks/authCreators';
 import { ROUTE_PREFIX as PREFIX } from '../../config';
 
 setTokenHeader(localStorage.getItem('token'));
+
+const decoded = jwdDecode(localStorage.getItem('token'));
+const emailToken = decoded.sub;
+
+// export function* profileData() {
+//   try {
+//     const response = yield call(AuthAPI.getUser, emailToken);
+//     console.log(response);
+//     // yield put(ActionCreators.updateUserSuccess('Dados atualizados com sucesso!'));
+//   } catch (err) {
+//     console.log(err);
+//     // yield put(ActionCreators.updateUserFailure(err.data.error));
+//   }
+// }
+// profileData();
+
+export function* editProfile(action) {
+  const { user } = action;
+  const { phoneNumber, gender } = action.user.userDetail;
+
+  console.log(action);
+  try {
+    const response = yield call(AuthAPI.userPut, emailToken, user);
+    console.log(response);
+    yield put(ActionCreators.updateUserSuccess('Dados atualizados com sucesso!'));
+  } catch (err) {
+    console.log(err);
+    yield put(ActionCreators.updateUserFailure(err));
+  }
+
+  // AuthAPI.getUser(emailToken)
+  // .then((response) => {
+  //   const userData = response.data;
+  //   this.setState({ userData });
+  // })
+  // .then(() => {
+  //   this.getFirstLetter();
+  // })
+  // .catch((err) => {
+  //   console.log(err);
+  // });
+}
 
 export function* changePass(action) {
   const { oldPassword, newPassword } = action;
@@ -25,10 +68,6 @@ export function* changePass(action) {
   } else {
     yield put(ActionCreators.getPassFailure('Campos obrigatórios'));
   }
-}
-
-export function* editProfile(action) {
-  yield console.log('editProfile');
 }
 
 export function* getAuth(action) {

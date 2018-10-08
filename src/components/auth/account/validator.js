@@ -4,15 +4,15 @@ import isEmpty from 'lodash/isEmpty';
 const ValidateForm = (data) => {
   const errors = {};
 
-  if (!data || !data.hasOwnProperty('username') || !data.hasOwnProperty('password')) {
-    return {
-      errors,
-      isValid: false,
-    };
-  }
+  // if (!data || !data.hasOwnProperty('username') || !data.hasOwnProperty('password')) {
+  //   return {
+  //     errors,
+  //     isValid: false,
+  //   };
+  // }
 
-  // if (Validator.isEmpty(data.username)) {
-  //   errors.username = 'Campo obrigatório';
+  // if (Validator.isEmpty(data.phoneNumber)) {
+  //   errors.phoneNumber = 'Campo obrigatório';
   // }
 
   // if (Validator.isEmpty(data.password)) {

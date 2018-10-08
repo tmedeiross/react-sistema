@@ -14,6 +14,18 @@ export const user = data => http.post('/user', data);
 export const getUser = email => http.get(`/user/${email}`);
 // Registration confirm
 export const confirmUser = token => http.get(`/user/registration/confirm?token=${token}`);
+// Changes a user and detail
+export const userPut = (email, data) => http.put(`/user/${email}`, data);
+/*
+{
+  "name": "string",
+  "password": "string",
+  "userDetail": {
+    "phoneNumber": "string",
+    "gender": "MALE"
+  }
+}
+*/
 
 // listAll
 export const storeAll = () => http.get('/store');

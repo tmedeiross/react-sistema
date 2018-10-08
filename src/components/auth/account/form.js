@@ -3,9 +3,17 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import Input from '../../common/form/input';
+import { user } from '../../../api/auth';
 
 const FormLogin = ({
-  handleSubmit, handleChange, errors, name, password, isLoading,
+  handleSubmit,
+  handleChange,
+  handleChangeName,
+  errors,
+  name,
+  gender,
+  phoneNumber,
+  isLoading,
 }) => (
   <form onSubmit={handleSubmit} autoComplete="off">
     <Input
@@ -14,34 +22,52 @@ const FormLogin = ({
       id="name"
       label="Nome"
       value={name}
-      handleChange={handleChange}
+      handleChange={handleChangeName}
       error={errors.name}
       showMsgError
+      maxLength="65"
     />
     <Input
       type="text"
-      name="phone"
-      id="phone"
+      name="phoneNumber"
+      id="phoneNumber"
       label="Telefone"
-      value={name}
+      value={phoneNumber}
       handleChange={handleChange}
-      error={errors.phone}
+      error={errors.phoneNumber}
       showMsgError
+      maxLength="30"
     />
 
     <div className="mdl-grid">
       <div className="mdl-cell mdl-cell--6-col">
         <div className="mdl-card__actions mdl-typography--text-left">
-          <label className="mdl-radio mdl-js-radio" htmlFor="option1">
-            <input type="radio" id="option1" name="gender" className="mdl-radio__button" checked />
+          <label className="mdl-radio mdl-js-radio" htmlFor="MALE">
+            <input
+              type="radio"
+              defaultChecked={gender === 'MALE'}
+              id="MALE"
+              value="MALE"
+              name="gender"
+              className="mdl-radio__button"
+              onChange={handleChange}
+            />
             <span className="mdl-radio__label">Masculino</span>
           </label>
         </div>
       </div>
       <div className="mdl-cell mdl-cell--6-col">
         <div className="mdl-card__actions mdl-typography--text-left">
-          <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor="option2">
-            <input type="radio" id="option2" name="gender" className="mdl-radio__button" />
+          <label className="mdl-radio mdl-js-radio mdl-js-ripple-effect" htmlFor="FEMALE">
+            <input
+              type="radio"
+              id="FEMALE"
+              defaultChecked={gender === 'FEMALE'}
+              value="FEMALE"
+              name="gender"
+              className="mdl-radio__button"
+              onChange={handleChange}
+            />
             <span className="mdl-radio__label">Feminino</span>
           </label>
         </div>
@@ -65,8 +91,9 @@ FormLogin.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  phoneNumber: PropTypes.string.isRequired,
+  gender: PropTypes.string.isRequired,
 };
 
 export default FormLogin;

@@ -6,6 +6,10 @@ export const { Types, Creators } = createActions({
   getShopSuccess: ['userStore'],
   getFailure: ['error'],
 
+  updateUserRequest: ['user'],
+  updateUserSuccess: ['successMessage'],
+  updateUserFailure: ['error'],
+
   authRequest: null,
   authSuccess: ['user'],
   authFailure: null,
