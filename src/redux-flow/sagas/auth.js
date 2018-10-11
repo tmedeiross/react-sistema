@@ -11,8 +11,8 @@ import { ROUTE_PREFIX as PREFIX } from '../../config';
 
 setTokenHeader(localStorage.getItem('token'));
 
-const decoded = jwdDecode(localStorage.getItem('token'));
-const emailToken = decoded.sub;
+// const decoded = jwdDecode(localStorage.getItem('token'));
+// const emailToken = decoded.sub;
 
 // export function* profileData() {
 //   try {
@@ -27,6 +27,8 @@ const emailToken = decoded.sub;
 // profileData();
 
 export function* editProfile(action) {
+  const decoded = jwdDecode(localStorage.getItem('token'));
+  const emailToken = decoded.sub;
   const { user } = action;
   const { phoneNumber, gender } = action.user.userDetail;
 

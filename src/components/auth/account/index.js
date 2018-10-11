@@ -16,8 +16,12 @@ import Footer from '../../layout/footer';
 import * as AuthAPI from '../../../api/auth';
 import { ROUTE_PREFIX as PREFIX } from '../../../config';
 
+import http, { setTokenHeader } from '../../../utils/services/http';
+
 import ActionCreators from '../../../redux-flow/ducks/authCreators';
 import { assignMasks } from '../../client-details/client-data/form-address/masks';
+
+setTokenHeader(localStorage.getItem('token'));
 
 export class Login extends Component {
   constructor(props) {
@@ -33,6 +37,7 @@ export class Login extends Component {
         },
       },
       errors: {},
+      files: '',
     };
     this.updateLogin = this.updateLogin.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -52,7 +57,19 @@ export class Login extends Component {
     AuthAPI.getUser(emailToken)
       .then((response) => {
         const user = response.data;
-        this.setState({ user });
+        if (user.userDetail === null) {
+          this.setState({
+            user: {
+              ...this.state.user,
+              name: user.name,
+            },
+          });
+        } else {
+          this.setState({
+            ...this.state.user,
+            user,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -112,6 +129,52 @@ export class Login extends Component {
     return isValid;
   }
 
+  onChange = async (e) => {
+    const { files } = this.state;
+    const file = e.target.files[0];
+
+    const output = document.getElementById('output');
+    output.src = URL.createObjectURL(e.target.files[0]);
+
+    this.setState({ files: e.target.files[0] });
+
+    console.log(file);
+    console.log(file.name);
+    // const files = e.target.files;
+    // console.log('data file', files);
+
+    // const reader = new FileReader();
+    // reader.readAsDataURL(files[0]);
+
+    // AuthAPI.addImage(e.target.files[0])
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.data);
+    //   });
+
+    // if (!files.length) this.props.history.push('/app');
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    const data = new FormData();
+    data.append('file', file);
+
+    // files.map((file, index) => data.append(`image[${index}]`, file, file.name));
+    // data.set('file', file);
+    await AuthAPI.addImage(data, config)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err.data);
+      });
+  };
+
   render() {
     const { errors, user } = this.state;
     const { userDetail } = this.state.user;
@@ -126,7 +189,12 @@ export class Login extends Component {
             </div>
             <div className="mdl-card__supporting-text w100">
               <div className="avatar">
-                <img src="/img/avatar.png" alt="" />
+                <img id="output" src="/img/avatar.png" alt="" />
+
+                <div onSubmit={this.onFormSubmit}>
+                  <input type="file" name="file" onChange={e => this.onChange(e)} />
+                </div>
+
                 <p className="text-center">
                   <a href="/" color="primary">
                     Trocar imagem
@@ -165,7 +233,7 @@ export class Login extends Component {
                 Trocar a senha
               </Link>
             </div>
-            {/* <div className="mdl-card__title bg-primary">
+            <div className="mdl-card__title bg-primary">
               <h2 className="mdl-card__title-text mdl-typography--text-center w100">
                 Fornecedores
               </h2>
@@ -198,7 +266,7 @@ export class Login extends Component {
                   </tr>
                 </tbody>
               </table>
-            </div> */}
+            </div>
           </div>
         </Card>
         <Footer />

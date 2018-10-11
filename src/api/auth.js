@@ -14,6 +14,8 @@ export const user = data => http.post('/user', data);
 export const getUser = email => http.get(`/user/${email}`);
 // Registration confirm
 export const confirmUser = token => http.get(`/user/registration/confirm?token=${token}`);
+// Upload a User avatar image into the database
+export const addImage = data => http.post('/user/picture/', data);
 // Changes a user and detail
 export const userPut = (email, data) => http.put(`/user/${email}`, data);
 /*

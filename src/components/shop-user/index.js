@@ -180,7 +180,7 @@ export class ShopUser extends Component {
                   <tr>
                     <th className="mdl-data-table__cell--non-numeric">Email</th>
                     <th>Profile</th>
-                    <th>showSalesValues</th>
+                    <th>Valores visíveis</th>
                     <th />
                   </tr>
                 </thead>
