@@ -76,4 +76,7 @@ injectGlobal`
 .nav-link {
   cursor: pointer;
 }
+.avatar img {
+    border-radius: 75px;
+}
 `;

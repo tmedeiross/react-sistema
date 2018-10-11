@@ -25,6 +25,31 @@ setTokenHeader(localStorage.getItem('token'));
 //   }
 // }
 // profileData();
+export const setUser = () => {
+  const decoded = jwdDecode(localStorage.getItem('token'));
+  const emailToken = decoded.sub;
+  AuthAPI.getUser(emailToken)
+    .then((response) => {
+      const user = response.data;
+      // if (user.userDetail === null) {
+      //   this.setState({
+      //     user: {
+      //       ...this.state.user,
+      //       name: user.name,
+      //     },
+      //   });
+      // } else {
+      //   this.setState({
+      //     ...this.state.user,
+      //     user,
+      //   });
+      // }
+      // console.log(user);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 export function* editProfile(action) {
   const decoded = jwdDecode(localStorage.getItem('token'));

@@ -3,7 +3,9 @@ import { Types as AuthTypes } from '../ducks/authCreators';
 import { Types as ShopUserTypes } from '../ducks/shopCreators';
 import { Types as ShopTypes } from '../ducks/shops';
 // import * as AuthAPI from '../../../api/auth';
-import { getAuth, changePass, editProfile } from './auth';
+import {
+  getAuth, changePass, editProfile, setUser,
+} from './auth';
 import { getShop } from './shops';
 import {
   getUserShop, getUserList, deleteUserShop, editUserShop,
