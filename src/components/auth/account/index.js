@@ -166,10 +166,9 @@ export class Login extends Component {
 
   isImg() {
     const { id } = this.state.user;
-    const idUser = id + 1;
     console.log(id);
     const img = new Image();
-    const avatar = `${CDN_URL + idUser}.jpg`;
+    const avatar = `${CDN_URL + id}.jpg`;
     img.src = avatar;
 
     img.onload = () => {
@@ -197,12 +196,11 @@ export class Login extends Component {
             <div className="mdl-card__supporting-text w100">
               <div className="avatar">
                 <img id="output" src={avatar} alt="" />
-
                 <div onSubmit={this.onFormSubmit}>
                   <p className="text-center">
                     <input type="file" name="file" id="files" placeholder="Trocar imagem" hidden />
                     <label htmlFor="files" onChange={e => this.onChange(e)}>
-                      Select file
+                      Trocar imagem
                     </label>
                   </p>
                 </div>
