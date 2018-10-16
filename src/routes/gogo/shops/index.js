@@ -394,7 +394,7 @@ export class Shops extends Component {
                             type="text"
                             value={this.state.form.email}
                             onChange={this.onChange}
-                            maxLength="17"
+                            maxLength="30"
                           />
                           <IntlMessages id="shops.email" />
                         </Label>
@@ -402,7 +402,7 @@ export class Shops extends Component {
                         <Label className="form-group has-float-label mb-4">
                           <InputMask
                             className="form-control"
-                            mask="(99) 9999-9999"
+                            mask="(99) 99999-9999"
                             name="phoneNumber"
                             type="text"
                             value={this.state.form.phoneNumber}
@@ -517,7 +517,7 @@ export class Shops extends Component {
                           {successMessage}
                         </Alert>
                       )}
-                      <Label className="mt-4">
+                      {/* <Label className="mt-4">
                         <br />
                         <IntlMessages id="shops.state" />
                       </Label>
@@ -532,7 +532,7 @@ export class Shops extends Component {
                         id="exCustomRadio2"
                         name="customRadio"
                         label="PROCESSED"
-                      />
+                      /> */}
                     </ModalBody>
                     <ModalFooter>
                       <Button
