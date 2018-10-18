@@ -1474,7 +1474,6 @@ button {
       @include respond-below(sm) {
         background-size: contain;
       }
-      
     }
 
     .logo-mobile {
@@ -5017,4 +5016,26 @@ select.form-control:not([size]):not([multiple]) {
   to {
     -webkit-transform: rotate(360deg);
   }
+}
+
+.react-autosuggest__container {
+  input {
+    border-radius: 0.1rem;
+    outline: initial !important;
+    box-shadow: initial !important;
+    font-size: 0.8rem;
+    padding: 0.7rem 0.75rem 0.65rem 0.75rem;
+    line-height: 1.5;
+    border: 1px solid #d7d7d7;
+    background: white;
+    color: #212121;
+    display: block;
+    width: 100%;
+  }
+}
+.supplier-delete .iconsmind-Close-Window {
+  font-size: 22px;
+}
+select.form-control {
+  border-radius: 0;
 }

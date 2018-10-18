@@ -242,7 +242,7 @@ class Sidebar extends Component {
                     active: this.state.selectedParentMenu == "gogo"
                   })}
                 >
-                  <a href="/">
+                  <a href="/app/shops">
                     <i className="iconsmind-Digital-Drawing" />{" "}
                     <IntlMessages id="menu.shop" />
                   </a>

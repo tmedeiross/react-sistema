@@ -18,11 +18,12 @@ export const Types = {
 
 // Reducer
 const INITIAL_STATE = {
-  data: [],
+  data: {},
   loading: false,
-  shops: [],
+  shops: {},
   errorMessage: "",
-  successMessage: ""
+  successMessage: "",
+  dataList: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -30,7 +31,11 @@ export default (state = INITIAL_STATE, action) => {
     case Types.GET_REQUEST:
       return { ...state, loading: false };
     case Types.GET_SUCCESS:
-      return { ...state, loading: false, data: action.payload.data };
+      return {
+        ...state,
+        loading: false,
+        dataList: action.payload.dataList
+      };
     case Types.ADD_SHOP_REQUEST:
       return {
         ...state,
@@ -57,7 +62,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        data: action.payload.data
+        dataDetails: action.payload.dataDetails
       };
     case Types.GET_DETAILS_SHOP_FAILURE:
       return {
@@ -109,9 +114,9 @@ export const Creators = {
   getShopRequest: () => ({
     type: Types.GET_REQUEST
   }),
-  getShopSuccess: data => ({
+  getShopSuccess: dataList => ({
     type: Types.GET_SUCCESS,
-    payload: { data }
+    payload: { dataList }
   }),
   addShopRequest: (shop, history) => ({
     type: Types.ADD_SHOP_REQUEST,
@@ -141,9 +146,9 @@ export const Creators = {
     type: Types.GET_DETAILS_SHOP_REQUEST,
     payload: { history }
   }),
-  getDetailsShopSuccess: data => ({
+  getDetailsShopSuccess: dataDetails => ({
     type: Types.GET_DETAILS_SHOP_SUCCESS,
-    payload: { data }
+    payload: { dataDetails }
   }),
   getDetailsShopFailure: errorMessage => ({
     type: Types.GET_DETAILS_SHOP_FAILURE,

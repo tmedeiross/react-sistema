@@ -30,7 +30,8 @@ module.exports = {
   "user.register-button": "CRIAR CONTA",
   "user.button-cancel": "CANCELAR",
   "user.button-recover-pass": "RECUPERAR A SENHA",
-  "user.button-change-pass": "CONFIRMAR TROCA DE SENHA",
+  "user.button-change-pass": "CONFIRMAR",
+  "user.button-add": "INCLUIR",
   "user.reset-password-button": "RECUPERAR",
   "user.confirm-button": "CONFIRMAR",
   "user.have-an-account-button": "JÁ TENHO UMA CONTA",
@@ -77,5 +78,15 @@ module.exports = {
   "shops.add": "ADICIONAR",
   "shops.cancel": "CANCELAR",
   "shops.button-update": "ATUALIZAR",
-  "shops.button-save": "SALVAR"
+  "shops.button-save": "SALVAR",
+
+  // supplier
+  "supplier.add-new": "Detalhes do fornecedor",
+  "supplier.label-priority": "Prioridade",
+  "supplier.label-defaultMessage": "Mensagem padrão",
+  "supplier.label-purchaseCode": "Código de compra neste fornecedor",
+  "supplier.label-awardsCode": "Código no clube de premios",
+  "supplier.button-confirm": "ADICIONAR",
+  "supplier.button-select": "SELECIONAR",
+  "supplier.label-supplier": "Fornecedor"
 };

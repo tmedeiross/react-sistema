@@ -13,6 +13,8 @@ import Logout from "Routes/auth/logout";
 import Signup from "Routes/auth/signup";
 import Recover from "Routes/auth/recover";
 import ChangePass from "Routes/auth/change-pass";
+import Confirm from "Routes/auth/confirm";
+import Account from "Routes/auth/account";
 
 import "Assets/css/vendor/bootstrap.min.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
@@ -52,6 +54,8 @@ class App extends Component {
               <Route path={`/auth/signup`} component={Signup} />
               <Route path={`/auth/recover`} component={Recover} />
               <Route path={`/auth/change-pass`} component={ChangePass} />
+              <Route path={`/auth/confirm`} component={Confirm} />
+              <Route path={`/auth/account`} component={Account} />
               <Route path={`/error`} component={error} />
               <Redirect to="/error" />
             </Switch>

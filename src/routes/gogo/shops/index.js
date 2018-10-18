@@ -26,8 +26,7 @@ import {
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import InputMask from "react-input-mask";
-import Select from "react-select";
-import CustomSelectInput from "Components/CustomSelectInput";
+import SelectSimple from "Components/SelectSimple";
 
 import IntlMessages from "Util/IntlMessages";
 import { Colxx, Separator } from "Components/CustomBootstrap";
@@ -41,35 +40,34 @@ import { Creators as ShopActions } from "Redux/shops/reducer";
 import * as ZipCodeService from "Util/services/zip-code";
 
 import swal from "sweetalert";
-
-const SELECT_DATA = [
-  { label: "Acre", value: "AC" },
-  { label: "Alagoas", value: "AL" },
-  { label: "Amapá", value: "AP" },
-  { label: "Amazonas", value: "AM" },
-  { label: "Bahia", value: "BA" },
-  { label: "Ceará", value: "CE" },
-  { label: "Distrito Federal", value: "DF" },
-  { label: "Espírito Santo", value: "ES" },
-  { label: "Goiás", value: "GO" },
-  { label: "Maranhão", value: "MA" },
-  { label: "Mato Grosso", value: "MT" },
-  { label: "Mato Grosso do Sul", value: "MS" },
-  { label: "Minas Gerais", value: "MG" },
-  { label: "Pará", value: "PA" },
-  { label: "Paraíba", value: "PB" },
-  { label: "Paraná", value: "PR" },
-  { label: "Pernambuco", value: "PE" },
-  { label: "Piauí", value: "PI" },
-  { label: "Rio de Janeiro", value: "RJ" },
-  { label: "Rio Grande do Norte", value: "RN" },
-  { label: "Rio Grande do Sul", value: "RS" },
-  { label: "Rondônia", value: "RO" },
-  { label: "Roraima", value: "RR" },
-  { label: "Santa Catarina", value: "SC" },
-  { label: "São Paulo", value: "SP" },
-  { label: "Sergipe", value: "SE" },
-  { label: "Tocantins", value: "TO" }
+const options = [
+  { value: "AC", text: "Acre" },
+  { value: "AL", text: "Alagoas" },
+  { value: "AP", text: "Amapá" },
+  { value: "AM", text: "Amazonas" },
+  { value: "BA", text: "Bahia" },
+  { value: "CE", text: "Ceará" },
+  { value: "DF", text: "Distrito Federal" },
+  { value: "ES", text: "Espírito Santo" },
+  { value: "GO", text: "Goiás" },
+  { value: "MA", text: "Maranhão" },
+  { value: "MT", text: "Mato Grosso" },
+  { value: "MS", text: "Mato Grosso do Sul" },
+  { value: "MG", text: "Minas Gerais" },
+  { value: "PA", text: "Pará" },
+  { value: "PB", text: "Paraíba" },
+  { value: "PR", text: "Paraná" },
+  { value: "PE", text: "Pernambuco" },
+  { value: "PI", text: "Piauí" },
+  { value: "RJ", text: "Rio de Janeiro" },
+  { value: "RN", text: "Rio Grande do Norte" },
+  { value: "RS", text: "Rio Grande do Sul" },
+  { value: "RO", text: "Rondônia" },
+  { value: "RR", text: "Roraima" },
+  { value: "SC", text: "Santa Catarina" },
+  { value: "SP", text: "São Paulo" },
+  { value: "SE", text: "Sergipe" },
+  { value: "TO", text: "Tocantins" }
 ];
 
 export class Shops extends Component {
@@ -109,7 +107,7 @@ export class Shops extends Component {
       startIndex: 0,
       endIndex: 10,
       totalPage: 1,
-      items: this.props.shops.data,
+      items: {},
       search: "",
       selectedItems: [],
       categories: [],
@@ -127,8 +125,7 @@ export class Shops extends Component {
         zipCode: "",
         neighborhood: "",
         city: "",
-        state: "",
-        stateNome: ""
+        state: ""
       }
     };
     this.onChange = this.onChange.bind(this);
@@ -141,27 +138,32 @@ export class Shops extends Component {
   }
 
   handleBlurCep = e => {
-    console.log("blur");
+    const form = { ...this.state.form };
     const { value } = e.target;
     if (!value) return;
+
+    this.setState({ loading: true });
     ZipCodeService.searchAddressByZipCode(e.target.value)
       .then(response => {
         if (response.status === 404) {
           swal("Atenção", "Cep não encontrado", "warning");
+          this.setState({ loading: false });
           return;
         }
         const data = {
           address: response.logradouro || "",
           neighborhood: response.bairro || "",
           city: response.cidade || "",
-          state: response.estado || ""
+          state: response.estado || "",
+          zipCode: response.cep || ""
         };
-        console.log(data);
         if (response.logradouro) {
-          this.setState({ form: { ...data } });
+          this.setState({ form: { ...this.state.form, ...data } });
+          this.setState({ loading: false });
         }
       })
       .catch(err => {
+        this.setState({ loading: false });
         swal("Atenção", "Ocorreu um erro ao consultar o cep", "error");
       });
   };
@@ -184,6 +186,12 @@ export class Shops extends Component {
       stateNome: ""
     };
     this.setState(resetState);
+
+    setTimeout(() => {
+      this.setState({ items: Array.from(this.props.shops.dataList) }, () => {
+        this.dataListRender();
+      });
+    }, 300);
   }
 
   toggleModal() {
@@ -191,14 +199,17 @@ export class Shops extends Component {
       modalOpen: !this.state.modalOpen
     });
   }
+
   toggleDisplayOptions() {
     this.setState({ displayOptionsIsOpen: !this.state.displayOptionsIsOpen });
   }
+
   toggleSplit() {
     this.setState(prevState => ({
       dropdownSplitOpen: !prevState.dropdownSplitOpen
     }));
   }
+
   changeOrderBy(column) {
     this.setState(
       {
@@ -209,6 +220,7 @@ export class Shops extends Component {
       () => this.dataListRender()
     );
   }
+
   changePageSize(size) {
     this.setState(
       {
@@ -218,12 +230,14 @@ export class Shops extends Component {
       () => this.dataListRender()
     );
   }
+
   changeDisplayMode(mode) {
     this.setState({
       displayMode: mode
     });
     return false;
   }
+
   onChangePage(page) {
     this.setState(
       {
@@ -257,28 +271,22 @@ export class Shops extends Component {
     const { getShopRequest } = this.props;
     getShopRequest();
     setTimeout(() => {
-      this.setState(
-        {
-          items: this.props.shops.data
-        },
-        () => {
-          this.dataListRender();
-        }
-      );
+      this.setState({ items: Array.from(this.props.shops.dataList) }, () => {
+        this.dataListRender();
+      });
     }, 300);
   }
 
   dataListRender() {
     let items =
       this.state.search.length > 0
-        ? this.props.shops.data.filter(p => {
+        ? this.props.shops.dataList.filter(p => {
             return (
               p.fantasyName.toLowerCase().indexOf(this.state.search) > -1 ||
               p.city.toLowerCase().indexOf(this.state.search) > -1
             );
           })
-        : this.props.shops.data;
-
+        : this.props.shops.dataList;
     const totalItemCount = items.length;
     let totalPage = parseInt(totalItemCount / this.state.selectedPageSize, 10);
     totalPage =
@@ -306,7 +314,6 @@ export class Shops extends Component {
         return 0;
       })
       .slice(startIndex, endIndex);
-
     this.setState({
       startIndex,
       endIndex,
@@ -318,10 +325,9 @@ export class Shops extends Component {
   }
 
   render() {
-    const shouldDisplayNotFound = !this.props.shops.data.length;
+    const shouldDisplayNotFound = !this.props.shops;
     const { errorMessage, successMessage } = this.props.shops;
-    const { state } = this.state.form;
-    const { items } = this.state;
+    const { items, loading } = this.state;
     return (
       <Fragment>
         <div className="disable-text-selection">
@@ -356,10 +362,12 @@ export class Shops extends Component {
                       <Form>
                         <Label className="form-group has-float-label mb-4">
                           <InputMask
+                            type="text"
                             mask="99.999.999/9999-99"
                             className="form-control"
                             placeholder="Enter a phone number"
                             name="cnpj"
+                            id="cnpj"
                             value={this.state.form.cnpj}
                             onChange={this.onChange}
                           />
@@ -480,27 +488,19 @@ export class Shops extends Component {
                         </Label>
 
                         <Label className="form-group has-float-label mb-4">
-                          <Select
-                            components={{ Input: CustomSelectInput }}
-                            className="react-select"
-                            classNamePrefix="react-select"
+                          <SelectSimple
                             name="state"
-                            options={SELECT_DATA}
-                            value={this.state.form.stateNome}
-                            onChange={val => {
-                              this.setState({
-                                form: {
-                                  ...this.state.form,
-                                  state: val.value,
-                                  stateNome: val
-                                }
-                              });
-                            }}
-                            placeholder={"Selecione"}
+                            id="state"
+                            value={this.state.form.state}
+                            handleChange={this.onChange}
+                            options={options}
+                            maxLength="2"
                           />
                           <IntlMessages id="shops.state" />
                         </Label>
+                        <Label className="form-group has-float-label mb-4" />
                       </Form>
+                      {loading && <div className="loading-inline" />}
                       {errorMessage && (
                         <Alert
                           color="danger"
@@ -517,22 +517,6 @@ export class Shops extends Component {
                           {successMessage}
                         </Alert>
                       )}
-                      {/* <Label className="mt-4">
-                        <br />
-                        <IntlMessages id="shops.state" />
-                      </Label>
-                      <CustomInput
-                        type="radio"
-                        id="exCustomRadio"
-                        name="customRadio"
-                        label="ON HOLD"
-                      />
-                      <CustomInput
-                        type="radio"
-                        id="exCustomRadio2"
-                        name="customRadio"
-                        label="PROCESSED"
-                      /> */}
                     </ModalBody>
                     <ModalFooter>
                       <Button
@@ -631,7 +615,14 @@ export class Shops extends Component {
                 </CardSubtitle>
               </Colxx>
             )}
-            {items.map(product => {
+            {shouldDisplayNotFound && (
+              <Colxx xxs="12" className="mb-3">
+                <CardSubtitle>
+                  <p className="text-center">NENHUMA LOJA CADASTRADA</p>
+                </CardSubtitle>
+              </Colxx>
+            )}
+            {this.props.shops.dataList.map(product => {
               if (this.state.displayMode === "imagelist") {
                 return (
                   <Colxx sm="6" lg="4" xl="3" className="mb-3" key={product.id}>
@@ -715,11 +706,6 @@ export class Shops extends Component {
                           <p className="mb-1 text-muted text-small w-15 w-sm-100">
                             {product.city} - {product.state}
                           </p>
-                          {/* <div className="w-15 w-sm-100">
-                            <Badge color={product.statusColor} pill>
-                              {product.status}
-                            </Badge>
-                          </div> */}
                         </div>
                       </div>
                     </Card>

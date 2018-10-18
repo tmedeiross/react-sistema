@@ -11,6 +11,7 @@ setTokenHeader(localStorage.getItem("token"));
 export function* getShop() {
   try {
     const response = yield call(AuthAPI.storeAll);
+    console.log(response);
     yield put(ShopActions.getShopSuccess(response.data.content));
   } catch (err) {
     console.log(err);
@@ -18,6 +19,7 @@ export function* getShop() {
 }
 
 export function* addShop({ payload }) {
+  console.log(payload);
   const {
     cnpj,
     fantasyName,
@@ -49,7 +51,15 @@ export function* addShop({ payload }) {
       state
     });
     yield put(ShopActions.addShopSuccess("Loja incluída com sucesso!"));
+
+    try {
+      const response = yield call(AuthAPI.storeAll);
+      yield put(ShopActions.getShopSuccess(response.data.content));
+    } catch (err) {
+      console.log(err);
+    }
   } catch (err) {
+    console.log(err);
     if (err.data.message === "Erro de Validação") {
       yield put(ShopActions.addShopFailure("Dados incorretos ou faltantes."));
     } else if (err.data.message === "Store CNPJ already in use!") {
@@ -73,6 +83,7 @@ export function* getDetailsStore({ payload }) {
   const storeID = idString.split("=");
   try {
     const response = yield call(AuthAPI.storeGet, storeID[1]);
+    console.log(response);
     yield put(ShopActions.getDetailsShopSuccess(response.data));
   } catch (err) {
     history.push("/app/shops");

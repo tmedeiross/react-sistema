@@ -26,10 +26,8 @@ import {
   Badge
 } from "reactstrap";
 
-import Select from "react-select";
-import CustomSelectInput from "Components/CustomSelectInput";
-import { Colxx, Separator } from "Components/CustomBootstrap";
-import Pagination from "Components/List/Pagination";
+import SelectSimple from "Components/SelectSimple";
+import { Colxx } from "Components/CustomBootstrap";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -37,7 +35,37 @@ import { Creators as ShopActions } from "Redux/shop-user/reducer";
 
 import swal from "sweetalert";
 
-const SELECT_DATA_USER = [
+const options2 = [
+  { label: "Acre", value: "AC" },
+  { label: "Alagoas", value: "AL" },
+  { label: "Amapá", value: "AP" },
+  { label: "Amazonas", value: "AM" },
+  { label: "Bahia", value: "BA" },
+  { label: "Ceará", value: "CE" },
+  { label: "Distrito Federal", value: "DF" },
+  { label: "Espírito Santo", value: "ES" },
+  { label: "Goiás", value: "GO" },
+  { label: "Maranhão", value: "MA" },
+  { label: "Mato Grosso", value: "MT" },
+  { label: "Mato Grosso do Sul", value: "MS" },
+  { label: "Minas Gerais", value: "MG" },
+  { label: "Pará", value: "PA" },
+  { label: "Paraíba", value: "PB" },
+  { label: "Paraná", value: "PR" },
+  { label: "Pernambuco", value: "PE" },
+  { label: "Piauí", value: "PI" },
+  { label: "Rio de Janeiro", value: "RJ" },
+  { label: "Rio Grande do Norte", value: "RN" },
+  { label: "Rio Grande do Sul", value: "RS" },
+  { label: "Rondônia", value: "RO" },
+  { label: "Roraima", value: "RR" },
+  { label: "Santa Catarina", value: "SC" },
+  { label: "São Paulo", value: "SP" },
+  { label: "Sergipe", value: "SE" },
+  { label: "Tocantins", value: "TO" }
+];
+
+const options = [
   { value: "ADMIN", label: "Admin" },
   { value: "SALESMAN", label: "Vendedor" },
   { value: "ASSEMBLY", label: "Montador" }
@@ -55,7 +83,8 @@ export class ShopUser extends Component {
       form: {
         showSalesValues: true,
         profileId: "",
-        userEmail: ""
+        userEmail: "",
+        state: ""
       },
       items: "",
       currentPage: 1,
@@ -74,8 +103,8 @@ export class ShopUser extends Component {
   }
 
   onChange(event) {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    // const target = event.target;
+    // const value = target.type === "checkbox" ? target.checked : target.value;
 
     const form = { ...this.state.form };
     form[target.name] = value;
@@ -124,10 +153,8 @@ export class ShopUser extends Component {
   };
   render() {
     const rowLength = this.state.items.length;
-    const { socialName } = this.props.shops.data;
     const { users } = this.props.shopUser;
     const { errorMessage, successMessage, loading } = this.props.shopUser;
-    // const userStore = this.props.shopUser.userStore.data;
     return (
       <Fragment>
         <Row>
@@ -151,22 +178,13 @@ export class ShopUser extends Component {
                     </Col>
                     <Col sm="6">
                       <Label className="form-group has-float-label mb-4">
-                        <Select
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="state"
-                          options={SELECT_DATA_USER}
-                          value={this.state.form.stateNome}
-                          onChange={val => {
-                            this.setState({
-                              form: {
-                                ...this.state.form,
-                                profileId: val.value,
-                                stateNome: val
-                              }
-                            });
-                          }}
+                        <SelectSimple
+                          name="profileId"
+                          id="profileId"
+                          label="Profile"
+                          value={this.state.form.profileId}
+                          handleChange={this.onChange}
+                          options={options}
                         />
                         <IntlMessages id="shops.state" />
                       </Label>
@@ -190,7 +208,7 @@ export class ShopUser extends Component {
                   size="lg"
                   onClick={() => this.addUser()}
                 >
-                  <IntlMessages id="shops.button-save" />
+                  <IntlMessages id="user.button-add" />
                 </Button>
               </CardText>
             </Card>
@@ -226,8 +244,8 @@ export class ShopUser extends Component {
                                 )}
                               </p>
                             </NavLink>
-                            <div class="w-15 w-sm-100 text-right">
-                              <span class="badge badge-secondary badge-pill">
+                            <div className="w-15 w-sm-100 text-right">
+                              <span className="badge badge-secondary badge-pill">
                                 {item.profileId === "SALESMAN" && (
                                   <small>Vendedor</small>
                                 )}
@@ -253,11 +271,6 @@ export class ShopUser extends Component {
               </CardBody>
             </Card>
           </Colxx>
-          <Pagination
-            currentPage={this.state.currentPage}
-            totalPage={this.state.totalPage}
-            onChangePage={i => this.onChangePage(i)}
-          />
         </Row>
         <div className="float-sm-right">
           <Button

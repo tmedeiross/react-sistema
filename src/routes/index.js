@@ -10,7 +10,7 @@ import Sidebar from "Containers/Sidebar";
 import gogo from "./gogo";
 import secondMenu from "./second-menu";
 import Shops from "./gogo/shops";
-import ShopDetails from "./gogo/shop-details";
+import ShopDetails from "./gogo/shop";
 
 import { connect } from "react-redux";
 

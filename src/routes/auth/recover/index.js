@@ -60,7 +60,7 @@ class Recover extends Component {
         <main>
           <div className="container">
             <Row className="h-100">
-              <Colxx xxs="12" md="10" className="mx-auto my-auto">
+              <Colxx xxs="12" md="12" lg="10" className="mx-auto my-auto">
                 <Card className="auth-card">
                   <div className="position-relative image-side ">
                     <p className="h2">ORDER TRACKING</p>
@@ -68,7 +68,7 @@ class Recover extends Component {
                       Por favor, insira suas credenciais para fazer o login.
                       <br />
                       Se você não tem uma conta, por favor, se{" "}
-                      <NavLink to={`/register`} className="color-theme-2">
+                      <NavLink to={`/auth/signup`} className="color-theme-2">
                         registre
                       </NavLink>
                       .
