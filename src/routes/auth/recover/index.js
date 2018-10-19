@@ -93,7 +93,7 @@ class Recover extends Component {
                       </Label>
                       <div className="d-flex justify-content-between align-items-center">
                         <Button
-                          href={`/auth/signup`}
+                          href={`/auth/login`}
                           color="secondary"
                           className="btn-shadow mr-1"
                           size="lg"

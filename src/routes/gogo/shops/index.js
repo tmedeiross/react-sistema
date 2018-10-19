@@ -3,13 +3,11 @@ import {
   Alert,
   Row,
   Card,
-  CustomInput,
   Button,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
-  ButtonDropdown,
   UncontrolledDropdown,
   Collapse,
   DropdownMenu,
@@ -18,10 +16,8 @@ import {
   Input,
   CardBody,
   CardSubtitle,
-  CardImg,
   Label,
   CardText,
-  Badge,
   Form
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
@@ -113,6 +109,7 @@ export class Shops extends Component {
       categories: [],
       lastChecked: null,
       displayOptionsIsOpen: false,
+      loadingCep: false,
       form: {
         cnpj: "",
         fantasyName: "",
@@ -142,12 +139,12 @@ export class Shops extends Component {
     const { value } = e.target;
     if (!value) return;
 
-    this.setState({ loading: true });
+    this.setState({ loadingCep: true });
     ZipCodeService.searchAddressByZipCode(e.target.value)
       .then(response => {
         if (response.status === 404) {
           swal("Atenção", "Cep não encontrado", "warning");
-          this.setState({ loading: false });
+          this.setState({ loadingCep: false });
           return;
         }
         const data = {
@@ -159,11 +156,11 @@ export class Shops extends Component {
         };
         if (response.logradouro) {
           this.setState({ form: { ...this.state.form, ...data } });
-          this.setState({ loading: false });
+          this.setState({ loadingCep: false });
         }
       })
       .catch(err => {
-        this.setState({ loading: false });
+        this.setState({ loadingCep: false });
         swal("Atenção", "Ocorreu um erro ao consultar o cep", "error");
       });
   };
@@ -327,7 +324,7 @@ export class Shops extends Component {
   render() {
     const shouldDisplayNotFound = !this.props.shops;
     const { errorMessage, successMessage } = this.props.shops;
-    const { items, loading } = this.state;
+    const { items, loading, loadingCep } = this.state;
     return (
       <Fragment>
         <div className="disable-text-selection">
@@ -373,7 +370,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.cnpj" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <Input
                             name="fantasyName"
@@ -384,7 +380,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.fantasyName" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <Input
                             name="socialName"
@@ -395,7 +390,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.socialName" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <Input
                             name="email"
@@ -406,7 +400,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.email" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <InputMask
                             className="form-control"
@@ -418,7 +411,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.phoneNumber" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <InputMask
                             className="form-control"
@@ -431,7 +423,7 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.zipCode" />
                         </Label>
-
+                        {loadingCep && <div className="loading-inline mb-5" />}
                         <Label className="form-group has-float-label mb-4">
                           <Input
                             name="address"
@@ -442,7 +434,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.address" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <Input
                             name="number"
@@ -453,7 +444,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.number" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <Input
                             name="complement"
@@ -464,7 +454,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.complement" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <Input
                             name="neighborhood"
@@ -475,7 +464,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.neighborhood" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <Input
                             name="city"
@@ -486,7 +474,6 @@ export class Shops extends Component {
                           />
                           <IntlMessages id="shops.city" />
                         </Label>
-
                         <Label className="form-group has-float-label mb-4">
                           <SelectSimple
                             name="state"

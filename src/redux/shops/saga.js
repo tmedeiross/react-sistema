@@ -12,6 +12,9 @@ export function* getShop() {
   try {
     const response = yield call(AuthAPI.storeAll);
     console.log(response);
+    console.log("tati");
+    // this.setState({ modalOpen: true });
+
     yield put(ShopActions.getShopSuccess(response.data.content));
   } catch (err) {
     console.log(err);
