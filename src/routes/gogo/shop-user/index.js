@@ -23,7 +23,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Badge
+  CustomInput
 } from "reactstrap";
 
 import SelectSimple from "Components/SelectSimple";
@@ -35,40 +35,10 @@ import { Creators as ShopActions } from "Redux/shop-user/reducer";
 
 import swal from "sweetalert";
 
-const options2 = [
-  { label: "Acre", value: "AC" },
-  { label: "Alagoas", value: "AL" },
-  { label: "Amapá", value: "AP" },
-  { label: "Amazonas", value: "AM" },
-  { label: "Bahia", value: "BA" },
-  { label: "Ceará", value: "CE" },
-  { label: "Distrito Federal", value: "DF" },
-  { label: "Espírito Santo", value: "ES" },
-  { label: "Goiás", value: "GO" },
-  { label: "Maranhão", value: "MA" },
-  { label: "Mato Grosso", value: "MT" },
-  { label: "Mato Grosso do Sul", value: "MS" },
-  { label: "Minas Gerais", value: "MG" },
-  { label: "Pará", value: "PA" },
-  { label: "Paraíba", value: "PB" },
-  { label: "Paraná", value: "PR" },
-  { label: "Pernambuco", value: "PE" },
-  { label: "Piauí", value: "PI" },
-  { label: "Rio de Janeiro", value: "RJ" },
-  { label: "Rio Grande do Norte", value: "RN" },
-  { label: "Rio Grande do Sul", value: "RS" },
-  { label: "Rondônia", value: "RO" },
-  { label: "Roraima", value: "RR" },
-  { label: "Santa Catarina", value: "SC" },
-  { label: "São Paulo", value: "SP" },
-  { label: "Sergipe", value: "SE" },
-  { label: "Tocantins", value: "TO" }
-];
-
 const options = [
-  { value: "ADMIN", label: "Admin" },
-  { value: "SALESMAN", label: "Vendedor" },
-  { value: "ASSEMBLY", label: "Montador" }
+  { value: "ADMIN", text: "Admin" },
+  { value: "SALESMAN", text: "Vendedor" },
+  { value: "ASSEMBLY", text: "Montador" }
 ];
 
 export class ShopUser extends Component {
@@ -78,13 +48,12 @@ export class ShopUser extends Component {
     this.toggle = this.toggle.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.state = {
-      activeTab: "1",
       shopActive: "",
       form: {
         showSalesValues: true,
-        profileId: "",
+        profileId: "ADMIN",
         userEmail: "",
-        state: ""
+        userSelected: ""
       },
       items: "",
       currentPage: 1,
@@ -92,6 +61,9 @@ export class ShopUser extends Component {
       modalOpen: false
     };
     this.onChange = this.onChange.bind(this);
+    this.deleteUserShopModal = this.deleteUserShopModal.bind(this);
+    this.editUserShop = this.editUserShop.bind(this);
+    this.toggleNested = this.toggleNested.bind(this);
   }
 
   toggle(tab) {
@@ -102,39 +74,62 @@ export class ShopUser extends Component {
     }
   }
 
-  onChange(event) {
-    // const target = event.target;
-    // const value = target.type === "checkbox" ? target.checked : target.value;
+  deleteUserShopModal(e) {
+    const userSelected = e.target.id;
+    swal(
+      "Tem certeza que deseja excluir este usuário?",
+      "O que deseja fazer?",
+      {
+        buttons: {
+          delete: {
+            text: "Deletar",
+            value: "delete"
+          },
+          proximo: {
+            text: "Cancelar",
+            value: "cancel"
+          }
+        }
+      }
+    ).then(value => {
+      switch (value) {
+        case "delete":
+          this.props.deleteUserRequest(
+            userSelected,
+            this.props.shops.dataDetails.cnpj,
+            this.props.history
+          );
+          break;
+        case "cancel":
+          break;
+        default:
+          break;
+      }
+    });
+  }
 
+  onChange(event) {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
     const form = { ...this.state.form };
     form[target.name] = value;
-
     this.setState({ form });
+
+    console.log(form);
   }
 
   addUser() {
     this.props.addUserRequest(
       this.state.form,
-      this.props.shops.data.cnpj,
+      this.props.shops.dataDetails.cnpj,
       this.props.history
     );
-  }
-
-  editUserShop() {
-    const { form, storeCnpj, userSelected } = this.state;
-    this.props.editUserShop(form, this.props.paramId, storeCnpj, userSelected);
-    this.handleCloseDialog();
   }
 
   onChangePage(page) {
     this.setState({
       currentPage: page
     });
-  }
-
-  listUser() {
-    const { storeCnpj } = this.state;
-    this.props.listUser(this.props.paramId, storeCnpj);
   }
 
   toggleModal() {
@@ -151,6 +146,38 @@ export class ShopUser extends Component {
       );
     }, 700);
   };
+
+  toggleNested(e) {
+    const form = {
+      userSelected: e.target.dataset.idcode,
+      profileId: e.target.dataset.id,
+      userEmail: e.target.dataset.name,
+      showSalesValues: e.target.dataset.showvalues === "true"
+    };
+    setTimeout(() => {
+      this.setState({ form });
+    }, 300);
+
+    this.setState({
+      nestedModal: !this.state.nestedModal,
+      closeAll: false
+    });
+    console.log(form);
+  }
+
+  editUserShop(e) {
+    this.props.editUserRequest(
+      this.state.form,
+      this.props.shops.dataDetails.cnpj,
+      this.props.history
+    );
+
+    this.setState({
+      nestedModal: !this.state.nestedModal,
+      closeAll: false
+    });
+  }
+
   render() {
     const rowLength = this.state.items.length;
     const { users } = this.props.shopUser;
@@ -171,7 +198,7 @@ export class ShopUser extends Component {
                           type="text"
                           value={this.state.form.userEmail}
                           onChange={this.onChange}
-                          maxLength="17"
+                          maxLength="50"
                         />
                         <IntlMessages id="shops.userEmail" />
                       </Label>
@@ -186,7 +213,7 @@ export class ShopUser extends Component {
                           handleChange={this.onChange}
                           options={options}
                         />
-                        <IntlMessages id="shops.state" />
+                        <IntlMessages id="shop-user.label-profile" />
                       </Label>
                     </Col>
                   </Row>
@@ -245,6 +272,19 @@ export class ShopUser extends Component {
                               </p>
                             </NavLink>
                             <div className="w-15 w-sm-100 text-right">
+                              <span className="badge badge-pill">
+                                Valores visiveis:{" "}
+                                <strong>
+                                  {item.showSalesValues === true && (
+                                    <strong>SIM</strong>
+                                  )}
+                                  {item.showSalesValues === false && (
+                                    <strong>NÃO</strong>
+                                  )}
+                                </strong>
+                              </span>
+                            </div>
+                            <div className="w-15 w-sm-100 text-right">
                               <span className="badge badge-secondary badge-pill">
                                 {item.profileId === "SALESMAN" && (
                                   <small>Vendedor</small>
@@ -257,11 +297,32 @@ export class ShopUser extends Component {
                                 )}
                               </span>
                             </div>
-                            {/* <div className="w-15 w-sm-100">
-                              <Badge color={item.statusColor} pill>
-                                {item.status}
-                              </Badge>
-                            </div> */}
+                            <div className="btn-edit d-flex">
+                              <div
+                                className=" w-sm-50 text-right supplier-delete mr-3"
+                                onClick={this.toggleNested}
+                              >
+                                <span
+                                  className="iconsmind-Pencil text-primary"
+                                  data-name={item.userEmail}
+                                  data-id={item.profileId}
+                                  data-idcode={item.id}
+                                  data-showvalues={item.showSalesValues}
+                                  value={item.id}
+                                  id={item.id}
+                                />
+                              </div>
+                              <div
+                                className=" w-sm-50 text-right supplier-delete"
+                                onClick={this.deleteUserShopModal}
+                              >
+                                <span
+                                  className="iconsmind-Close-Window text-danger"
+                                  value={item.id}
+                                  id={item.id}
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </Card>
@@ -272,49 +333,56 @@ export class ShopUser extends Component {
             </Card>
           </Colxx>
         </Row>
-        <div className="float-sm-right">
-          <Button
-            color="primary"
-            size="lg"
-            className=""
-            onClick={this.toggleModal}
-          >
-            <IntlMessages id="shops.add-new" />
-          </Button>
-          <Modal
-            isOpen={this.state.modalOpen}
-            toggle={this.toggleModal}
-            wrapClassName="modal-right"
-            backdrop="static"
-          >
-            <ModalHeader toggle={this.toggleModal}>
-              <IntlMessages id="shops.add-new" />
-            </ModalHeader>
-            <ModalBody>
-              <Form>
-                <Label className="form-group has-float-label mb-4">
-                  <Input
-                    mask="99.999.999/9999-99"
-                    className="form-control"
-                    placeholder="Enter a phone number"
-                    name="cnpj"
-                    value={this.state.form.cnpj}
-                    onChange={this.onChange}
-                  />
-                  <IntlMessages id="shops.cnpj" />
-                </Label>
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" outline onClick={this.toggleModal}>
-                <IntlMessages id="shops.cancel" />
-              </Button>
-              <Button color="primary" onClick={() => this.addNewShop()}>
-                <IntlMessages id="shops.add" />
-              </Button>{" "}
-            </ModalFooter>
-          </Modal>
-        </div>
+        <Modal
+          isOpen={this.state.nestedModal}
+          toggle={this.toggleNested}
+          onClosed={
+            this.state.closeAll ? this.toggleNestedContainer : undefined
+          }
+        >
+          <ModalHeader>Atualizar usuário</ModalHeader>
+          <ModalBody>
+            <Label className="form-group has-float-label mb-4">
+              <Input
+                name="userEmail"
+                type="text"
+                value={this.state.form.userEmail}
+                onChange={this.onChange}
+                maxLength="50"
+              />
+              <IntlMessages id="shops.userEmail" />
+            </Label>
+            <Label className="form-group has-float-label mb-4">
+              <SelectSimple
+                name="profileId"
+                id="profileId"
+                label="Profile"
+                value={this.state.form.profileId}
+                handleChange={this.onChange}
+                options={options}
+              />
+              <IntlMessages id="shop-user.label-profile" />
+            </Label>
+            <CustomInput
+              type="checkbox"
+              name="showSalesValues"
+              id="showSalesValues"
+              label="Habilitar valores visíveis"
+              checked={this.state.form.showSalesValues}
+              value={this.state.form.showSalesValues}
+              onChange={this.onChange}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggleNested}>
+              <IntlMessages id="shops.cancel" />
+            </Button>{" "}
+            <Button color="secondary" onClick={this.editUserShop}>
+              <IntlMessages id="shops.button-update" />
+            </Button>
+          </ModalFooter>
+        </Modal>
+        <div className="float-sm-right" />
       </Fragment>
     );
   }

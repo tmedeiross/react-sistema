@@ -16,6 +16,10 @@ export const Types = {
   CREATE_ACCOUNT_SUCCESS: "auth/CREATE_ACCOUNT_SUCCESS",
   CREATE_ACCOUNT_FAILURE: "auth/CREATE_ACCOUNT_FAILURE",
 
+  GET_USER_REQUEST: "auth/GET_USER_REQUEST",
+  GET_USER_SUCCESS: "auth/GET_USER_SUCCESS",
+  GET_USER_FAILURE: "auth/GET_USER_FAILURE",
+
   USER_STORE: "auth/USER_STORE",
   SET_AUTH: "auth/SET_AUTH"
 };
@@ -23,6 +27,7 @@ export const Types = {
 // Reducer
 const INITIAL_STATE = {
   user: [],
+  userDetails: [],
   loading: false,
   errorMessage: "",
   successMessage: "",
@@ -113,6 +118,23 @@ export default (state = INITIAL_STATE, action) => {
         loading: false,
         errorMessage: action.payload.errorMessage
       };
+    case Types.GET_USER_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case Types.GET_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        userDetails: action.payload.userDetails
+      };
+    case Types.GET_USER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        errorMessage: action.payload.errorMessage
+      };
     default:
       return { ...state };
   }
@@ -169,6 +191,19 @@ export const Creators = {
   }),
   createAccountFailure: errorMessage => ({
     type: Types.CREATE_ACCOUNT_FAILURE,
+    payload: { errorMessage }
+  }),
+
+  getUserRequest: (data, history) => ({
+    type: Types.GET_USER_REQUEST,
+    payload: { data, history }
+  }),
+  getUserSuccess: userDetails => ({
+    type: Types.GET_USER_SUCCESS,
+    payload: { userDetails }
+  }),
+  getUserFailure: errorMessage => ({
+    type: Types.GET_USER_FAILURE,
     payload: { errorMessage }
   }),
 

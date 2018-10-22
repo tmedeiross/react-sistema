@@ -12,6 +12,8 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Creators as AuthActions } from "Redux/auth/reducer";
 import {
   setContainerClassnames,
   clickOnMobileMenu,
@@ -28,6 +30,7 @@ class TopNav extends Component {
     this.state = {
       isInFullScreen: false
     };
+    this.getUser = this.getUser.bind(this);
   }
   isInFullScreen = () => {
     return (
@@ -89,8 +92,16 @@ class TopNav extends Component {
     this.props.clickOnMobileMenu(containerClassnames);
   }
 
+  getUser() {
+    this.props.getUserRequest("teste", this.props.history);
+  }
+
+  componentDidMount() {
+    this.getUser();
+  }
+
   render() {
-    const { name } = this.props.authUser.user;
+    const { name } = this.props.authUser.userDetails;
     const { containerClassnames, menuClickCount } = this.props;
     return (
       <nav className="navbar fixed-top">
@@ -141,19 +152,17 @@ class TopNav extends Component {
             <i className="simple-icon-magnifier" />
           </span>
         </div>
-
         <a className="navbar-logo" href="/">
           <span className="logo d-none d-xs-block" />
           <span className="logo-mobile d-block d-xs-none" />
         </a>
-
         <div className="ml-auto">
           <div className="header-icons d-inline-block align-middle">
             <div className="user d-inline-block">
               <UncontrolledDropdown className="dropdown-menu-right">
                 <DropdownToggle className="p-0" color="empty">
                   <span>
-                    <img alt="Profile" src="/assets/img/profile-pic-l-2.jpg" />
+                    <img alt="Profile" src="/assets/img/avatar.png" />
                   </span>
                   <span className="name ml-3">{name}</span>
                 </DropdownToggle>
@@ -189,7 +198,11 @@ const mapStateToProps = state => ({
   // const { containerClassnames, menuClickCount } = menu;
   // return { containerClassnames, menuClickCount };
 });
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(AuthActions, dispatch);
+
 export default connect(
   mapStateToProps,
-  { setContainerClassnames, clickOnMobileMenu, logoutUser }
+  mapDispatchToProps
 )(TopNav);

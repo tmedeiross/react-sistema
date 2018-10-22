@@ -1,37 +1,51 @@
 import React, { Component, Fragment } from "react";
+
 import IntlMessages from "Util/IntlMessages";
 import {
   Row,
   Card,
   CardTitle,
   Button,
+  Modal,
+  ModalHeader,
   NavLink,
+  ModalBody,
+  ModalFooter,
   CardText,
+  CardBody,
   Col,
   Form,
   Label,
   Input,
   Alert,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
+  CustomInput
 } from "reactstrap";
+import { Colxx, Separator } from "Components/CustomBootstrap";
 
 import Autosuggest from "react-autosuggest";
+import swal from "sweetalert";
+import InputMask from "react-input-mask";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { Creators as AuthActions } from "Redux/auth/reducer";
 import { Creators as ShopActions } from "Redux/shops/reducer";
 import * as AuthAPI from "Constants/api";
 import ValidateForm from "./validator";
 
-import swal from "sweetalert";
-
-export class ShopDetails extends Component {
+export class Account extends Component {
   constructor(...props) {
-    super(...props);
+    super(props);
+
     this.state = {
+      user: {
+        id: "",
+        name: "",
+        userDetail: {
+          phoneNumber: "",
+          gender: "MALE"
+        }
+      },
       modalOpen: false,
       suggestions: [],
       suppliers: [],
@@ -67,6 +81,37 @@ export class ShopDetails extends Component {
     this.deleteSupplierShopModal = this.deleteSupplierShopModal.bind(this);
     this.deleteSupplier = this.deleteSupplier.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.handleChangeName = this.handleChangeName.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleChangeSupplier = this.handleChangeSupplier.bind(this);
+  }
+
+  handleChangeName(event) {
+    this.setState({
+      user: {
+        ...this.state.user,
+        name: event.target.value
+      }
+    });
+  }
+
+  handleChange(event) {
+    const target = event.target;
+    const value = target.type === "radio" ? target.value : target.value;
+
+    const userDetail = { ...this.state.user.userDetail };
+    userDetail[target.name] = value;
+
+    this.setState({
+      user: {
+        ...this.state.user,
+        userDetail
+      }
+    });
+  }
+
+  handleChangeSupplier(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   toggleModal() {
@@ -82,6 +127,16 @@ export class ShopDetails extends Component {
     getShopRequest();
     this.shopSelectedDetails();
     this.listSupplierStore();
+
+    const teste = this.props.authUser.userDetails;
+    setTimeout(() => {
+      this.setState({
+        user: {
+          ...this.state.user,
+          teste
+        }
+      });
+    }, 1000);
   }
 
   handleOpenDialog() {
@@ -332,13 +387,18 @@ export class ShopDetails extends Component {
   }
 
   render() {
+    const { userDetail } = this.state.user;
+    // const { errorMessage, loading, successMessage } = this.props.authData;
+    const { id, name, email } = this.props.authUser.userDetails;
     const shouldDisplayNotFound = !this.state.supplierStore.length;
     const {
-      errors,
+      loading,
       errorMessage,
       successMessage,
+      user,
+      avatar,
+      errors,
       suggestions,
-      loading,
       awardsCode,
       purchaseCode,
       defaultMessage,
@@ -358,8 +418,68 @@ export class ShopDetails extends Component {
         <Row>
           <Col sm="12">
             <Card body>
-              <CardTitle> Adicionar fornecedor </CardTitle>
-              <CardText>
+              {/* {JSON.stringify(this.props.authUser.userDetails)} */}
+
+              <CardTitle> Alterar dados do usuário </CardTitle>
+              <Form>
+                <Row>
+                  <Colxx xxs="12" sm="4">
+                    <span className="avatar">
+                      <img alt="Profile" src="/assets/img/avatar.png" />
+                    </span>
+                  </Colxx>
+                  <Colxx xxs="12" sm="8">
+                    <p>{email}</p>
+                    <Form>
+                      <Label className="form-group has-float-label mb-4">
+                        <Input
+                          name="fantasyName"
+                          type="text"
+                          value={user.name}
+                          onChange={this.handleChangeName}
+                          maxLength="30"
+                        />
+                        <IntlMessages id="user.name" />
+                      </Label>
+                      <Label className="form-group has-float-label mb-4">
+                        <InputMask
+                          className="form-control"
+                          mask="(99) 9999-9999"
+                          name="phoneNumber"
+                          type="text"
+                          value={userDetail.phoneNumber}
+                          onChange={this.onChange}
+                        />
+                        <IntlMessages id="shops.phoneNumber" />
+                      </Label>
+
+                      <CustomInput
+                        type="radio"
+                        name="showSalesValues"
+                        id="showSalesValues"
+                        label="Masculino"
+                        checked={userDetail.gender === "MALE"}
+                        id="MALE"
+                        value="MALE"
+                        onChange={this.handleChange}
+                      />
+                      <CustomInput
+                        type="radio"
+                        name="showSalesValues"
+                        id="showSalesValues"
+                        label="Feminino"
+                        checked={userDetail.gender === "FEMALE"}
+                        id="FEMALE"
+                        value="FEMALE"
+                        onChange={this.handleChange}
+                      />
+                    </Form>
+                  </Colxx>
+                </Row>
+              </Form>
+              <Separator className="mb-5 mt-5" />
+              <CardTitle>Adicionar fornecedor </CardTitle>
+              <CardBody>
                 <Form>
                   <Row>
                     <Col sm="8" xxs="12">
@@ -391,7 +511,7 @@ export class ShopDetails extends Component {
                 >
                   <IntlMessages id="supplier.button-select" />
                 </Button>
-              </CardText>
+              </CardBody>
             </Card>
           </Col>
         </Row>
@@ -526,13 +646,14 @@ export class ShopDetails extends Component {
 }
 
 const mapStateToProps = state => ({
+  authUser: state.authUser,
   shops: state.shops
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(ShopActions, dispatch);
+  bindActionCreators({ ...ShopActions, ...AuthActions }, dispatch);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ShopDetails);
+)(Account);

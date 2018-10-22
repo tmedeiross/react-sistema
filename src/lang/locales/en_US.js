@@ -88,5 +88,8 @@ module.exports = {
   "supplier.label-awardsCode": "Código no clube de premios",
   "supplier.button-confirm": "ADICIONAR",
   "supplier.button-select": "SELECIONAR",
-  "supplier.label-supplier": "Fornecedor"
+  "supplier.label-supplier": "Fornecedor",
+
+  // shop-user
+  "shop-user.label-profile": "Profile"
 };

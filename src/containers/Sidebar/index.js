@@ -252,7 +252,7 @@ class Sidebar extends Component {
                     active: this.state.selectedParentMenu == "second-menu"
                   })}
                 >
-                  <NavLink to="/auth/account">
+                  <NavLink to="/app/account">
                     <i className="iconsmind-Shopping-Bag" />{" "}
                     <IntlMessages id="menu.account" />
                   </NavLink>

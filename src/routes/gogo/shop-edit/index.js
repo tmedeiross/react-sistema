@@ -3,39 +3,21 @@ import IntlMessages from "Util/IntlMessages";
 import {
   Row,
   Card,
-  CardBody,
   CardTitle,
   Button,
-  Jumbotron,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  CardText,
   Col,
   Form,
   Label,
   Input,
   Alert
 } from "reactstrap";
-import classnames from "classnames";
 
 import InputMask from "react-input-mask";
-import Select from "react-select";
-import CustomSelectInput from "Components/CustomSelectInput";
-import { Colxx, Separator } from "Components/CustomBootstrap";
-import BreadcrumbContainer from "Components/BreadcrumbContainer";
 import SelectSimple from "Components/SelectSimple";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as ShopActions } from "Redux/shops/reducer";
-import * as ZipCodeService from "Util/services/zip-code";
-
-import ShopUser from "../shop-user";
-
-import swal from "sweetalert";
 
 const options = [
   { value: "AC", text: "Acre" },
@@ -308,7 +290,7 @@ export class ShopDetails extends Component {
                 size="lg"
                 onClick={() => this.onUpdateData()}
               >
-                <IntlMessages id="shops.button-save" />
+                <IntlMessages id="shops.button-update" />
               </Button>
             </Card>
           </Col>

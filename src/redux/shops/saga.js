@@ -11,10 +11,6 @@ setTokenHeader(localStorage.getItem("token"));
 export function* getShop() {
   try {
     const response = yield call(AuthAPI.storeAll);
-    console.log(response);
-    console.log("tati");
-    // this.setState({ modalOpen: true });
-
     yield put(ShopActions.getShopSuccess(response.data.content));
   } catch (err) {
     console.log(err);
@@ -54,6 +50,22 @@ export function* addShop({ payload }) {
       state
     });
     yield put(ShopActions.addShopSuccess("Loja incluída com sucesso!"));
+
+    yield put((payload.shop.cnpj = ""));
+    yield put((payload.shop.fantasyName = ""));
+    yield put((payload.shop.socialName = ""));
+    yield put((payload.shop.phoneNumber = ""));
+    yield put((payload.shop.email = ""));
+    yield put((payload.shop.address = ""));
+    yield put((payload.shop.number = ""));
+    yield put((payload.shop.complement = ""));
+    yield put((payload.shop.zipCode = ""));
+    yield put((payload.shop.neighborhood = ""));
+    yield put((payload.shop.city = ""));
+    yield put((payload.shop.state = ""));
+    yield put((payload.shop.modalOpen = false));
+
+    yield put(ShopActions.addShopSuccess(""));
 
     try {
       const response = yield call(AuthAPI.storeAll);

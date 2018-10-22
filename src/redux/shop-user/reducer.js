@@ -75,7 +75,6 @@ export default (state = INITIAL_STATE, action) => {
     case Types.DELETE_USER_SUCCESS:
       return {
         ...state,
-        shops: action.payload.shops,
         successMessage: action.payload.successMessage
       };
     case Types.DELETE_USER_FAILURE:
@@ -92,7 +91,6 @@ export default (state = INITIAL_STATE, action) => {
     case Types.EDIT_USER_SUCCESS:
       return {
         ...state,
-        shops: action.payload.shops,
         successMessage: action.payload.successMessage
       };
     case Types.EDIT_USER_FAILURE:
@@ -121,9 +119,9 @@ export const Creators = {
     payload: { errorMessage }
   }),
 
-  deleteUserRequest: (data, history) => ({
+  deleteUserRequest: (id, cnpj, history) => ({
     type: Types.DELETE_USER_REQUEST,
-    payload: { data, history }
+    payload: { id, cnpj, history }
   }),
   deleteUserSuccess: successMessage => ({
     type: Types.DELETE_USER_SUCCESS,
@@ -134,16 +132,16 @@ export const Creators = {
     payload: { errorMessage }
   }),
 
-  editUserRequest: (users, history) => ({
-    type: Types.EDITE_USER_REQUEST,
-    payload: { users, history }
+  editUserRequest: (user, cnpj, history) => ({
+    type: Types.EDIT_USER_REQUEST,
+    payload: { user, cnpj, history }
   }),
   editUserSuccess: successMessage => ({
-    type: Types.EDITE_USER_SUCCESS,
+    type: Types.EDIT_USER_SUCCESS,
     payload: { successMessage }
   }),
   editUserFailure: errorMessage => ({
-    type: Types.EDITE_USER_FAILURE,
+    type: Types.EDIT_USER_FAILURE,
     payload: { errorMessage }
   }),
 

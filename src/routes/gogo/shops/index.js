@@ -37,6 +37,7 @@ import * as ZipCodeService from "Util/services/zip-code";
 
 import swal from "sweetalert";
 const options = [
+  { value: "", text: "Selecionar" },
   { value: "AC", text: "Acre" },
   { value: "AL", text: "Alagoas" },
   { value: "AP", text: "Amapá" },
@@ -92,7 +93,6 @@ export class Shops extends Component {
 
     this.state = {
       dropdownSplitOpen: false,
-      modalOpen: false,
       displayMode: "list",
       pageSizes: pageSizes,
       selectedPageSize: pageSizes[0],
@@ -103,7 +103,7 @@ export class Shops extends Component {
       startIndex: 0,
       endIndex: 10,
       totalPage: 1,
-      items: {},
+      items: [],
       search: "",
       selectedItems: [],
       categories: [],
@@ -111,6 +111,7 @@ export class Shops extends Component {
       displayOptionsIsOpen: false,
       loadingCep: false,
       form: {
+        modalOpen: false,
         cnpj: "",
         fantasyName: "",
         socialName: "",
@@ -126,6 +127,12 @@ export class Shops extends Component {
       }
     };
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentWillReceiveProps() {
+    this.setState({ items: this.props.shops.dataList }, () => {
+      this.dataListRender();
+    });
   }
 
   onChange(event) {
@@ -166,34 +173,23 @@ export class Shops extends Component {
   };
 
   addNewShop() {
-    this.props.addShopRequest(this.state.form, this.props.history);
-    const resetState = {
-      cnpj: "",
-      fantasyName: "",
-      socialName: "",
-      phoneNumber: "",
-      email: "",
-      address: "",
-      number: "",
-      complement: "",
-      zipCode: "",
-      neighborhood: "",
-      city: "",
-      state: "",
-      stateNome: ""
-    };
-    this.setState(resetState);
+    this.props.addShopRequest(
+      this.state.form,
+      this.props.history,
+      this.state.form.modalOpen
+    );
 
-    setTimeout(() => {
-      this.setState({ items: Array.from(this.props.shops.dataList) }, () => {
-        this.dataListRender();
-      });
-    }, 300);
+    this.setState({ items: this.props.shops.dataList }, () => {
+      this.dataListRender();
+    });
   }
 
   toggleModal() {
     this.setState({
-      modalOpen: !this.state.modalOpen
+      form: {
+        ...this.state.form,
+        modalOpen: !this.state.form.modalOpen
+      }
     });
   }
 
@@ -251,8 +247,6 @@ export class Shops extends Component {
       },
       () => this.dataListRender()
     );
-    if (e.key === "Enter") {
-    }
   }
 
   getIndex(value, arr, prop) {
@@ -267,11 +261,11 @@ export class Shops extends Component {
   componentDidMount() {
     const { getShopRequest } = this.props;
     getShopRequest();
-    setTimeout(() => {
-      this.setState({ items: Array.from(this.props.shops.dataList) }, () => {
-        this.dataListRender();
-      });
-    }, 300);
+    this.setState({ items: this.props.shops.dataList }, () => {
+      this.dataListRender();
+    });
+
+    this.dataListRender();
   }
 
   dataListRender() {
@@ -345,9 +339,8 @@ export class Shops extends Component {
                     <IntlMessages id="shops.add-new" />
                   </Button>
                   {"  "}
-
                   <Modal
-                    isOpen={this.state.modalOpen}
+                    isOpen={this.state.form.modalOpen}
                     toggle={this.toggleModal}
                     wrapClassName="modal-right"
                     backdrop="static"
@@ -405,6 +398,7 @@ export class Shops extends Component {
                             className="form-control"
                             mask="(99) 99999-9999"
                             name="phoneNumber"
+                            id="phoneNumber"
                             type="text"
                             value={this.state.form.phoneNumber}
                             onChange={this.onChange}
@@ -609,7 +603,7 @@ export class Shops extends Component {
                 </CardSubtitle>
               </Colxx>
             )}
-            {this.props.shops.dataList.map(product => {
+            {items.reverse().map(product => {
               if (this.state.displayMode === "imagelist") {
                 return (
                   <Colxx sm="6" lg="4" xl="3" className="mb-3" key={product.id}>
@@ -663,27 +657,22 @@ export class Shops extends Component {
                     <Card className="d-flex flex-row">
                       <div className="pl-2 d-flex flex-grow-1 min-width-zero">
                         <div className="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
-                          <NavLink
-                            to={`/app/shop?p=${product.id}`}
-                            className="w-40 w-sm-100"
-                          >
-                            <p className="list-item-heading mb-1 truncate">
-                              {product.fantasyName}
-                              {product.userStore.profileId === "SALESMAN" && (
-                                <small className="ml-3 text-muted">
-                                  Vendedor
-                                </small>
-                              )}
-                              {product.userStore.profileId === "ADMIN" && (
-                                <small className="ml-3 text-muted">Admin</small>
-                              )}
-                              {product.userStore.profileId === "ASSEMBLY" && (
-                                <small className="ml-3 text-muted">
-                                  Montador
-                                </small>
-                              )}
-                            </p>
-                          </NavLink>
+                          <p className="list-item-heading mb-1 truncate">
+                            {product.fantasyName}
+                            {product.userStore.profileId === "SALESMAN" && (
+                              <small className="ml-3 text-muted">
+                                Vendedor
+                              </small>
+                            )}
+                            {product.userStore.profileId === "ADMIN" && (
+                              <small className="ml-3 text-muted">Admin</small>
+                            )}
+                            {product.userStore.profileId === "ASSEMBLY" && (
+                              <small className="ml-3 text-muted">
+                                Montador
+                              </small>
+                            )}
+                          </p>
                           <p className="mb-1 text-muted text-small w-15 w-sm-100">
                             {product.phoneNumber}
                           </p>
@@ -692,6 +681,16 @@ export class Shops extends Component {
                           </p>
                           <p className="mb-1 text-muted text-small w-15 w-sm-100">
                             {product.city} - {product.state}
+                          </p>
+                          <p className="mb-1 text-small">
+                            {product.userStore.profileId === "ADMIN" && (
+                              <NavLink
+                                to={`/app/shop?p=${product.id}`}
+                                className="w-40 w-sm-100"
+                              >
+                                <span className="iconsmind-Pencil text-primary" />
+                              </NavLink>
+                            )}
                           </p>
                         </div>
                       </div>

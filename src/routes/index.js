@@ -11,6 +11,7 @@ import gogo from "./gogo";
 import secondMenu from "./second-menu";
 import Shops from "./gogo/shops";
 import ShopDetails from "./gogo/shop";
+import Account from "./gogo/account";
 
 import { connect } from "react-redux";
 
@@ -33,6 +34,7 @@ class MainApp extends Component {
               <Route path={`${match.url}/shops`} component={Shops} />
               <Route path={`${match.url}/shop`} component={ShopDetails} />
               <Route path={`${match.url}/second-menu`} component={secondMenu} />
+              <Route path={`${match.url}/account`} component={Account} />
               <Redirect to="/error" />
             </Switch>
           </div>

@@ -1,5 +1,6 @@
 import { all, call, fork, put, takeLatest } from "redux-saga/effects";
 import { delay } from "redux-saga";
+import jwdDecode from "jwt-decode";
 
 import { Types as AuthTypes } from "./reducer";
 import { Creators as AuthActions } from "./reducer";
@@ -18,7 +19,7 @@ function* createAccount({ payload }) {
   const { history } = payload;
 
   try {
-    const response = yield call(AuthAPI.user, {
+    yield call(AuthAPI.user, {
       name,
       email,
       password
@@ -174,6 +175,71 @@ function* logout({ payload }) {
   // } catch (error) {}
 }
 
+function* getUser() {
+  console.log("getUser");
+  const decoded = jwdDecode(localStorage.getItem("token"));
+  const emailToken = decoded.sub;
+  try {
+    const response = yield call(AuthAPI.getUser, emailToken);
+    console.log(response.data);
+    const userData = response.data;
+    yield put(AuthActions.getUserSuccess(userData));
+  } catch (err) {
+    console.log(err);
+  }
+  // // getUser
+  // try {
+  //   const response = yield call(AuthAPI.getUser, username);
+  //   const userData = response.data;
+  //   yield put(AuthActions.userSuccess(userData));
+  //   // getShop
+  //   try {
+  //     const response = yield call(AuthAPI.getShopUser, userData.id);
+  //     const existStore = !!response.data.content[0];
+  //     console.log("já tem loja cadastrada? ", existStore);
+  //     yield put(AuthActions.userStore(existStore));
+  //     history.push(defaultStartPath);
+  //     // direcionar para a rota correta
+  //     // if (userStore === false) {
+  //     //   history.push("/error");
+  //     // } else {
+  //     //   history.push(defaultStartPath);
+  //     // }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // } catch (err) {
+  //   console.log(err);
+  //   if (err.status === 404) {
+  //     yield put(AuthActions.userFailure(err.data.message));
+  //   } else if (err.data.message === "Usuário desabilitado") {
+  //     yield put(
+  //       AuthActions.userFailure(
+  //         "Por favor, consulte seu email para ativar o cadastro."
+  //       )
+  //     );
+  //   } else if (err.data.status === 401) {
+  //     yield put(
+  //       AuthActions.userFailure("Usuário inexistente ou senha inválida.")
+  //     );
+  //   }
+  // }
+  // const decoded = jwdDecode(localStorage.getItem("token"));
+  // const emailToken = decoded.sub;
+  // AuthAPI.getUser(emailToken)
+  //   .then((response) => {
+  //     const userData = response.data;
+  //     // this.setState({ userData });
+  //     yield put(AuthActions.getUserSuccess(userData));
+  //   })
+  //   .then(() => {
+  //     this.getFirstLetter();
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+}
+
 export function* watchLoginUser() {
   yield takeLatest(AuthTypes.USER_REQUEST, loginWithEmailPassword);
 }
@@ -190,11 +256,16 @@ export function* watchCreateAccount() {
   yield takeLatest(AuthTypes.CREATE_ACCOUNT_REQUEST, createAccount);
 }
 
+export function* watchGetUser() {
+  yield takeLatest(AuthTypes.GET_USER_REQUEST, getUser);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchLoginUser),
     fork(watchPassRecover),
     fork(watchPassChange),
-    fork(watchCreateAccount)
+    fork(watchCreateAccount),
+    fork(watchGetUser)
   ]);
 }

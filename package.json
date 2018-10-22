@@ -54,6 +54,7 @@
     "draft-js": "^0.10.5",
     "fine-uploader": "^5.16.2",
     "history": "^4.7.2",
+    "jwt-decode": "^2.2.0",
     "moment": "2.22.2",
     "query-string": "^6.2.0",
     "rc-slider": "^8.6.1",
