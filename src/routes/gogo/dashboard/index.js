@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Row } from "reactstrap";
-import Board from "react-trello";
+import { Board } from "react-trello";
 
 import IntlMessages from "Util/IntlMessages";
 import { Colxx, Separator } from "Components/CustomBootstrap";
@@ -10,50 +10,85 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as ShopActions } from "Redux/shops/reducer";
 
-const data = {
-  lanes: [
-    {
-      id: "lane1",
-      title: "Planned Tasks",
-      cards: [
-        {
-          id: "Card1",
-          name: "John Smith",
-          dueOn: "due in a day",
-          subTitle: "SMS received at 12:13pm today",
-          body: "Thanks. Please schedule me for an estimate on Monday.",
-          escalationText: "Escalated to OPS-ESCALATIONS!",
-          cardColor: "#BD3B36",
-          cardStyle: {
-            borderRadius: 6,
-            boxShadow: "0 0 6px 1px #BD3B36",
-            marginBottom: 15
-          }
-        },
-        {
-          id: "Card2",
-          name: "Card Weathers",
-          dueOn: "due now",
-          subTitle: "Email received at 1:14pm",
-          body: "Is the estimate free, and can someone call me soon?",
-          escalationText: "Escalated to Admin",
-          cardColor: "#E08521",
-          cardStyle: {
-            borderRadius: 6,
-            boxShadow: "0 0 6px 1px #E08521",
-            marginBottom: 15
-          }
-        }
-      ]
-    }
-  ]
+const data = require("./data.json");
+
+const handleDragStart = (cardId, laneId) => {
+  console.log("drag started");
+  console.log(`cardId: ${cardId}`);
+  console.log(`laneId: ${laneId}`);
+};
+
+const handleDragEnd = (cardId, sourceLaneId, targetLaneId) => {
+  console.log("drag ended");
+  console.log(`cardId: ${cardId}`);
+  console.log(`sourceLaneId: ${sourceLaneId}`);
+  console.log(`targetLaneId: ${targetLaneId}`);
 };
 
 export class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      boardData: { lanes: [] }
+    };
   }
+  state = { boardData: { lanes: [] } };
+
+  setEventBus = eventBus => {
+    this.setState({ eventBus });
+  };
+
+  async componentWillMount() {
+    const response = await this.getBoard();
+    this.setState({ boardData: response });
+  }
+
+  getBoard() {
+    return new Promise(resolve => {
+      resolve(data);
+    });
+  }
+
+  completeCard = () => {
+    this.state.eventBus.publish({
+      type: "ADD_CARD",
+      laneId: "COMPLETED",
+      card: {
+        id: "Milk",
+        title: "Buy Milk",
+        label: "15 mins",
+        description: "Use Headspace app"
+      }
+    });
+    this.state.eventBus.publish({
+      type: "REMOVE_CARD",
+      laneId: "PLANNED",
+      cardId: "Milk"
+    });
+  };
+
+  addCard = () => {
+    this.state.eventBus.publish({
+      type: "ADD_CARD",
+      laneId: "BLOCKED",
+      card: {
+        id: "Ec2Error",
+        title: "EC2 Instance Down",
+        label: "30 mins",
+        description: "Main EC2 instance down"
+      }
+    });
+  };
+
+  shouldReceiveNewData = nextData => {
+    console.log("New card has been added");
+    console.log(nextData);
+  };
+
+  handleCardAdd = (card, laneId) => {
+    console.log(`New card added to lane ${laneId}`);
+    console.dir(card);
+  };
 
   render() {
     return (
@@ -70,7 +105,20 @@ export class Dashboard extends Component {
               </div>
 
               <Separator className="mb-5" />
-              <Board data={data} />
+              <Board
+                style={{
+                  backgroundColor: "transparent",
+                  height: "calc(100vh - 265px)"
+                }}
+                editable
+                onCardAdd={this.handleCardAdd}
+                data={this.state.boardData}
+                draggable
+                onDataChange={this.shouldReceiveNewData}
+                eventBusHandle={this.setEventBus}
+                handleDragStart={handleDragStart}
+                handleDragEnd={handleDragEnd}
+              />
             </Colxx>
           </Row>
         </div>

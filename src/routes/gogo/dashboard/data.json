@@ -2,7 +2,7 @@
   "lanes": [
     {
       "id": "PLANNED",
-      "title": "Planned Tasks",
+      "title": "Pedidos",
       "label": "20/70",
       "style": { "width": 280 },
       "cards": [
@@ -58,7 +58,7 @@
     },
     {
       "id": "WIP",
-      "title": "Work In Progress",
+      "title": "Fornecedores",
       "label": "10/20",
       "style": { "width": 280 },
       "cards": [
@@ -77,15 +77,8 @@
       ]
     },
     {
-      "id": "BLOCKED",
-      "title": "Blocked",
-      "label": "0/0",
-      "style": { "width": 280 },
-      "cards": []
-    },
-    {
       "id": "COMPLETED",
-      "title": "Completed",
+      "title": "Montadoras",
       "style": { "width": 280 },
       "label": "2/5",
       "cards": [
@@ -117,7 +110,7 @@
     },
     {
       "id": "REPEAT",
-      "title": "Repeat",
+      "title": "Entregues",
       "style": { "width": 280 },
       "label": "1/1",
       "cards": [
@@ -132,66 +125,6 @@
             "marginBottom": 5
           },
           "description": "Track using fitbit"
-        }
-      ]
-    },
-    {
-      "id": "ARCHIVED",
-      "title": "Archived",
-      "style": { "width": 280 },
-      "label": "1/1",
-      "cards": [
-        {
-          "id": "Archived1",
-          "title": "Go Trekking",
-          "label": "300 mins",
-          "cardStyle": {
-            "width": 270,
-            "maxWidth": 270,
-            "margin": "auto",
-            "marginBottom": 5
-          },
-          "description": "Completed 10km on cycle"
-        }
-      ]
-    },
-    {
-      "id": "ARCHIVED2",
-      "title": "Archived2",
-      "style": { "width": 280 },
-      "label": "1/1",
-      "cards": [
-        {
-          "id": "Archived1",
-          "title": "Go Trekking",
-          "label": "300 mins",
-          "cardStyle": {
-            "width": 270,
-            "maxWidth": 270,
-            "margin": "auto",
-            "marginBottom": 5
-          },
-          "description": "Completed 10km on cycle"
-        }
-      ]
-    },
-    {
-      "id": "ARCHIVED3",
-      "title": "Archived3",
-      "style": { "width": 280 },
-      "label": "1/1",
-      "cards": [
-        {
-          "id": "Archived1",
-          "title": "Go Trekking",
-          "label": "300 mins",
-          "cardStyle": {
-            "width": 270,
-            "maxWidth": 270,
-            "margin": "auto",
-            "marginBottom": 5
-          },
-          "description": "Completed 10km on cycle"
         }
       ]
     }
