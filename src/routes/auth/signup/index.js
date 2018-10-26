@@ -31,7 +31,7 @@ class LoginLayout extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  onUserLogin() {
+  onUserCreateUser() {
     this.props.createAccountRequest(this.state.form, this.props.history);
   }
 
@@ -129,7 +129,7 @@ class LoginLayout extends Component {
                           color="primary"
                           className="btn-shadow"
                           size="lg"
-                          onClick={() => this.onUserLogin()}
+                          onClick={() => this.onUserCreateUser()}
                         >
                           <IntlMessages id="user.confirm-button" />
                         </Button>

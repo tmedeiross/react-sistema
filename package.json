@@ -80,6 +80,7 @@
     "react-table": "^6.8.6",
     "react-tagsinput": "^3.19.0",
     "react-transition-group": "^1.2.0",
+    "react-trello": "^2.0.1",
     "reactstrap": "^6.3.0",
     "redux": "4.0.0",
     "redux-saga": "^0.16.0",
