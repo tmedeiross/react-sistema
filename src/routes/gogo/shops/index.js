@@ -316,8 +316,8 @@ export class Shops extends Component {
   }
 
   render() {
-    const shouldDisplayNotFound = !this.props.shops;
-    const { errorMessage, successMessage } = this.props.shops;
+    const shouldDisplayNotFound = !this.props.shops.dataList.length;
+    const { errorMessage, successMessage } = this.props.shops.dataList;
     const { items, loading, loadingCep } = this.state;
     return (
       <Fragment>
@@ -590,16 +590,11 @@ export class Shops extends Component {
           </Row>
           <Row>
             {shouldDisplayNotFound && (
-              <Colxx xxs="12" className="mb-3">
+              <Colxx xxs="12" className="mb-3 mt-5">
                 <CardSubtitle>
-                  <p className="text-center">NENHUMA LOJA CADASTRADA</p>
-                </CardSubtitle>
-              </Colxx>
-            )}
-            {shouldDisplayNotFound && (
-              <Colxx xxs="12" className="mb-3">
-                <CardSubtitle>
-                  <p className="text-center">NENHUMA LOJA CADASTRADA</p>
+                  <p className="h5 text-center">
+                    VOCÊ NÃO TEM NENHUMA LOJA CADASTRADA
+                  </p>
                 </CardSubtitle>
               </Colxx>
             )}

@@ -32,18 +32,22 @@ import { Creators as AuthActions } from "Redux/auth/reducer";
 import { Creators as ShopActions } from "Redux/shops/reducer";
 import * as AuthAPI from "Constants/api";
 import ValidateForm from "./validator";
+import { CDN_URL } from "Constants/defaultValues";
 
 export class Account extends Component {
-  constructor(...props) {
+  constructor(props) {
     super(props);
 
     this.state = {
+      avatar: "",
       user: {
+        files: "",
         id: "",
         name: "",
+        email: "",
         userDetail: {
           phoneNumber: "",
-          gender: "MALE"
+          gender: ""
         }
       },
       modalOpen: false,
@@ -75,15 +79,98 @@ export class Account extends Component {
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.listAllSuppliers = this.listAllSuppliers.bind(this);
     this.addSupplier = this.addSupplier.bind(this);
-    this.shopSelectedDetails = this.shopSelectedDetails.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.listSupplierStore = this.listSupplierStore.bind(this);
+    this.listUserSupplier = this.listUserSupplier.bind(this);
     this.deleteSupplierShopModal = this.deleteSupplierShopModal.bind(this);
     this.deleteSupplier = this.deleteSupplier.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
-    this.handleChangeName = this.handleChangeName.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.onChangeSupplier = this.onChangeSupplier.bind(this);
+    this.handleChangeName = this.handleChangeName.bind(this);
     this.handleChangeSupplier = this.handleChangeSupplier.bind(this);
+    this.updateLogin = this.updateLogin.bind(this);
+    this.isImg = this.isImg.bind(this);
+  }
+
+  componentDidMount() {
+    this.getUser();
+    this.isImg();
+  }
+  componentWillMount() {
+    this.listAllSuppliers();
+  }
+  updateLogin() {
+    this.props.updateUserRequest(this.state.user, this.props.history);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.isImg();
+  }
+
+  isImg() {
+    setTimeout(() => {
+      const id = this.props.authUser.userDetails.id;
+      const img = new Image();
+      const avatar = `${CDN_URL + id}.jpg`;
+      img.src = avatar;
+      img.onload = () => {
+        this.setState({ avatar });
+      };
+      img.onerror = () => {
+        this.setState({ avatar: "/assets/img/avatar.png" });
+      };
+    }, 1400);
+  }
+
+  onChange = async e => {
+    console.log("handleChangeImage");
+    const file = e.target.files[0];
+
+    const outputNav = document.getElementById("outputNav");
+    const output = document.getElementById("output");
+
+    console.log(URL.createObjectURL(e.target.files[0]));
+    output.src = URL.createObjectURL(e.target.files[0]);
+    outputNav.src = URL.createObjectURL(e.target.files[0]);
+
+    this.setState({ files: e.target.files[0] });
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    };
+    const data = new FormData();
+    data.append("file", file);
+
+    await AuthAPI.addImage(data, config)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err.data);
+      });
+  };
+
+  getUser() {
+    setTimeout(() => {
+      if (this.props.authUser.userDetails.userDetail === null) {
+        this.setState({
+          userEmail: this.props.authUser.userDetails.email,
+          user: {
+            ...this.state.user,
+            id: this.props.authUser.userDetails.id,
+            name: this.props.authUser.userDetails.name,
+            email: this.props.authUser.userDetails.email
+          }
+        });
+      } else {
+        this.setState({
+          ...this.state.user,
+          user: this.props.authUser.userDetails
+        });
+      }
+      this.listUserSupplier();
+    }, 1000);
   }
 
   handleChangeName(event) {
@@ -119,24 +206,6 @@ export class Account extends Component {
       modalOpen: !this.state.modalOpen,
       errorMessage: ""
     });
-  }
-
-  componentDidMount() {
-    const { getShopRequest } = this.props;
-    this.listAllSuppliers();
-    getShopRequest();
-    this.shopSelectedDetails();
-    this.listSupplierStore();
-
-    const teste = this.props.authUser.userDetails;
-    setTimeout(() => {
-      this.setState({
-        user: {
-          ...this.state.user,
-          teste
-        }
-      });
-    }, 1000);
   }
 
   handleOpenDialog() {
@@ -192,30 +261,10 @@ export class Account extends Component {
       });
   }
 
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  shopSelectedDetails() {
-    const idString = this.props.history.location.search;
-    const storeID = idString.split("=");
-
-    AuthAPI.storeGet(storeID[1])
+  listUserSupplier() {
+    AuthAPI.listUserSupplier(this.state.user.id)
       .then(response => {
-        this.setState({ storeCnpj: response.data.cnpj });
-        this.setState({ idCode: response.data.id });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
-  listSupplierStore() {
-    const idString = this.props.history.location.search;
-    const storeID = idString.split("=");
-
-    AuthAPI.listSupplierStore(storeID[1])
-      .then(response => {
+        console.log(response);
         this.setState({ supplierStore: response.data.content });
       })
       .catch(err => {
@@ -228,6 +277,7 @@ export class Account extends Component {
       this.setState({ errorMessage: "Campos obrigatórios" });
       return;
     }
+    console.log(this.state.value);
 
     const resetState = {
       errors: {},
@@ -240,34 +290,22 @@ export class Account extends Component {
       priority: ""
     };
 
-    this.setState(resetState);
-    const {
-      supplierCnpj,
-      storeCnpj,
-      idCode,
-      awardsCode,
-      purchaseCode,
-      defaultMessage,
-      priority,
-      supplierStore
-    } = this.state;
+    const { supplierCnpj, awardsCode } = this.state;
+    const userEmail = this.props.authUser.userDetails.email;
 
-    AuthAPI.addSupplierStore({
+    console.log(userEmail, supplierCnpj, awardsCode);
+
+    AuthAPI.addUserSupplier({
+      userEmail,
       supplierCnpj,
-      storeCnpj,
-      idCode,
-      awardsCode,
-      purchaseCode,
-      defaultMessage,
-      priority
+      awardsCode
     })
       .then(response => {
-        this.listSupplierStore();
-        this.handleCloseDialog();
+        console.log(response);
+        this.listUserSupplier();
         this.setState({
           ...resetState,
-          successMessage: "Fornecedor incluído com sucesso.",
-          modalOpen: false
+          successMessage: "Fornecedor incluído com sucesso."
         });
 
         setTimeout(() => {
@@ -277,7 +315,6 @@ export class Account extends Component {
         }, 1000);
       })
       .catch(err => {
-        this.handleCloseDialog();
         console.log(err);
         if (err.status === 404) {
           this.setState({
@@ -319,7 +356,7 @@ export class Account extends Component {
     </div>
   );
 
-  onChange = (event, { newValue }) => {
+  onChangeSupplier = (event, { newValue }) => {
     this.setState({
       value: newValue
     });
@@ -388,7 +425,11 @@ export class Account extends Component {
 
   render() {
     const { userDetail } = this.state.user;
-    // const { errorMessage, loading, successMessage } = this.props.authData;
+    const {
+      errorMessageUser,
+      // loading,
+      successMessageUser
+    } = this.props.authUser;
     const { id, name, email } = this.props.authUser.userDetails;
     const shouldDisplayNotFound = !this.state.supplierStore.length;
     const {
@@ -396,20 +437,20 @@ export class Account extends Component {
       errorMessage,
       successMessage,
       user,
-      avatar,
       errors,
       suggestions,
       awardsCode,
       purchaseCode,
       defaultMessage,
       priority,
-      supplierStore
+      supplierStore,
+      avatar
     } = this.state;
 
     const inputProps = {
       placeholder: "Procure seu fornecedor",
       value: this.state.value,
-      onChange: this.onChange,
+      onChange: this.onChangeSupplier,
       onBlur: this.onBlur
     };
 
@@ -418,24 +459,49 @@ export class Account extends Component {
         <Row>
           <Col sm="12">
             <Card body>
-              {/* {JSON.stringify(this.props.authUser.userDetails)} */}
-
               <CardTitle> Alterar dados do usuário </CardTitle>
               <Form>
                 <Row>
                   <Colxx xxs="12" sm="4">
-                    <span className="avatar">
-                      <img alt="Profile" src="/assets/img/avatar.png" />
-                    </span>
+                    <div className="avatar">
+                      <img
+                        id="output"
+                        alt="Profile"
+                        src={avatar}
+                        onError={e => {
+                          e.target.onerror = null;
+                          e.target.src = "/assets/img/avatar.png";
+                        }}
+                      />
+                      <div onSubmit={this.onFormSubmit}>
+                        <p className="text-center">
+                          <input
+                            type="file"
+                            name="file"
+                            id="files"
+                            placeholder="Trocar imagem"
+                            hidden
+                            onChange={e => this.onChange(e)}
+                          />
+                          <label
+                            className="chance-image"
+                            htmlFor="files"
+                            onChange={e => this.onChange(e)}
+                          >
+                            Trocar imagem
+                          </label>
+                        </p>
+                      </div>
+                    </div>
                   </Colxx>
                   <Colxx xxs="12" sm="8">
                     <p>{email}</p>
                     <Form>
                       <Label className="form-group has-float-label mb-4">
                         <Input
-                          name="fantasyName"
+                          name="name"
                           type="text"
-                          value={user.name}
+                          value={name}
                           onChange={this.handleChangeName}
                           maxLength="30"
                         />
@@ -448,31 +514,44 @@ export class Account extends Component {
                           name="phoneNumber"
                           type="text"
                           value={userDetail.phoneNumber}
-                          onChange={this.onChange}
+                          onChange={this.handleChange}
                         />
                         <IntlMessages id="shops.phoneNumber" />
                       </Label>
-
                       <CustomInput
                         type="radio"
-                        name="showSalesValues"
-                        id="showSalesValues"
+                        name="gender"
+                        id="gender"
                         label="Masculino"
-                        checked={userDetail.gender === "MALE"}
+                        checked={user.userDetail.gender === "MALE"}
                         id="MALE"
                         value="MALE"
                         onChange={this.handleChange}
                       />
                       <CustomInput
                         type="radio"
-                        name="showSalesValues"
-                        id="showSalesValues"
+                        name="gender"
+                        id="gender"
                         label="Feminino"
-                        checked={userDetail.gender === "FEMALE"}
+                        checked={user.userDetail.gender === "FEMALE"}
                         id="FEMALE"
                         value="FEMALE"
                         onChange={this.handleChange}
                       />
+                      <NavLink
+                        className="app-menu-button d-inline-block text-primary mt-3"
+                        href="/auth/change-pass"
+                      >
+                        Trocar a senha
+                      </NavLink>
+                      <Button
+                        color="primary"
+                        className="btn-shadow float-right"
+                        size="lg"
+                        onClick={this.updateLogin}
+                      >
+                        <IntlMessages id="shops.button-update" />
+                      </Button>
                     </Form>
                   </Colxx>
                 </Row>
@@ -500,14 +579,36 @@ export class Account extends Component {
                         <IntlMessages id="supplier.label-supplier" />
                       </Label>
                     </Col>
+                    <Col sm="4" xxs="12">
+                      <Label className="form-group has-float-label mb-4">
+                        <Input
+                          name="awardsCode"
+                          type="text"
+                          value={this.state.awardsCode}
+                          onChange={this.handleChangeSupplier}
+                          maxLength="10"
+                        />
+                        <IntlMessages id="supplier.label-awardsCode" />
+                      </Label>
+                    </Col>
                   </Row>
                 </Form>
-                {loading && <div className="loading-inline" />}
+                {errorMessageUser && (
+                  <Alert color="danger" className="rounded mt-3 text-center">
+                    {errorMessageUser}
+                  </Alert>
+                )}
+                {successMessageUser && (
+                  <Alert color="success" className="rounded mt-3 text-center">
+                    {successMessageUser}
+                  </Alert>
+                )}
+                {/* {loading && <div className="loading-inline" />}  */}
                 <Button
                   color="primary"
                   className="btn-shadow float-right"
                   size="lg"
-                  onClick={this.toggleModal}
+                  onClick={() => this.addSupplier()}
                 >
                   <IntlMessages id="supplier.button-select" />
                 </Button>
@@ -562,92 +663,27 @@ export class Account extends Component {
                   </Card>
                 ))}
               </CardText>
+              {loading && <div className="loading-inline" />}
+              {errorMessage && (
+                <Alert color="danger" className="rounded mt-3 text-center">
+                  {errorMessage}
+                </Alert>
+              )}
+              {successMessage && (
+                <Alert color="success" className="rounded mt-3 text-center">
+                  {successMessage}
+                </Alert>
+              )}
             </Card>
           </Col>
         </Row>
-
-        <Modal
-          isOpen={this.state.modalOpen}
-          toggle={this.toggleModal}
-          wrapClassName="modal-right"
-          backdrop="static"
-        >
-          <ModalHeader toggle={this.toggleModal}>
-            <IntlMessages id="supplier.add-new" />
-          </ModalHeader>
-          <ModalBody>
-            <form onSubmit={() => this.onUserLogin()}>
-              <Label className="form-group has-float-label mb-4">
-                <Input
-                  name="awardsCode"
-                  type="text"
-                  value={this.state.awardsCode}
-                  onChange={this.handleChange}
-                  maxLength="10"
-                />
-                <IntlMessages id="supplier.label-awardsCode" />
-              </Label>
-              <Label className="form-group has-float-label mb-4">
-                <Input
-                  name="purchaseCode"
-                  type="text"
-                  value={this.state.purchaseCode}
-                  onChange={this.handleChange}
-                  maxLength="10"
-                />
-                <IntlMessages id="supplier.label-purchaseCode" />
-              </Label>
-              <Label className="form-group has-float-label mb-4">
-                <Input
-                  name="defaultMessage"
-                  type="text"
-                  value={this.state.defaultMessage}
-                  onChange={this.handleChange}
-                  maxLength="65"
-                />
-                <IntlMessages id="supplier.label-defaultMessage" />
-              </Label>
-              <Label className="form-group has-float-label mb-4">
-                <Input
-                  name="priority"
-                  type="text"
-                  value={this.state.priority}
-                  onChange={this.handleChange}
-                  maxLength="6"
-                />
-                <IntlMessages id="supplier.label-priority" />
-              </Label>
-              {loading && <div className="loading-inline" />}
-            </form>
-            {loading && <div className="loading-inline" />}
-            {errorMessage && (
-              <Alert color="danger" className="rounded mt-3 text-center">
-                {errorMessage}
-              </Alert>
-            )}
-            {successMessage && (
-              <Alert color="success" className="rounded mt-3 text-center">
-                {successMessage}
-              </Alert>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" outline onClick={this.toggleModal}>
-              <IntlMessages id="shops.cancel" />
-            </Button>
-            <Button color="primary" onClick={() => this.addSupplier()}>
-              <IntlMessages id="shops.add" />
-            </Button>{" "}
-          </ModalFooter>
-        </Modal>
       </Fragment>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  authUser: state.authUser,
-  shops: state.shops
+  authUser: state.authUser
 });
 
 const mapDispatchToProps = dispatch =>

@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import App from "Containers/App";
 import { configureStore } from "Redux/store";
-import history from "Util/history";
 
 const MainApp = () => (
   <Provider store={configureStore()}>

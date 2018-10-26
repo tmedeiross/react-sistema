@@ -242,14 +242,24 @@ class Sidebar extends Component {
                     active: this.state.selectedParentMenu == "gogo"
                   })}
                 >
-                  <a href="/app/shops">
+                  <NavLink to="/app/dashboard">
                     <i className="iconsmind-Digital-Drawing" />{" "}
-                    <IntlMessages id="menu.shop" />
-                  </a>
+                    <IntlMessages id="menu.dashboard" />
+                  </NavLink>
                 </NavItem>
                 <NavItem
                   className={classnames({
-                    active: this.state.selectedParentMenu == "second-menu"
+                    active: this.state.selectedParentMenu == "shops"
+                  })}
+                >
+                  <NavLink to="/app/shops">
+                    <i className="iconsmind-Box-withFolders" />{" "}
+                    <IntlMessages id="menu.shop" />
+                  </NavLink>
+                </NavItem>
+                <NavItem
+                  className={classnames({
+                    active: this.state.selectedParentMenu == "account"
                   })}
                 >
                   <NavLink to="/app/account">

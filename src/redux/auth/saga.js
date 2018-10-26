@@ -5,10 +5,13 @@ import jwdDecode from "jwt-decode";
 import { Types as AuthTypes } from "./reducer";
 import { Creators as AuthActions } from "./reducer";
 
-import { defaultStartPath, path } from "Constants/defaultValues";
+import {
+  defaultStartPath,
+  defaultStartDashboard
+} from "Constants/defaultValues";
 import * as AuthAPI from "Constants/api";
 import { setTokenHeader } from "Util/services/http";
-import { setToken } from "Util/services/auth";
+import { isAuthenticated, setToken, setUser } from "Util/services/auth";
 
 import swal from "sweetalert";
 
@@ -107,7 +110,6 @@ function* loginWithEmailPassword({ payload }) {
     const response = yield call(AuthAPI.login, { username, password });
     const token = response.data.token;
     setToken(token);
-    yield put(AuthActions.setAuth(true));
 
     const userData = response.data;
     yield put(AuthActions.userSuccess(userData));
@@ -125,15 +127,12 @@ function* loginWithEmailPassword({ payload }) {
         console.log("já tem loja cadastrada? ", existStore);
 
         yield put(AuthActions.userStore(existStore));
-        history.push(defaultStartPath);
 
-        // direcionar para a rota correta
-
-        // if (userStore === false) {
-        //   history.push("/error");
-        // } else {
-        //   history.push(defaultStartPath);
-        // }
+        if (existStore === false) {
+          history.push(defaultStartPath);
+        } else {
+          history.push(defaultStartDashboard);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -159,85 +158,36 @@ function* loginWithEmailPassword({ payload }) {
   }
 }
 
-const logoutAsync = async history => {
-  // await auth
-  //   .signOut()
-  //   .then(authUser => authUser)
-  //   .catch(error => error);
-  // history.push("/");
-};
-
-function* logout({ payload }) {
-  // const { history } = payload;
-  // try {
-  //   yield call(logoutAsync, history);
-  //   localStorage.removeItem("user_id");
-  // } catch (error) {}
-}
-
-function* getUser() {
-  console.log("getUser");
+export function* getUser() {
   const decoded = jwdDecode(localStorage.getItem("token"));
   const emailToken = decoded.sub;
+
   try {
     const response = yield call(AuthAPI.getUser, emailToken);
-    console.log(response.data);
     const userData = response.data;
     yield put(AuthActions.getUserSuccess(userData));
+    setUser(userData);
   } catch (err) {
     console.log(err);
   }
-  // // getUser
-  // try {
-  //   const response = yield call(AuthAPI.getUser, username);
-  //   const userData = response.data;
-  //   yield put(AuthActions.userSuccess(userData));
-  //   // getShop
-  //   try {
-  //     const response = yield call(AuthAPI.getShopUser, userData.id);
-  //     const existStore = !!response.data.content[0];
-  //     console.log("já tem loja cadastrada? ", existStore);
-  //     yield put(AuthActions.userStore(existStore));
-  //     history.push(defaultStartPath);
-  //     // direcionar para a rota correta
-  //     // if (userStore === false) {
-  //     //   history.push("/error");
-  //     // } else {
-  //     //   history.push(defaultStartPath);
-  //     // }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // } catch (err) {
-  //   console.log(err);
-  //   if (err.status === 404) {
-  //     yield put(AuthActions.userFailure(err.data.message));
-  //   } else if (err.data.message === "Usuário desabilitado") {
-  //     yield put(
-  //       AuthActions.userFailure(
-  //         "Por favor, consulte seu email para ativar o cadastro."
-  //       )
-  //     );
-  //   } else if (err.data.status === 401) {
-  //     yield put(
-  //       AuthActions.userFailure("Usuário inexistente ou senha inválida.")
-  //     );
-  //   }
-  // }
-  // const decoded = jwdDecode(localStorage.getItem("token"));
-  // const emailToken = decoded.sub;
-  // AuthAPI.getUser(emailToken)
-  //   .then((response) => {
-  //     const userData = response.data;
-  //     // this.setState({ userData });
-  //     yield put(AuthActions.getUserSuccess(userData));
-  //   })
-  //   .then(() => {
-  //     this.getFirstLetter();
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+}
+
+function* updateUser({ payload }) {
+  console.log(payload);
+  const { email } = payload.data;
+
+  try {
+    const response = yield call(AuthAPI.userPut, email, payload.data);
+    yield put(AuthActions.updateUserSuccess("Usuário alterado com sucesso!"));
+    yield call(delay, 4000);
+    yield put(AuthActions.updateUserSuccess(""));
+  } catch (err) {
+    console.log(err);
+    yield put(AuthActions.updateUserSuccess(err.message));
+    yield call(delay, 4000);
+    yield put(AuthActions.updateUserSuccess(""));
+  }
+  getUser();
 }
 
 export function* watchLoginUser() {
@@ -260,12 +210,17 @@ export function* watchGetUser() {
   yield takeLatest(AuthTypes.GET_USER_REQUEST, getUser);
 }
 
+export function* watchUpdateUser() {
+  yield takeLatest(AuthTypes.UPDATE_USER_REQUEST, updateUser);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchLoginUser),
     fork(watchPassRecover),
     fork(watchPassChange),
     fork(watchCreateAccount),
-    fork(watchGetUser)
+    fork(watchGetUser),
+    fork(watchUpdateUser)
   ]);
 }

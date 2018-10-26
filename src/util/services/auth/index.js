@@ -8,13 +8,11 @@ export const setToken = token => {
 };
 
 export const setUser = user => {
-  localStorage.setItem("user", user);
+  localStorage.setItem("user", JSON.stringify(user));
 };
 
 export const logout = () => {
   localStorage.removeItem("token");
-  localStorage.removeItem("token-cep");
-  localStorage.removeItem("shop");
   localStorage.removeItem("user");
   unsetTokenHeader();
 };

@@ -8,8 +8,8 @@ import TopNav from "Containers/TopNav";
 import Sidebar from "Containers/Sidebar";
 
 import gogo from "./gogo";
-import secondMenu from "./second-menu";
 import Shops from "./gogo/shops";
+import Dashboard from "./gogo/dashboard";
 import ShopDetails from "./gogo/shop";
 import Account from "./gogo/account";
 
@@ -30,11 +30,17 @@ class MainApp extends Component {
           <div className="container-fluid">
             <Switch>
               <Redirect exact from="/" to={`${PREFIX}`} />
-              <Route path={`${match.url}/dashboard`} component={gogo} />
-              <Route path={`${match.url}/shops`} component={Shops} />
-              <Route path={`${match.url}/shop`} component={ShopDetails} />
-              <Route path={`${match.url}/second-menu`} component={secondMenu} />
-              <Route path={`${match.url}/account`} component={Account} />
+              <PrivateRoute path={`${match.url}/shops`} component={Shops} />
+              <PrivateRoute
+                path={`${match.url}/dashboard`}
+                component={Dashboard}
+              />
+              <PrivateRoute
+                path={`${match.url}/shop`}
+                component={ShopDetails}
+              />
+
+              <PrivateRoute path={`${match.url}/account`} component={Account} />
               <Redirect to="/error" />
             </Switch>
           </div>

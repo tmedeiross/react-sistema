@@ -7,20 +7,19 @@ import {
   DropdownMenu,
   Input
 } from "reactstrap";
-import IntlMessages from "Util/IntlMessages";
-import PerfectScrollbar from "react-perfect-scrollbar";
 
+import { CDN_URL } from "Constants/defaultValues";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as AuthActions } from "Redux/auth/reducer";
+import { logout } from "Util/services/auth";
+import { isAuthenticated } from "Util/services/auth";
 import {
   setContainerClassnames,
   clickOnMobileMenu,
   logoutUser
 } from "Redux/actions";
-
-import notifications from "Data/topnav.notifications.json";
 
 class TopNav extends Component {
   constructor(props) {
@@ -28,10 +27,32 @@ class TopNav extends Component {
     this.menuButtonClick = this.menuButtonClick.bind(this);
     this.mobileMenuButtonClick = this.mobileMenuButtonClick.bind(this);
     this.state = {
-      isInFullScreen: false
+      isInFullScreen: false,
+      avatar: ""
     };
     this.getUser = this.getUser.bind(this);
+    this.isImg = this.isImg.bind(this);
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.isImg();
+  }
+
+  isImg() {
+    setTimeout(() => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const img = new Image();
+      const avatar = `${CDN_URL + user.id}.jpg`;
+      img.src = avatar;
+      img.onload = () => {
+        this.setState({ avatar });
+      };
+      img.onerror = () => {
+        this.setState({ avatar: "/assets/img/avatar.png" });
+      };
+    }, 1200);
+  }
+
   isInFullScreen = () => {
     return (
       (document.fullscreenElement && document.fullscreenElement !== null) ||
@@ -73,10 +94,6 @@ class TopNav extends Component {
     });
   };
 
-  handleLogout = history => {
-    history.push("/auth/login");
-  };
-
   menuButtonClick(e, menuClickCount, containerClassnames) {
     e.preventDefault();
 
@@ -87,14 +104,20 @@ class TopNav extends Component {
     }, 350);
     this.props.setContainerClassnames(++menuClickCount, containerClassnames);
   }
+
   mobileMenuButtonClick(e, containerClassnames) {
     e.preventDefault();
     this.props.clickOnMobileMenu(containerClassnames);
   }
 
   getUser() {
-    this.props.getUserRequest("teste", this.props.history);
+    this.props.getUserRequest("", this.props.history);
   }
+
+  logoutUser = history => {
+    logout();
+    this.props.history.push("/auth/login");
+  };
 
   componentDidMount() {
     this.getUser();
@@ -103,6 +126,7 @@ class TopNav extends Component {
   render() {
     const { name } = this.props.authUser.userDetails;
     const { containerClassnames, menuClickCount } = this.props;
+    const { avatar } = this.state;
     return (
       <nav className="navbar fixed-top">
         <NavLink
@@ -162,15 +186,23 @@ class TopNav extends Component {
               <UncontrolledDropdown className="dropdown-menu-right">
                 <DropdownToggle className="p-0" color="empty">
                   <span>
-                    <img alt="Profile" src="/assets/img/avatar.png" />
+                    <img
+                      id="outputNav"
+                      alt="Profile"
+                      src={avatar}
+                      onError={e => {
+                        e.target.onerror = null;
+                        e.target.src = "/assets/img/avatar.png";
+                      }}
+                    />
                   </span>
                   <span className="name ml-3">{name}</span>
                 </DropdownToggle>
                 <DropdownMenu className="mt-3" right>
-                  <DropdownItem>Minhas Lojas</DropdownItem>
-                  <DropdownItem>Minha conta</DropdownItem>
+                  <DropdownItem href="/app/shops">Minhas Lojas</DropdownItem>
+                  <DropdownItem href="/app/account">Minha conta</DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href="/auth/login">Sair</DropdownItem>
+                  <DropdownItem onClick={this.logoutUser}>Sair</DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
             </div>
@@ -188,6 +220,8 @@ class TopNav extends Component {
             </button>
           </div>
         </div>
+        {/* {JSON.stringify(this.props.authUser)} */}
+        {/* {isAuthenticated() === true ? <h1>LOGADO</h1> : <h1>DESLOGADO</h1>} */}
       </nav>
     );
   }

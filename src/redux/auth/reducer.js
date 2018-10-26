@@ -20,6 +20,10 @@ export const Types = {
   GET_USER_SUCCESS: "auth/GET_USER_SUCCESS",
   GET_USER_FAILURE: "auth/GET_USER_FAILURE",
 
+  UPDATE_USER_REQUEST: "auth/UPDATE_USER_REQUEST",
+  UPDATE_USER_SUCCESS: "auth/UPDATE_USER_SUCCESS",
+  UPDATE_USER_FAILURE: "auth/UPDATE_USER_FAILURE",
+
   USER_STORE: "auth/USER_STORE",
   SET_AUTH: "auth/SET_AUTH"
 };
@@ -27,14 +31,16 @@ export const Types = {
 // Reducer
 const INITIAL_STATE = {
   user: [],
+  picture: "",
   userDetails: [],
   loading: false,
-  errorMessage: "",
   successMessage: "",
+  errorMessage: "",
   oldPassword: "",
   newPassword: "",
   userStore: false,
-  isAuthenticated: false
+  successMessageUser: "",
+  errorMessageUser: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -100,6 +106,24 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         errorMessage: action.payload.errorMessage
+      };
+
+    case Types.UPDATE_USER_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case Types.UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        successMessageUser: action.payload.successMessageUser
+      };
+    case Types.UPDATE_USER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        errorMessageUser: action.payload.errorMessageUser
       };
     case Types.CREATE_ACCOUNT_REQUEST:
       return {
@@ -198,21 +222,30 @@ export const Creators = {
     type: Types.GET_USER_REQUEST,
     payload: { data, history }
   }),
-  getUserSuccess: userDetails => ({
+  getUserSuccess: (userDetails, avatar) => ({
     type: Types.GET_USER_SUCCESS,
-    payload: { userDetails }
+    payload: { userDetails, avatar }
   }),
   getUserFailure: errorMessage => ({
     type: Types.GET_USER_FAILURE,
     payload: { errorMessage }
   }),
 
-  userStore: userStore => ({
-    type: Types.USER_STORE,
-    payload: { userStore }
+  updateUserRequest: (data, history) => ({
+    type: Types.UPDATE_USER_REQUEST,
+    payload: { data, history }
   }),
-  setAuth: isAuthenticated => ({
-    type: Types.SET_AUTH,
-    payload: isAuthenticated
+  updateUserSuccess: successMessageUser => ({
+    type: Types.UPDATE_USER_SUCCESS,
+    payload: { successMessageUser }
+  }),
+  updateUserFailure: errorMessageUser => ({
+    type: Types.UPDATE_USER_FAILURE,
+    payload: { errorMessageUser }
+  }),
+
+  userStore: stores => ({
+    type: Types.LOGOUT,
+    payload: { stores }
   })
 };

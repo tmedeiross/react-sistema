@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { IntlProvider } from "react-intl";
 import { NotificationContainer } from "Components/ReactNotifications";
 import { defaultStartPathLogin } from "Constants/defaultValues";
+import PrivateRoute from "../routes/private-route";
 
 import AppLocale from "../lang";
 import MainRoute from "Routes";
@@ -52,9 +53,9 @@ class App extends Component {
               <Route path={`/auth/logout`} component={Logout} />
               <Route path={`/auth/signup`} component={Signup} />
               <Route path={`/auth/recover`} component={Recover} />
-              <Route path={`/auth/change-pass`} component={ChangePass} />
               <Route path={`/auth/confirm`} component={Confirm} />
               <Route path={`/error`} component={error} />
+              <PrivateRoute path={`/auth/change-pass`} component={ChangePass} />
               <Redirect to="/error" />
             </Switch>
           </Fragment>

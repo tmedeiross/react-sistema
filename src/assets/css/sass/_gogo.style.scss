@@ -5049,3 +5049,15 @@ select.form-control {
     display: block;
   }
 }
+.chance-image {
+  padding: 10px 30px;
+  margin-top: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 25px;
+}
+.chance-image:hover {
+  background-color: #145388;
+  color: #fff;
+}

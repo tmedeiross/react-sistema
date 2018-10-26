@@ -40,6 +40,7 @@ module.exports = {
   "menu.app": "Home",
   "menu.gogo": "Gogo",
   "menu.shop": "Minhas Lojas",
+  "menu.dashboard": "Dashboard",
   "menu.start": "Start",
   "menu.second-menu": "Second Menu",
   "menu.account": "Meus dados",
@@ -91,5 +92,8 @@ module.exports = {
   "supplier.label-supplier": "Fornecedor",
 
   // shop-user
-  "shop-user.label-profile": "Profile"
+  "shop-user.label-profile": "Profile",
+
+  // dashboard
+  "dashboard.menu-dashboard": "Dashboard"
 };

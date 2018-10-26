@@ -4,12 +4,7 @@ import isEmpty from "lodash/isEmpty";
 const ValidateForm = data => {
   const errors = {};
 
-  if (
-    !data ||
-    !data.hasOwnProperty("awardsCode") ||
-    !data.hasOwnProperty("purchaseCode") ||
-    !data.hasOwnProperty("defaultMessage")
-  ) {
+  if (!data.hasOwnProperty("awardsCode")) {
     return {
       errors,
       isValid: false
@@ -18,14 +13,6 @@ const ValidateForm = data => {
 
   if (Validator.isEmpty(data.awardsCode)) {
     errors.awardsCode = "Campo obrigatório";
-  }
-
-  if (Validator.isEmpty(data.purchaseCode)) {
-    errors.purchaseCode = "Campo obrigatório";
-  }
-
-  if (Validator.isEmpty(data.defaultMessage)) {
-    errors.defaultMessage = "Campo obrigatório";
   }
 
   return {
