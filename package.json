@@ -6,9 +6,7 @@
     "start": "webpack-dev-server --mode development --hot --progress --open",
     "build": "webpack --mode production"
   },
-  "keywords": [
-    "reactjs"
-  ],
+  "keywords": ["reactjs"],
   "author": "Colored Strategies",
   "license": "ISC",
   "devDependencies": {
