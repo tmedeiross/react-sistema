@@ -5061,3 +5061,10 @@ select.form-control {
   background-color: #145388;
   color: #fff;
 }
+.react-autosuggest__suggestions-list > li {
+  margin: 0 !important;
+  padding: 0;
+}
+.suggestionsList {
+  padding: 15px;
+}

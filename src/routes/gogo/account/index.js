@@ -344,6 +344,7 @@ export class Account extends Component {
 
   getCnpjSupplier = e => {
     this.setState({ supplierCnpj: e.target.id });
+    console.log(e.target.id);
   };
 
   renderSuggestion = suggestion => (
@@ -394,9 +395,9 @@ export class Account extends Component {
     ).then(value => {
       switch (value) {
         case "delete":
-          AuthAPI.deleteSupplier(idSupplier)
+          AuthAPI.deleteUserSupplier(idSupplier)
             .then(response => {
-              this.listSupplierStore();
+              this.listUserSupplier();
             })
             .catch(err => {
               console.log(err);
@@ -416,7 +417,7 @@ export class Account extends Component {
     AuthAPI.deleteSupplier(idSupplier)
       .then(response => {
         console.log(response);
-        this.listSupplierStore();
+        this.listUserSupplier();
       })
       .catch(err => {
         console.log(err);
