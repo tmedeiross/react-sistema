@@ -14,6 +14,7 @@ import {
 
 import InputMask from "react-input-mask";
 import SelectSimple from "Components/SelectSimple";
+import swal from "sweetalert";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -103,6 +104,29 @@ export class ShopDetails extends Component {
     this.props.updateShopRequest(this.state.form, this.props.history);
   }
 
+  inactiveStore(e) {
+    swal({
+      title: "Você tem certeza que deseja desativar esta loja?",
+      text:
+        "Para confirmar digite a palavra INATIVAR em letra maiúscula no campo abaixo.",
+      icon: "warning",
+      content: "input",
+      buttons: true
+    }).then(value => {
+      if (value === "INATIVAR") {
+        swal("A loja foi inativada", {
+          icon: "success"
+        });
+      } else {
+        swal(
+          "Tente novamente digitando a palavra INATIVAR em letra maiúscula.",
+          {
+            icon: "error"
+          }
+        );
+      }
+    });
+  }
   render() {
     const { errorMessage, successMessage, loading } = this.props.shops;
     return (
@@ -270,6 +294,17 @@ export class ShopDetails extends Component {
                       />
                       <IntlMessages id="shops.state" />
                     </Label>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm="12">
+                    <a
+                      href="javascript:void(0)"
+                      className="text-right text-danger pt-3 pb-2 d-block c-pointer"
+                      onClick={this.inactiveStore}
+                    >
+                      Inativar loja
+                    </a>
                   </Col>
                 </Row>
               </Form>

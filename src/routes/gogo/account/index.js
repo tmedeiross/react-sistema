@@ -77,7 +77,7 @@ export class Account extends Component {
     };
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
-    this.listAllSuppliers = this.listAllSuppliers.bind(this);
+    // this.listAllSuppliers = this.listAllSuppliers.bind(this);
     this.addSupplier = this.addSupplier.bind(this);
     this.listUserSupplier = this.listUserSupplier.bind(this);
     this.deleteSupplierShopModal = this.deleteSupplierShopModal.bind(this);
@@ -642,11 +642,8 @@ export class Account extends Component {
                           </p>
                         </NavLink>
                         <div className="w-15 w-sm-100 text-right">
-                          {supplier.defaultMessage}
-                        </div>
-                        <div className="w-15 w-sm-100 text-right">
                           <span className="badge badge-secondary badge-pill">
-                            Código de compra: {supplier.purchaseCode}
+                            Código de compra: {supplier.awardsCode}
                           </span>
                         </div>
                         <div

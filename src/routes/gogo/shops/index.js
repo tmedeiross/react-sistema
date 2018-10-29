@@ -269,6 +269,7 @@ export class Shops extends Component {
   }
 
   dataListRender() {
+    console.log(this.props.shops.dataList);
     let items =
       this.state.search.length > 0
         ? this.props.shops.dataList.filter(p => {
@@ -676,6 +677,14 @@ export class Shops extends Component {
                           </p>
                           <p className="mb-1 text-muted text-small w-15 w-sm-100">
                             {product.city} - {product.state}
+                          </p>
+                          <p className="mb-1 text-small">
+                            <span className="badge badge-danger badge-pill">
+                              INATIVO
+                            </span>
+                            <span className="badge badge-secondary badge-pill">
+                              ATIVO
+                            </span>
                           </p>
                           <p className="mb-1 text-small">
                             {product.userStore.profileId === "ADMIN" && (
