@@ -678,14 +678,14 @@ export class Shops extends Component {
                           <p className="mb-1 text-muted text-small w-15 w-sm-100">
                             {product.city} - {product.state}
                           </p>
-                          <p className="mb-1 text-small">
+                          {/* <p className="mb-1 text-small">
                             <span className="badge badge-danger badge-pill">
                               INATIVO
                             </span>
                             <span className="badge badge-secondary badge-pill">
                               ATIVO
                             </span>
-                          </p>
+                          </p> */}
                           <p className="mb-1 text-small">
                             {product.userStore.profileId === "ADMIN" && (
                               <NavLink

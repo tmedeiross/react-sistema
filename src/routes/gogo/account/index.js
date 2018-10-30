@@ -496,15 +496,24 @@ export class Account extends Component {
                     </div>
                   </Colxx>
                   <Colxx xxs="12" sm="8">
-                    <p>{email}</p>
                     <Form>
+                      <Label className="form-group has-float-label mb-4">
+                        <Input
+                          name="email"
+                          type="text"
+                          value={email}
+                          maxLength="30"
+                          disabled
+                        />
+                        <IntlMessages id="user.email" />
+                      </Label>
                       <Label className="form-group has-float-label mb-4">
                         <Input
                           name="name"
                           type="text"
                           value={name}
-                          onChange={this.handleChangeName}
                           maxLength="30"
+                          disabled
                         />
                         <IntlMessages id="user.name" />
                       </Label>

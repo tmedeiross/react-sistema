@@ -73,7 +73,11 @@ export class ShopDetails extends Component {
         state: "",
         stateNome: "",
         profileId: "",
-        userEmail: ""
+        userEmail: "",
+        storeDetail: {
+          receiveSendFrames: true,
+          printCertificateShip: true
+        }
       }
     };
     this.onChange = this.onChange.bind(this);
@@ -91,6 +95,8 @@ export class ShopDetails extends Component {
     const form = { ...this.state.form };
     form[event.target.name] = event.target.value;
     this.setState({ form });
+
+    console.log(this.state.form);
   }
 
   componentDidMount() {

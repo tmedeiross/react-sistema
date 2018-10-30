@@ -33,7 +33,6 @@ export function* addShop({ payload }) {
     city,
     state
   } = payload.shop;
-
   try {
     yield call(AuthAPI.storeNew, {
       cnpj,
@@ -47,7 +46,7 @@ export function* addShop({ payload }) {
       zipCode,
       neighborhood,
       city,
-      state
+      state,
     });
     yield put(ShopActions.addShopSuccess("Loja incluída com sucesso!"));
 
@@ -106,6 +105,7 @@ export function* getDetailsStore({ payload }) {
 }
 
 export function* updateShop({ payload }) {
+  console.log("payload ", payload);
   const {
     cnpj,
     fantasyName,
@@ -118,14 +118,15 @@ export function* updateShop({ payload }) {
     zipCode,
     neighborhood,
     city,
-    state
+    state,
+    storeDetail: { receiveSendFrames, printCertificateShip }
   } = payload.shop;
 
   const idString = payload.history.location.search;
   const storeID = idString.split("=");
 
   try {
-    yield call(AuthAPI.storePut, storeID[1], {
+    const response = yield call(AuthAPI.storePut, storeID[1], {
       cnpj,
       fantasyName,
       socialName,
@@ -137,8 +138,14 @@ export function* updateShop({ payload }) {
       zipCode,
       neighborhood,
       city,
-      state
+      state,
+      storeDetail: {
+        receiveSendFrames,
+        printCertificateShip
+      }
     });
+
+    console.log("response ", response);
     yield put(ShopActions.updateShopSuccess("Dados atualizados com sucesso!"));
   } catch (err) {
     yield put(ShopActions.updateShopFailure("Dados incorretos ou faltantes."));
