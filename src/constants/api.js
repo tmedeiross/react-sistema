@@ -43,6 +43,9 @@ export const deleteUserShop = id => http.delete(`/user/store/${id}`);
 export const updateUserShop = (id, data) => http.put(`/user/store/${id}`, data);
 // List all Users by Store
 export const allUsersStore = id => http.get(`/store/${id}/user/`);
+// Changes Store Status
+export const changeStoreStatus = (id, value) =>
+  http.put(`/store/${id}/change/status?value=${value}`);
 
 // /supplier
 export const listSupplier = () => http.get("/supplier");

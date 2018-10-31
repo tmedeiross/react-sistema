@@ -84,7 +84,6 @@ function* changePassword({ payload }) {
 
 function* recoverPassword({ payload }) {
   const { username } = payload.email;
-  console.log(username);
   try {
     yield call(AuthAPI.forgetPassword, username);
     yield put(
@@ -93,7 +92,6 @@ function* recoverPassword({ payload }) {
       )
     );
   } catch (err) {
-    console.log(err);
     if (err.status === 404) {
       yield put(AuthActions.passRecoverFailure("Usuário não encontrado."));
     } else {
@@ -177,7 +175,7 @@ function* updateUser({ payload }) {
   const { email } = payload.data;
 
   try {
-    const response = yield call(AuthAPI.userPut, email, payload.data);
+    yield call(AuthAPI.userPut, email, payload.data);
     yield put(AuthActions.updateUserSuccess("Usuário alterado com sucesso!"));
     yield call(delay, 4000);
     yield put(AuthActions.updateUserSuccess(""));

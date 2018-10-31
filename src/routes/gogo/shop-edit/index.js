@@ -81,6 +81,7 @@ export class ShopDetails extends Component {
       }
     };
     this.onChange = this.onChange.bind(this);
+    this.inactiveStore = this.inactiveStore.bind(this);
   }
 
   toggle(tab) {
@@ -100,9 +101,14 @@ export class ShopDetails extends Component {
   }
 
   componentDidMount() {
+    this.storeDetails();
+  }
+
+  storeDetails() {
     this.props.getDetailsShopRequest(this.props.history);
     setTimeout(() => {
       this.setState({ form: this.props.shops.dataDetails });
+      this.changeStatus();
     }, 1000);
   }
 
@@ -110,7 +116,11 @@ export class ShopDetails extends Component {
     this.props.updateShopRequest(this.state.form, this.props.history);
   }
 
-  inactiveStore(e) {
+  changeStatus() {
+    this.props.changeStatusShopRequest(this.state.form, this.props.history);
+  }
+
+  inactiveStore() {
     swal({
       title: "Você tem certeza que deseja desativar esta loja?",
       text:
@@ -120,10 +130,12 @@ export class ShopDetails extends Component {
       buttons: true
     }).then(value => {
       if (value === "INATIVAR") {
-        swal("A loja foi inativada", {
-          icon: "success"
-        });
+        this.changeStatus();
+        this.storeDetails();
+        console.log("loja inativada");
       } else {
+        this.props.changeStatusShopRequest(this.state.form, this.props.history);
+        console.log("loja cancelada");
         swal(
           "Tente novamente digitando a palavra INATIVAR em letra maiúscula.",
           {

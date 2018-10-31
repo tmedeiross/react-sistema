@@ -13,7 +13,11 @@ export const Types = {
 
   GET_DETAILS_SHOP_REQUEST: "shop/SHOPS_GET_DETAILS_SHOP_REQUEST",
   GET_DETAILS_SHOP_SUCCESS: "shop/SHOPS_GET_DETAILS_SHOP_SUCCESS",
-  GET_DETAILS_SHOP_FAILURE: "shop/SHOPS_GET_DETAILS_SHOP_FAILURE"
+  GET_DETAILS_SHOP_FAILURE: "shop/SHOPS_GET_DETAILS_SHOP_FAILURE",
+
+  CHANGE_STATUS_SHOP_REQUEST: "shop/SHOPS_CHANGE_STATUS_SHOP_REQUEST",
+  CHANGE_STATUS_SHOP_SUCCESS: "shop/SHOPS_CHANGE_STATUS_SHOP_SUCCESS",
+  CHANGE_STATUS_SHOP_FAILURE: "shop/SHOPS_CHANGE_STATUS_SHOP_FAILURE"
 };
 
 // Reducer
@@ -104,6 +108,23 @@ export default (state = INITIAL_STATE, action) => {
         loading: false,
         errorMessage: action.payload.errorMessage
       };
+    case Types.CHANGE_STATUS_SHOP_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case Types.CHANGE_STATUS_SHOP_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        successMessage: action.payload.successMessage
+      };
+    case Types.CHANGE_STATUS_SHOP_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        errorMessage: action.payload.errorMessage
+      };
     default:
       return state;
   }
@@ -164,6 +185,18 @@ export const Creators = {
   }),
   addUserShopFailure: errorMessage => ({
     type: Types.ADD_USER_SHOP_FAILURE,
+    payload: { errorMessage }
+  }),
+  changeStatusShopRequest: (data, history) => ({
+    type: Types.CHANGE_STATUS_SHOP_REQUEST,
+    payload: { data, history }
+  }),
+  changeStatusShopSuccess: data => ({
+    type: Types.CHANGE_STATUS_SHOP_SUCCESS,
+    payload: { data }
+  }),
+  changeStatusShopFailure: errorMessage => ({
+    type: Types.CHANGE_STATUS_SHOP_FAILURE,
     payload: { errorMessage }
   })
 };

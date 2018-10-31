@@ -46,7 +46,7 @@ export function* addShop({ payload }) {
       zipCode,
       neighborhood,
       city,
-      state,
+      state
     });
     yield put(ShopActions.addShopSuccess("Loja incluída com sucesso!"));
 
@@ -105,7 +105,7 @@ export function* getDetailsStore({ payload }) {
 }
 
 export function* updateShop({ payload }) {
-  console.log("payload ", payload);
+  console.log(updateShop);
   const {
     cnpj,
     fantasyName,
@@ -152,6 +152,29 @@ export function* updateShop({ payload }) {
   }
 }
 
+export function* changeStoreStatus({ payload }) {
+  console.log(payload);
+  const idString = payload.history.location.search;
+  const storeID = idString.split("=");
+
+  console.log(storeID[1]);
+  // console.log("changeStoreStatus");
+
+  try {
+    const response = yield call(
+      AuthAPI.changeStoreStatus,
+      storeID[1],
+      "INACTIVE"
+    );
+    console.log(response);
+    swal("A loja foi inativada", {
+      icon: "success"
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export function* watchGetShop() {
   yield takeLatest(ShopTypes.GET_REQUEST, getShop);
 }
@@ -168,12 +191,17 @@ export function* watchGetDetailsShop() {
   yield takeLatest(ShopTypes.GET_DETAILS_SHOP_REQUEST, getDetailsStore);
 }
 
+export function* watchChangeStoreStatus() {
+  yield takeLatest(ShopTypes.CHANGE_STATUS_SHOP_REQUEST, changeStoreStatus);
+}
+
 export default function* rootSaga() {
   yield all([
     fork(watchGetShop),
     fork(watchAddShop),
     fork(watchGetShop),
     fork(watchUpdateShop),
-    fork(watchGetDetailsShop)
+    fork(watchGetDetailsShop),
+    fork(watchChangeStoreStatus)
   ]);
 }
