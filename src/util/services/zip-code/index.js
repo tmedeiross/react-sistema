@@ -18,8 +18,8 @@ export function searchAddressByZipCode(zipCode) {
 
 function getTokenAPI() {
   const credentials = JSON.stringify({
-    username: "acert",
-    password: "acert"
+    username: "admin",
+    password: "admin"
   });
   const url = `${API_URL_ZIPCODE}/login`;
   return fetch(url, {

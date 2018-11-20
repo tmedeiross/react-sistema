@@ -10,7 +10,7 @@ Table of Contents
 
 module.exports = {
   /* 01.General */
-  "general.copyright": "Grupo Acert © 2018 All Rights Reserved.",
+  "general.copyright": "Sistema de Pedidos © 2018 All Rights Reserved.",
 
   /* 02.User Login, Logout, Register, Recover */
   "user.login-title": "Login",

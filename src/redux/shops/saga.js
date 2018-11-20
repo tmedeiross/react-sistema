@@ -157,22 +157,23 @@ export function* changeStoreStatus({ payload }) {
   const idString = payload.history.location.search;
   const storeID = idString.split("=");
 
-  console.log(storeID[1]);
-  // console.log("changeStoreStatus");
+  swal("A loja foi inativada", {
+    icon: "success"
+  });
 
-  try {
-    const response = yield call(
-      AuthAPI.changeStoreStatus,
-      storeID[1],
-      "INACTIVE"
-    );
-    console.log(response);
-    swal("A loja foi inativada", {
-      icon: "success"
-    });
-  } catch (err) {
-    console.log(err);
-  }
+  // try {
+  //   const response = yield call(
+  //     AuthAPI.changeStoreStatus,
+  //     storeID[1],
+  //     "INACTIVE"
+  //   );
+  //   console.log(response);
+  //   swal("A loja foi inativada", {
+  //     icon: "success"
+  //   });
+  // } catch (err) {
+  //   console.log(err);
+  // }
 }
 
 export function* watchGetShop() {

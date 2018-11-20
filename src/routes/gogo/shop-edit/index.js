@@ -108,7 +108,6 @@ export class ShopDetails extends Component {
     this.props.getDetailsShopRequest(this.props.history);
     setTimeout(() => {
       this.setState({ form: this.props.shops.dataDetails });
-      this.changeStatus();
     }, 1000);
   }
 

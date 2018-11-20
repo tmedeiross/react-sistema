@@ -18,7 +18,7 @@ export const defaultLocale = {
 };
 
 export const CDN_URL = "https://s3.amazonaws.com/order-tracking-storage/cp";
-export const API_URL_ZIPCODE = "http://cep.grupoacert.com.br";
+export const API_URL_ZIPCODE = "viacep.com.br";
 export const apiUrl = "http://localhost:8090/";
 
 export const api = axios.create({
